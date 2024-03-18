@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Fantasy League</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        main {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .team-selection {
+            width: 45%;
+        }
+
+        .team {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .player {
+            width: 45%;
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+            .player p {
+                margin: 0;
+            }
+
+            .player button {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+        .selected-team {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .team-selection {
+            width: 45%;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+            .team-selection h2 {
+                font-size: 1.5rem;
+                margin-top: 0;
+            }
+
+            .team-selection .team {
+                margin-top: 20px;
+            }
+
+            .team-selection table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .team-selection th, .team-selection td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+
+            .team-selection th {
+                background-color: #f2f2f2;
+            }
+
+            .team-selection button {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .team-selection button:hover {
+                    background-color: #45a049;
+                }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>IPL Fantasy League</h1>
+    </header>
+    <main>
+        <div class="team-selection">
+            <h2>Select Your Team</h2>
+            <div class="team">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Team - 1</th>
+                            <th>Team - 2</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CSK</td>
+                            <td>RCB</td>
+                            <td><button>Select</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="team-selection">
+            <h2>Your Selected Team</h2>
+            <div class="selected-team">
+            </div>
+            <p>Total Amount: <span id="total-amount">250</span></p>
+            <button id="submit-team">Submit Team</button>
+        </div>
+    </main>
+    <main>
+        <div class="team-selection">
+            <h2>Results so far</h2>
+            <div class="team">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Vivek</td>
+                            <td>Won</td>
+                        </tr>
+                        <!-- Add more player rows here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+
+
