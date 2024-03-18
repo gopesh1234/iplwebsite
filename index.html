@@ -108,7 +108,7 @@
             }
 
         /* Responsive styles */
-        @media screen and (max-width: 600px) {
+        @@media screen and (max-width: 600px) {
             .team-selection {
                 width: 100%;
             }
@@ -189,6 +189,10 @@
             <button onclick="getSelectedNames()">Your name</button>
             <button onclick="closePopup()">Close</button>
         </div>
+        <div class="popup" id="popup2">
+            <h2>Already scheduled !!</h2>
+            <button onclick="closePopup2()">Close</button>
+        </div>
         <div class="team-selection">
             <div class="selected-team">
                 <p id="selected-team-name"></p>
@@ -208,6 +212,8 @@
                             <th class="column-2">Name</th>
                             <th class="column-3">Team</th>
                             <th class="column-4">Status</th>
+                            <th class="column-5">Edit</th>
+                            <th class="column-6">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -221,33 +227,133 @@
         var userName = "";
         var teamName = "";
 
+        window.onload = function () {
+
+            var tableBody = document.querySelector('#users-table tbody');
+
+            for (let [key, value] of Object.entries(localStorage)) {
+                console.log(`${key}: ${JSON.parse(value)}`);
+                var userEntry = JSON.parse(value);
+
+            //    var newRow = document.createElement('tr');
+            //    newRow.innerHTML = `
+            //    <td>${userEntry.date}</td>
+            //    <td>${userEntry.name}</td>
+            //    <td>${userEntry.team}</td>
+            //    <td>${userEntry.status}</td>
+
+            //`;
+            //    tableBody.appendChild(newRow);
+
+                var newRow = document.createElement('tr');
+                newRow.innerHTML = `
+        <td>${userEntry.date}</td>
+        <td>${userEntry.name}</td>
+        <td>${userEntry.team}</td>
+        <td class="status">${userEntry.status}</td>
+        <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
+        <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
+    `;
+                tableBody.appendChild(newRow);
+            }
+        };
+
+        function editStatus(button) {
+            var statusCell = button.parentElement.previousElementSibling;
+            var newStatus = prompt("Enter new status:");
+
+            const fourDigitPin = newStatus.split(" ");
+
+            if (fourDigitPin.length == 2) {
+                let pin = fourDigitPin[1];
+
+                if (pin == "0000" && fourDigitPin[0] !== null) {
+                    statusCell.textContent = fourDigitPin[0];
+                    updateLocalStorage();
+                }
+            }
+        }
+
+        function deleteRow(button) {
+
+            var pin = prompt("Enter pin:");
+
+            if (pin == "0000") {
+                var row = button.parentElement.parentElement;
+                row.remove();
+                updateLocalStorage();
+            }
+        }
+
+        function updateLocalStorage() {
+            // Update localStorage with the updated status values
+            var rows = document.querySelectorAll('#users-table tbody tr');
+            var updatedData = {};
+            rows.forEach(function (row) {
+                var date = row.cells[0].textContent;
+                var team = row.cells[2].textContent;
+                var status = row.cells[3].textContent;
+                updatedData[date + team] = JSON.stringify({
+                    'date': date,
+                    'name': row.cells[1].textContent,
+                    'team': team,
+                    'status': status
+                });
+            });
+            // Clear existing localStorage and set updated data
+            localStorage.clear();
+            for (let key in updatedData) {
+                localStorage.setItem(key, updatedData[key]);
+            }
+        }
+
 
         function submitTeam() {
-            addRow(selectedDate, userName, teamName, 'In Progress');
+
+            //localStorage.clear();
+            //localStorage.removeItem('keyName');
+
+            var myKey = selectedDate + teamName;
+
+            if (localStorage.getItem(myKey) == null) {
+
+                var userData = { 'date': selectedDate, 'name': userName, 'team': teamName, 'status': 'In Progress' };
+                localStorage.setItem(myKey, JSON.stringify(userData));
+
+                addRow(myKey);
+            } else {
+                openPopup2();
+            }
+        }
+
+        function openPopup2() {
+            var popup = document.getElementById('popup2');
+            popup.style.display = 'block';
+        }
+
+        function closePopup2() {
+            var popup = document.getElementById('popup2');
+            popup.style.display = 'none';
         }
 
         function highlightCell(cell) {
-            // Remove highlight from all cells
             var teamNames = document.querySelectorAll('.team-name');
 
             teamNames.forEach(function (element) {
                 element.classList.remove('highlighted');
             });
-            // Highlight the clicked cell
             cell.classList.add('highlighted');
         }
 
         function selectTeam(button, name) {
-            // Get the selected team name
+
             var selectedTeam = button.parentElement.parentElement.querySelector('.highlighted').textContent;
             selectedDate = button.parentElement.parentElement.querySelector('.selected-date').textContent;
 
-            // Update the selected team name in the display
             document.getElementById('selected-team-name').textContent = "Selected Team: " + selectedTeam;
 
             teamName = selectedTeam;
             userName = name;
-            //addRow(date, name, team, status)
         }
 
         function openPopup(button) {
@@ -276,14 +382,22 @@
             console.log(selectedNames);
         }
 
-        function addRow(date, name, team, status) {
+        function addRow(myKey) {
+
+            var items = localStorage.getItem(myKey);
+            var userEntry = JSON.parse(items);
+
+            console.log(JSON.parse(items));
+
             var tableBody = document.querySelector('#users-table tbody');
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td>${date}</td>
-                <td>${name}</td>
-                <td>${team}</td>
-                <td>${status}</td>
+                <td>${userEntry.date}</td>
+                <td>${userEntry.name}</td>
+                <td>${userEntry.team}</td>
+                <td>${userEntry.status}</td>
+                <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
+                <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
 
             `;
             tableBody.appendChild(newRow);
