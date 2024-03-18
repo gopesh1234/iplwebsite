@@ -1,138 +1,98 @@
+
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPL Fantasy League</title>
+    <title>IPL24</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+        /* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
 
-        header {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 20px 0;
-        }
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
 
-        main {
-            display: flex;
-            justify-content: space-around;
-            padding: 20px;
-        }
+main {
+    padding: 20px;
+}
 
-        .team-selection {
-            width: 45%;
-        }
+/* Team selection styles */
+.team-selection {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
 
-        .team {
-            display: flex;
-            flex-wrap: wrap;
-        }
+.team-selection h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+}
 
-        .player {
-            width: 45%;
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: center;
-        }
+.team-selection .team table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-            .player p {
-                margin: 0;
-            }
+.team-selection th, .team-selection td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
 
-            .player button {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                border-radius: 5px;
-                cursor: pointer;
-            }
+.team-selection th {
+    background-color: #f2f2f2;
+}
 
-        .selected-team {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
+.team-selection button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
+.team-selection button:hover {
+    background-color: #45a049;
+}
 
-        .team-selection {
-            width: 45%;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
+/* Responsive styles */
+@media screen and (max-width: 600px) {
+    .team-selection {
+        width: 100%;
+    }
+}
 
-            .team-selection h2 {
-                font-size: 1.5rem;
-                margin-top: 0;
-            }
-
-            .team-selection .team {
-                margin-top: 20px;
-            }
-
-            .team-selection table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            .team-selection th, .team-selection td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: center;
-            }
-
-            .team-selection th {
-                background-color: #f2f2f2;
-            }
-
-            .team-selection button {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                padding: 8px 12px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 14px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
-
-                .team-selection button:hover {
-                    background-color: #45a049;
-                }
 
     </style>
 </head>
 <body>
-    <header>
-        <h1>IPL Fantasy League</h1>
-    </header>
     <main>
         <div class="team-selection">
             <h2>Select Your Team</h2>
@@ -188,4 +148,11 @@
 </body>
 </html>
 
-
+        </main>
+    </div>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js?v=4q1jwFhaPaZgr8WAUSrux6hAuh0XDg9kPS3xIVq36I0"></script>
+    
+</body>
+</html>
