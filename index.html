@@ -269,7 +269,9 @@
         </div>
     </main>
     <div style="margin-left:5%">
-        <iframe width="330" height="300" src="https://www.cricketlineguru.com/live-scores"></iframe>
+        <iframe width="340" height="300" src="https://www.cricketlineguru.com/live-scores"></iframe>
+    </div>
+    <div style="height:10px">
     </div>
     <script>
         var selectedDate = "";
@@ -297,13 +299,13 @@
 
                 var newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td>${userEntry.date}</td>
-                    <td>${userEntry.name}</td>
-                    <td>${userEntry.team}</td>
-                    <td class="status">${userEntry.status}</td>
-                    <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
-                    <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
-                `;
+                        <td>${userEntry.date}</td>
+                        <td>${userEntry.name}</td>
+                        <td>${userEntry.team}</td>
+                        <td class="status">${userEntry.status}</td>
+                        <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
+                        <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
+                    `;
                 tableBody.appendChild(newRow);
             }
         };
@@ -470,14 +472,14 @@
             var tableBody = document.querySelector('#users-table tbody');
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                            <td>${userEntry.date}</td>
-                            <td>${userEntry.name}</td>
-                            <td>${userEntry.team}</td>
-                            <td>${userEntry.status}</td>
-                            <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
-                            <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
+                                <td>${userEntry.date}</td>
+                                <td>${userEntry.name}</td>
+                                <td>${userEntry.team}</td>
+                                <td>${userEntry.status}</td>
+                                <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
+                                <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
 
-                        `;
+                            `;
             tableBody.appendChild(newRow);
         }
 
