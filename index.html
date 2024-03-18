@@ -23,8 +23,6 @@
 
         main {
             padding: 20px;
-            max-height: calc(100vh - 102px); /* Adjusted height for header and margin */
-            overflow-y: auto; /* Enable vertical scrolling if content exceeds the height */
         }
 
         /* Team selection styles */
@@ -74,6 +72,20 @@
             background-color: #45a049;
         }
 
+        /* Selected team styles */
+        .selected-team {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+        }
+
+        /* Highlighted cell styles */
+        .highlighted {
+            background-color: green;
+            color: white;
+        }
+
         /* Responsive styles */
         @media screen and (max-width: 600px) {
             .team-selection {
@@ -93,49 +105,49 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Team - 1</th>
-                            <th>Team - 2</th>
+                            <th class="column-1">Date</th>
+                            <th class="column-2">Team - 1</th>
+                            <th class="column-3">Team - 2</th>
                             <th>Select</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>CSK</td>
-                            <td>RCB</td>
-                            <td><button>Select</button></td>
+                            <td>22 March 2024</td>
+                            <td class="team-name" onclick="highlightCell(this)">CSK</td>
+                            <td class="team-name" onclick="highlightCell(this)">RCB</td>
+                            <td><button class="select-button" onclick="selectTeam(this)">Select</button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="team-selection">
-            <h2>Your Selected Team</h2>
             <div class="selected-team">
+                <p id="selected-team-name"></p>
             </div>
             <p>Total Amount: <span id="total-amount">250</span></p>
             <button id="submit-team">Submit Team</button>
         </div>
-        <div class="team-selection">
-            <h2>Results so far</h2>
-            <div class="team">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Result</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Vivek</td>
-                            <td>Won</td>
-                        </tr>
-                        <!-- Add more player rows here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </main>
+    <script>
+        function highlightCell(cell) {
+            // Remove highlight from all cells
+            var teamNames = document.querySelectorAll('.team-name');
+            teamNames.forEach(function (element) {
+                element.classList.remove('highlighted');
+            });
+            // Highlight the clicked cell
+            cell.classList.add('highlighted');
+        }
+
+        function selectTeam(button) {
+            // Get the selected team name
+            var selectedTeam = button.parentElement.parentElement.querySelector('.highlighted').textContent;
+            // Update the selected team name in the display
+            document.getElementById('selected-team-name').textContent = "Selected Team: " + selectedTeam;
+        }
+    </script>
     <script src="/lib/jquery/dist/jquery.min.js"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/site.js?v=4q1jwFhaPaZgr8WAUSrux6hAuh0XDg9kPS3xIVq36I0"></script>
