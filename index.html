@@ -261,7 +261,6 @@
             </div>
         </div>
         <div id="profit_loss" style="text-align: center; background-color: darkgrey; font-weight: bold; color: white; ">
-
         </div>
         <div id="profit_loss" style="text-align: center; background-color: darkgrey; font-weight: bold; color: white;">
             <p>Won by Gopesh: 5</p>
@@ -269,7 +268,9 @@
             <p>Total: 7</p>
         </div>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div style="margin-left:27%">
+        <iframe width="500" height="300" src="https://www.cricketlineguru.com/live-scores"></iframe>
+    </div>
     <script>
         var selectedDate = "";
         var userName = "";
@@ -296,13 +297,13 @@
 
                 var newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                <td>${userEntry.date}</td>
-                <td>${userEntry.name}</td>
-                <td>${userEntry.team}</td>
-                <td class="status">${userEntry.status}</td>
-                <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
-                <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
-            `;
+                    <td>${userEntry.date}</td>
+                    <td>${userEntry.name}</td>
+                    <td>${userEntry.team}</td>
+                    <td class="status">${userEntry.status}</td>
+                    <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
+                    <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
+                `;
                 tableBody.appendChild(newRow);
             }
         };
@@ -469,14 +470,14 @@
             var tableBody = document.querySelector('#users-table tbody');
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                        <td>${userEntry.date}</td>
-                        <td>${userEntry.name}</td>
-                        <td>${userEntry.team}</td>
-                        <td>${userEntry.status}</td>
-                        <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
-                        <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
+                            <td>${userEntry.date}</td>
+                            <td>${userEntry.name}</td>
+                            <td>${userEntry.team}</td>
+                            <td>${userEntry.status}</td>
+                            <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
+                            <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
 
-                    `;
+                        `;
             tableBody.appendChild(newRow);
         }
 
