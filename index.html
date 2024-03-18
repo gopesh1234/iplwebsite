@@ -119,7 +119,7 @@
     <main>
         <div class="team-selection">
             <h2>Select Your Team</h2>
-            <div class="team">
+            <div class="team" style="max-height: 312px; overflow-y: scroll;">
                 <table>
                     <thead>
                         <tr>
@@ -160,15 +160,33 @@
                             <td class="team-name" onclick="highlightCell(this)">MI</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
+                        <tr>
+                            <td>25 Mar</td>
+                            <td class="team-name" onclick="highlightCell(this)">PBKS</td>
+                            <td class="team-name" onclick="highlightCell(this)">RCB</td>
+                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                        </tr>
+                        <tr>
+                            <td>26 Mar</td>
+                            <td class="team-name" onclick="highlightCell(this)">CSK</td>
+                            <td class="team-name" onclick="highlightCell(this)">GT</td>
+                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                        </tr>
+                        <tr>
+                            <td>27 Mar</td>
+                            <td class="team-name" onclick="highlightCell(this)">MI</td>
+                            <td class="team-name" onclick="highlightCell(this)">SRH</td>
+                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="popup" id="popup">
-            <h2>Available Players</h2>
+            <h2>Users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
             <p><input type="radio" id="gopesh" value="Gopesh" name="pl1"> <label for="gopesh">Gopesh</label></p>
             <p><input type="radio" id="vivek" value="Vivek" name="pl1"> <label for="vivek">Vivek</label></p>
-            <button onclick="getSelectedNames()">Check your name</button>
+            <button onclick="getSelectedNames()">Your name</button>
             <button onclick="closePopup()">Close</button>
         </div>
         <div class="team-selection">
