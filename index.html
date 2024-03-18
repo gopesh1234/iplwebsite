@@ -131,49 +131,49 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>22 Mar</td>
+                            <td class="selected-date">22 Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">CSK</td>
                             <td class="team-name" onclick="highlightCell(this)">RCB</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
-                            <td>23 Mar</td>
+                            <td class="selected-date">23 Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">DC</td>
                             <td class="team-name" onclick="highlightCell(this)">PBKS</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
-                            <td>23 Mar</td>
+                            <td class="selected-date">23 Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">KKR</td>
                             <td class="team-name" onclick="highlightCell(this)">SRH</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
-                            <td>24 Mar</td>
+                            <td class="selected-date">24 Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">LSG</td>
                             <td class="team-name" onclick="highlightCell(this)">RR</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
-                            <td>24 Mar</td>
+                            <td class="selected-date">24 Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">GT</td>
                             <td class="team-name" onclick="highlightCell(this)">MI</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
-                            <td>25 Mar</td>
+                            <td class="selected-date">25 Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">PBKS</td>
                             <td class="team-name" onclick="highlightCell(this)">RCB</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
-                            <td>26 Mar</td>
+                            <td class="selected-date">26 Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">CSK</td>
                             <td class="team-name" onclick="highlightCell(this)">GT</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
-                            <td>27 Mar</td>
+                            <td class="selected-date">27 Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">MI</td>
                             <td class="team-name" onclick="highlightCell(this)">SRH</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
@@ -197,11 +197,33 @@
             <button id="submit-team">Submit Team</button>
         </div>
     </main>
+    <main>
+        <div class="team-selection">
+            <h2>Users List</h2>
+            <div class="team" style="max-height: 312px; overflow-y: scroll;">
+                <table id="users-table">
+                    <thead>
+                        <tr>
+                            <th class="column-1">Date</th>
+                            <th class="column-2">Name</th>
+                            <th class="column-3">Team</th>
+                            <th class="column-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
     <script>
         var teamName = "";
+        var selectedDate = "";
+
         function highlightCell(cell) {
             // Remove highlight from all cells
             var teamNames = document.querySelectorAll('.team-name');
+
             teamNames.forEach(function (element) {
                 element.classList.remove('highlighted');
             });
@@ -209,11 +231,16 @@
             cell.classList.add('highlighted');
         }
 
-        function selectTeam(button) {
+        function selectTeam(button, name) {
             // Get the selected team name
             var selectedTeam = button.parentElement.parentElement.querySelector('.highlighted').textContent;
+            var selectedDate = button.parentElement.parentElement.querySelector('.selected-date').textContent;
+
             // Update the selected team name in the display
             document.getElementById('selected-team-name').textContent = "Selected Team: " + selectedTeam;
+
+            addRow(selectedDate, name, selectedTeam, 'In Progress');
+            //addRow(date, name, team, status)
         }
 
         function openPopup(button) {
@@ -238,8 +265,21 @@
             });
 
             closePopup();
-            selectTeam(teamName);
+            selectTeam(teamName, selectedNames[0]);
             console.log(selectedNames);
+        }
+
+        function addRow(date, name, team, status) {
+            var tableBody = document.querySelector('#users-table tbody');
+            var newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${date}</td>
+                <td>${name}</td>
+                <td>${team}</td>
+                <td>${status}</td>
+
+            `;
+            tableBody.appendChild(newRow);
         }
     </script>
     <script src="/lib/jquery/dist/jquery.min.js"></script>
