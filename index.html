@@ -86,6 +86,27 @@
             color: white;
         }
 
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+        }
+
+            .popup p {
+                margin: 10px 0;
+            }
+
+            .popup input[type="checkbox"] {
+                margin-right: 10px;
+            }
+
         /* Responsive styles */
         @media screen and (max-width: 600px) {
             .team-selection {
@@ -113,11 +134,42 @@
                             <td>22 Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">CSK</td>
                             <td class="team-name" onclick="highlightCell(this)">RCB</td>
-                            <td><button class="select-button" onclick="selectTeam(this)">Select</button></td>
+                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                        </tr>
+                        <tr>
+                            <td>23 Mar</td>
+                            <td class="team-name" onclick="highlightCell(this)">DC</td>
+                            <td class="team-name" onclick="highlightCell(this)">PBKS</td>
+                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                        </tr>
+                        <tr>
+                            <td>23 Mar</td>
+                            <td class="team-name" onclick="highlightCell(this)">KKR</td>
+                            <td class="team-name" onclick="highlightCell(this)">SRH</td>
+                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                        </tr>
+                        <tr>
+                            <td>24 Mar</td>
+                            <td class="team-name" onclick="highlightCell(this)">LSG</td>
+                            <td class="team-name" onclick="highlightCell(this)">RR</td>
+                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                        </tr>
+                        <tr>
+                            <td>24 Mar</td>
+                            <td class="team-name" onclick="highlightCell(this)">GT</td>
+                            <td class="team-name" onclick="highlightCell(this)">MI</td>
+                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div class="popup" id="popup">
+            <h2>Available Players</h2>
+            <p><input type="radio" id="gopesh" value="Gopesh" name="pl1"> <label for="gopesh">Gopesh</label></p>
+            <p><input type="radio" id="vivek" value="Vivek" name="pl1"> <label for="vivek">Vivek</label></p>
+            <button onclick="getSelectedNames()">Check your name</button>
+            <button onclick="closePopup()">Close</button>
         </div>
         <div class="team-selection">
             <div class="selected-team">
@@ -128,6 +180,7 @@
         </div>
     </main>
     <script>
+        var teamName = "";
         function highlightCell(cell) {
             // Remove highlight from all cells
             var teamNames = document.querySelectorAll('.team-name');
@@ -143,6 +196,32 @@
             var selectedTeam = button.parentElement.parentElement.querySelector('.highlighted').textContent;
             // Update the selected team name in the display
             document.getElementById('selected-team-name').textContent = "Selected Team: " + selectedTeam;
+        }
+
+        function openPopup(button) {
+            var popup = document.getElementById('popup');
+            popup.style.display = 'block';
+            teamName = button;
+        }
+
+        function closePopup() {
+            var popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        }
+
+        function getSelectedNames() {
+
+            var selectedNames = [];
+            var checkboxes = document.querySelectorAll('.popup input[type="radio"]');
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    selectedNames.push(checkbox.value);
+                }
+            });
+
+            closePopup();
+            selectTeam(teamName);
+            console.log(selectedNames);
         }
     </script>
     <script src="/lib/jquery/dist/jquery.min.js"></script>
