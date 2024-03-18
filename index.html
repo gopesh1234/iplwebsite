@@ -194,7 +194,7 @@
                 <p id="selected-team-name"></p>
             </div>
             <p>Total Amount: <span id="total-amount">250</span></p>
-            <button id="submit-team">Submit Team</button>
+            <button onclick="submitTeam()">Submit Team</button>
         </div>
     </main>
     <main>
@@ -217,8 +217,14 @@
         </div>
     </main>
     <script>
-        var teamName = "";
         var selectedDate = "";
+        var userName = "";
+        var teamName = "";
+
+
+        function submitTeam() {
+            addRow(selectedDate, userName, teamName, 'In Progress');
+        }
 
         function highlightCell(cell) {
             // Remove highlight from all cells
@@ -234,12 +240,13 @@
         function selectTeam(button, name) {
             // Get the selected team name
             var selectedTeam = button.parentElement.parentElement.querySelector('.highlighted').textContent;
-            var selectedDate = button.parentElement.parentElement.querySelector('.selected-date').textContent;
+            selectedDate = button.parentElement.parentElement.querySelector('.selected-date').textContent;
 
             // Update the selected team name in the display
             document.getElementById('selected-team-name').textContent = "Selected Team: " + selectedTeam;
 
-            addRow(selectedDate, name, selectedTeam, 'In Progress');
+            teamName = selectedTeam;
+            userName = name;
             //addRow(date, name, team, status)
         }
 
