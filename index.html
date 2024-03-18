@@ -106,6 +106,43 @@
             .popup input[type="checkbox"] {
                 margin-right: 10px;
             }
+
+        #profit_loss {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        .profit_label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .green-triangle, .red-triangle {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .green-triangle {
+            border-width: 0 10px 20px 10px;
+            border-color: transparent transparent green transparent;
+            margin-right: 5px;
+        }
+
+        .red-triangle {
+            border-width: 20px 10px 0 10px;
+            border-color: red transparent transparent transparent;
+            margin-right: 5px;
+        }
+
+        .align-text-center{
+            text-align:center;
+        }
     </style>
 </head>
 <body>
@@ -117,58 +154,75 @@
                     <thead>
                         <tr>
                             <th class="column-1">Date</th>
-                            <th class="column-2">Team</th>
-                            <th class="column-3">Team</th>
+                            <th class="column-2">Team1</th>
+                            <th class="column-3">Team2</th>
+                            <th>Won</th>
                             <th>Select</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @*<tr style="background-color:grey;">
+                            <td class="selected-date">22Mar</td>
+                            <td class="team-name" onclick="highlightCell(this)">CSK</td>
+                            <td class="team-name" onclick="highlightCell(this)">RCB</td>
+                            <td>NA</td>
+                            <td><button disabled class="select-button" onclick="openPopup(this)">Select</button></td>
+                            <td><button class="select-button" onclick="openPopup2('Match settled !!')">Select</button></td>
+                        </tr>*@
                         <tr>
                             <td class="selected-date">22Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">CSK</td>
                             <td class="team-name" onclick="highlightCell(this)">RCB</td>
+                            <td>NA</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
                             <td class="selected-date">23Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">DC</td>
                             <td class="team-name" onclick="highlightCell(this)">PBKS</td>
+                            <td>NA</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
                             <td class="selected-date">23Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">KKR</td>
                             <td class="team-name" onclick="highlightCell(this)">SRH</td>
+                            <td>NA</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
                             <td class="selected-date">24Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">LSG</td>
                             <td class="team-name" onclick="highlightCell(this)">RR</td>
+                            <td>NA</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
                             <td class="selected-date">24Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">GT</td>
                             <td class="team-name" onclick="highlightCell(this)">MI</td>
+                            <td>NA</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
                             <td class="selected-date">25Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">PBKS</td>
                             <td class="team-name" onclick="highlightCell(this)">RCB</td>
+                            <td>NA</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
                             <td class="selected-date">26Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">CSK</td>
                             <td class="team-name" onclick="highlightCell(this)">GT</td>
+                            <td>NA</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
                             <td class="selected-date">27Mar</td>
                             <td class="team-name" onclick="highlightCell(this)">MI</td>
                             <td class="team-name" onclick="highlightCell(this)">SRH</td>
+                            <td>NA</td>
                             <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                     </tbody>
@@ -183,7 +237,7 @@
             <button onclick="closePopup()">Close</button>
         </div>
         <div class="popup" id="popup2">
-            <h2>Already scheduled !!</h2>
+            <h2 id="second-popup"></h2>
             <button onclick="closePopup2()">Close</button>
         </div>
         <div class="team-selection">
@@ -214,11 +268,31 @@
                 </table>
             </div>
         </div>
+        <div id="profit_loss" style="text-align: center; background-color: darkgrey; font-weight: bold; color: white; ">
+
+        </div>
+        <div id="profit_loss" style="text-align: center; background-color: darkgrey; font-weight: bold; color: white;">
+            <p>Won by Gopesh: 5</p>
+            <p>Won by Vivek: 2</p>
+            <p>Total: 7</p>
+        </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var selectedDate = "";
         var userName = "";
         var teamName = "";
+        var noError = true;
+        var noNameError = true;
+
+        var dailyData = [
+            { date: 'Mar 22', gopeshProfit: 250, vivekProfit: -250 },
+            { date: 'Mar 23', gopeshProfit: 250, vivekProfit: -250 },
+            { date: 'Mar 23', gopeshProfit: -250, vivekProfit: 250 },
+            { date: 'Mar 24', gopeshProfit: 250, vivekProfit: -250 },
+            { date: 'Mar 24', gopeshProfit: 250, vivekProfit: -250 }
+            // Add more data here
+        ];
 
         window.onload = function () {
 
@@ -230,13 +304,13 @@
 
                 var newRow = document.createElement('tr');
                 newRow.innerHTML = `
-        <td>${userEntry.date}</td>
-        <td>${userEntry.name}</td>
-        <td>${userEntry.team}</td>
-        <td class="status">${userEntry.status}</td>
-        <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
-        <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
-    `;
+                <td>${userEntry.date}</td>
+                <td>${userEntry.name}</td>
+                <td>${userEntry.team}</td>
+                <td class="status">${userEntry.status}</td>
+                <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
+                <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
+            `;
                 tableBody.appendChild(newRow);
             }
         };
@@ -298,19 +372,32 @@
 
             var myKey = selectedDate + teamName;
 
-            if (localStorage.getItem(myKey) == null) {
+            if (noNameError) {
 
-                var userData = { 'date': selectedDate, 'name': userName, 'team': teamName, 'status': 'Progress' };
-                localStorage.setItem(myKey, JSON.stringify(userData));
+                if (noError) {
 
-                addRow(myKey);
-            } else {
-                openPopup2();
+                    if (localStorage.getItem(myKey) == null) {
+
+                        var userData = { 'date': selectedDate, 'name': userName, 'team': teamName, 'status': 'Progress' };
+                        localStorage.setItem(myKey, JSON.stringify(userData));
+
+                        addRow(myKey);
+                    } else {
+                        openPopup2('Already scheduled !!');
+                    }
+
+                } else {
+                    openPopup2('Team not selected !!');
+                }
+            }
+            else {
+                openPopup2('No name selected !!');
             }
         }
 
-        function openPopup2() {
+        function openPopup2(msg) {
             var popup = document.getElementById('popup2');
+            document.getElementById('second-popup').textContent = msg;
             popup.style.display = 'block';
         }
 
@@ -330,13 +417,20 @@
 
         function selectTeam(button, name) {
 
-            var selectedTeam = button.parentElement.parentElement.querySelector('.highlighted').textContent;
-            selectedDate = button.parentElement.parentElement.querySelector('.selected-date').textContent;
+            try {
+                var selectedTeam = button.parentElement.parentElement.querySelector('.highlighted').textContent;
+                selectedDate = button.parentElement.parentElement.querySelector('.selected-date').textContent;
 
-            document.getElementById('selected-team-name').textContent = "Selected Team: " + selectedTeam;
+                document.getElementById('selected-team-name').textContent = "Selected Team: " + selectedTeam;
 
-            teamName = selectedTeam;
-            userName = name;
+                teamName = selectedTeam;
+                userName = name;
+                noError = true;
+            }
+            catch (err) {
+                noError = false;
+                console.log('Team not selected');
+            }
         }
 
         function openPopup(button) {
@@ -352,17 +446,25 @@
 
         function getSelectedNames() {
 
-            var selectedNames = [];
-            var checkboxes = document.querySelectorAll('.popup input[type="radio"]');
-            checkboxes.forEach(function (checkbox) {
-                if (checkbox.checked) {
-                    selectedNames.push(checkbox.value);
-                }
-            });
+            //var selectedNames = [];
+            //var checkboxes = document.querySelectorAll('.popup input[type="radio"]');
+            //checkboxes.forEach(function (checkbox) {
+            //    if (checkbox.checked) {
+            //        selectedNames.push(checkbox.value);
+            //    }
+            //});
 
-            closePopup();
-            selectTeam(teamName, selectedNames[0]);
-            console.log(selectedNames);
+            try {
+                var selectedName = document.querySelector('input[name="pl1"]:checked').value;
+
+                closePopup();
+                selectTeam(teamName, selectedName);
+                console.log(selectedName);
+                noNameError = true;
+            }
+            catch (err) {
+                noNameError = false;
+            }
         }
 
         function addRow(myKey) {
@@ -375,16 +477,49 @@
             var tableBody = document.querySelector('#users-table tbody');
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td>${userEntry.date}</td>
-                <td>${userEntry.name}</td>
-                <td>${userEntry.team}</td>
-                <td>${userEntry.status}</td>
-                <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
-                <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
+                        <td>${userEntry.date}</td>
+                        <td>${userEntry.name}</td>
+                        <td>${userEntry.team}</td>
+                        <td>${userEntry.status}</td>
+                        <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
+                        <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
 
-            `;
+                    `;
             tableBody.appendChild(newRow);
         }
+
+        // Function to calculate and display profit/loss
+        function calculateProfit() {
+            var profit_loss = document.getElementById('profit_loss');
+            var gopeshTotal = 0;
+            var vivekTotal = 0;
+
+            dailyData.forEach(function (data) {
+                gopeshTotal += data.gopeshProfit;
+                vivekTotal += data.vivekProfit;
+            });
+
+            // Display profit/loss for Gopesh
+            profit_loss.innerHTML += 'Gopesh Profit/Loss: ';
+            if (gopeshTotal >= 0) {
+                profit_loss.innerHTML += '<span class="green-triangle"></span> ' + gopeshTotal;
+            } else {
+                profit_loss.innerHTML += '<span class="red-triangle"></span> ' + gopeshTotal;
+            }
+            profit_loss.innerHTML += '<br>';
+
+            // Display profit/loss for Vivek
+            profit_loss.innerHTML += 'Vivek Profit/Loss: ';
+            if (vivekTotal >= 0) {
+                profit_loss.innerHTML += '<span class="green-triangle"></span> ' + vivekTotal;
+            } else {
+                profit_loss.innerHTML += '<span class="red-triangle"></span> ' + vivekTotal;
+            }
+        }
+
+        // Call the function to calculate and display profit/loss
+        calculateProfit();
+
     </script>
     <script src="/lib/jquery/dist/jquery.min.js"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
