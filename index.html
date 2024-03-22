@@ -500,7 +500,7 @@
             var rows = document.querySelectorAll('.team-selection tbody tr');
 
             rows.forEach(function (row) {
-                var wonCell = row.cells[3]; // Index of the "Won" column
+                var wonCell = row.cells[4]; // Index of the "Won" column
                 if (filterTeam === '' || wonCell.textContent === filterTeam) {
                     row.style.display = ''; // Show row if selected team matches or no team selected
                 } else {
