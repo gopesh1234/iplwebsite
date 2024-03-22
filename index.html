@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IPL24</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        /* Team selection styles */
+        .team-selection {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+            .team-selection h2 {
+                font-size: 1.5rem;
+                margin-top: 0;
+            }
+
+            .team-selection .team table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .team-selection th, .team-selection td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+
+            .team-selection th {
+                background-color: #f2f2f2;
+            }
+
+            .team-selection button {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .team-selection button:hover {
+                    background-color: #45a049;
+                }
+
+        .team-selection2 {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+            .team-selection2 h2 {
+                font-size: 1.5rem;
+                margin-top: 0;
+            }
+
+            .team-selection2 .team table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .team-selection2 th, .team-selection2 td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+
+            .team-selection2 th {
+                background-color: #f2f2f2;
+            }
+
+            .team-selection2 button {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .team-selection2 button:hover {
+                    background-color: #45a049;
+                }
+
+        /* Selected team styles */
+        .selected-team {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+        }
+
+        /* Highlighted cell styles */
+        .highlighted {
+            background-color: green;
+            color: white;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+        }
+
+            .popup p {
+                margin: 10px 0;
+            }
+
+            .popup input[type="checkbox"] {
+                margin-right: 10px;
+            }
+
+        #profit_loss {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        .profit_label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .green-triangle, .red-triangle {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .green-triangle {
+            border-width: 0 10px 20px 10px;
+            border-color: transparent transparent green transparent;
+            margin-right: 5px;
+        }
+
+        .red-triangle {
+            border-width: 20px 10px 0 10px;
+            border-color: red transparent transparent transparent;
+            margin-right: 5px;
+        }
+
+        .align-text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="team-selection">
+            <select id="filter-team" style="margin-bottom: 20px; height: 45px; width: 200px; text-align: center; background-color: darkorange; border-radius: 35px;">
+                <option value="">Select Team</option>
+                <option value="CSK">CSK</option>
+                <option value="DC">DC</option>
+                <option value="GT">GT</option>
+                <option value="KKR">KKR</option>
+                <option value="LSG">LSG</option>
+                <option value="MI">MI</option>
+                <option value="PBKS">PBKS</option>
+                <option value="RCB">RCB</option>
+                <option value="RR">RR</option>
+                <option value="SRH">SRH</option>
+            </select>
+            <div class="team" style="max-height: 312px; overflow-y: scroll;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="column-1">SNo</th>
+                            <th class="column-2">Date</th>
+                            <th class="column-3">Team1</th>
+                            <th class="column-4">Team2</th>
+                            <th class="column-5">Won</th>
+                            <th class="column-6">MoM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background-color:grey;">
+                            <td>1</td>
+                            <td class="selected-date">22Mar</td>
+                            <td>CSK</td>
+                            <td style="background-color: red; color: white;">RCB</td>
+                            <td style="background-color: green; color: white;">CSK</td>
+                            <td style="background-color: blue; color: white;">Mustafizur(4o-29r-4w)</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="selected-date">23Mar</td>
+                            <td>DC</td>
+                            <td>PBKS</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="selected-date">23Mar</td>
+                            <td>KKR</td>
+                            <td>SRH</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="selected-date">24Mar</td>
+                            <td>LSG</td>
+                            <td>RR</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td class="selected-date">24Mar</td>
+                            <td>GT</td>
+                            <td>MI</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td class="selected-date">25Mar</td>
+                            <td>PBKS</td>
+                            <td>RCB</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td class="selected-date">26Mar</td>
+                            <td>CSK</td>
+                            <td>GT</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td class="selected-date">27Mar</td>
+                            <td>MI</td>
+                            <td>SRH</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="text-align:center;" id="entry-count">
+                    <!-- Footer row to show the number of entries -->
+                    <span id="entry-count-display">Showing 9 out of 9 entries</span>
+                </div>
+            </div>
+        </div>
+        <div class="popup" id="popup">
+            <h2>Users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+            <p><input type="radio" id="gopesh" value="Gopesh" name="pl1"> <label for="gopesh">Gopesh</label></p>
+            <p><input type="radio" id="vivek" value="Vivek" name="pl1"> <label for="vivek">Vivek</label></p>
+            <button onclick="getSelectedNames()">Your name</button>
+            <button onclick="closePopup()">Close</button>
+        </div>
+        <div class="popup" id="popup2">
+            <h2 id="second-popup"></h2>
+            <button onclick="closePopup2()">Close</button>
+        </div>
+    </main>
+    <main>
+        <div class="team-selection2">
+            <h2>Users List</h2>
+            <div class="team" style="max-height: 312px; overflow-y: scroll;">
+                <table id="users-table">
+                    <thead>
+                        <tr>
+                            <th class="column-1">SNo</th>
+                            <th class="column-2">Date</th>
+                            <th class="column-3">Name</th>
+                            <th class="column-4">Team</th>
+                            <th class="column-5">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>22Mar</td>
+                            <td>Vivek</td>
+                            <td>CSK</td>
+                            <td style="background-color: green; color: white;">Won</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="profit_loss" style="text-align: center; background-color: darkgrey; font-weight: bold; color: white; ">
+        </div>
+        <div id="profit_loss" style="text-align: center; background-color: darkgrey; font-weight: bold; color: white;">
+            <p>Won by Gopesh: 0</p>
+            <p>Won by Vivek: 1</p>
+            <p>Total: 1</p>
+        </div>
+    </main>
+    <div style="margin-left:5%">
+        <iframe width="340" height="300" src="https://www.cricketlineguru.com/live-scores"></iframe>
+    </div>
+    <div style="height:10px">
+    </div>
+    <script>
+        var selectedDate = "";
+        var userName = "";
+        var teamName = "";
+        var noError = true;
+        var noNameError = true;
+
+        var dailyData = [
+            { date: 'Mar 22', gopeshProfit: -250, vivekProfit: +250 }
+        ];
+
+        function editStatus(button) {
+            var statusCell = button.parentElement.previousElementSibling;
+            var newStatus = prompt("Enter new status:");
+
+            const fourDigitPin = newStatus.split(" ");
+
+            if (fourDigitPin.length == 2) {
+                let pin = fourDigitPin[1];
+
+                if (pin == "0000" && fourDigitPin[0] !== null) {
+                    statusCell.textContent = fourDigitPin[0];
+                    updateLocalStorage();
+                }
+            }
+        }
+
+        function deleteRow(button) {
+
+            var pin = prompt("Enter pin:");
+
+            if (pin == "0000") {
+                var row = button.parentElement.parentElement;
+                row.remove();
+                updateLocalStorage();
+            }
+        }
+
+        function updateLocalStorage() {
+            // Update localStorage with the updated status values
+            var rows = document.querySelectorAll('#users-table tbody tr');
+            var updatedData = {};
+            rows.forEach(function (row) {
+                var date = row.cells[0].textContent;
+                var team = row.cells[2].textContent;
+                var status = row.cells[3].textContent;
+                updatedData[date + team] = JSON.stringify({
+                    'date': date,
+                    'name': row.cells[1].textContent,
+                    'team': team,
+                    'status': status
+                });
+            });
+
+            localStorage.clear();
+            for (let key in updatedData) {
+                localStorage.setItem(key, updatedData[key]);
+            }
+        }
+
+
+        function submitTeam() {
+
+            var myKey = selectedDate + teamName;
+
+            if (noNameError) {
+
+                if (noError) {
+
+                    if (localStorage.getItem(myKey) == null) {
+
+                        var userData = { 'date': selectedDate, 'name': userName, 'team': teamName, 'status': 'Progress' };
+                        localStorage.setItem(myKey, JSON.stringify(userData));
+
+                        addRow(myKey);
+                    } else {
+                        openPopup2('Already scheduled !!');
+                    }
+
+                } else {
+                    openPopup2('Team not selected !!');
+                }
+            }
+            else {
+                openPopup2('No name selected !!');
+            }
+        }
+
+        function openPopup2(msg) {
+            var popup = document.getElementById('popup2');
+            document.getElementById('second-popup').textContent = msg;
+            popup.style.display = 'block';
+        }
+
+        function closePopup2() {
+            var popup = document.getElementById('popup2');
+            popup.style.display = 'none';
+        }
+
+        function highlightCell(cell) {
+            var teamNames = document.querySelectorAll('.team-name');
+
+            teamNames.forEach(function (element) {
+                element.classList.remove('highlighted');
+            });
+            cell.classList.add('highlighted');
+        }
+
+        function selectTeam(button, name) {
+
+            try {
+                var selectedTeam = button.parentElement.parentElement.querySelector('.highlighted').textContent;
+                selectedDate = button.parentElement.parentElement.querySelector('.selected-date').textContent;
+
+                document.getElementById('selected-team-name').textContent = "Selected Team: " + selectedTeam;
+
+                teamName = selectedTeam;
+                userName = name;
+                noError = true;
+            }
+            catch (err) {
+                noError = false;
+                console.log('Team not selected');
+            }
+        }
+
+        function openPopup(button) {
+            var popup = document.getElementById('popup');
+            popup.style.display = 'block';
+            teamName = button;
+        }
+
+        function closePopup() {
+            var popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        }
+
+        function getSelectedNames() {
+
+            try {
+                var selectedName = document.querySelector('input[name="pl1"]:checked').value;
+
+                closePopup();
+                selectTeam(teamName, selectedName);
+                console.log(selectedName);
+                noNameError = true;
+            }
+            catch (err) {
+                noNameError = false;
+            }
+        }
+
+        function addRow(myKey) {
+
+            var items = localStorage.getItem(myKey);
+            var userEntry = JSON.parse(items);
+
+            console.log(JSON.parse(items));
+
+            var tableBody = document.querySelector('#users-table tbody');
+            var newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                                    <td>${userEntry.date}</td>
+                                    <td>${userEntry.name}</td>
+                                    <td>${userEntry.team}</td>
+                                    <td>${userEntry.status}</td>`;
+
+            tableBody.appendChild(newRow);
+        }
+
+        function calculateProfit() {
+            var profit_loss = document.getElementById('profit_loss');
+            var gopeshTotal = 0;
+            var vivekTotal = 0;
+
+            dailyData.forEach(function (data) {
+                gopeshTotal += data.gopeshProfit;
+                vivekTotal += data.vivekProfit;
+            });
+
+            // Display profit/loss for Gopesh
+            profit_loss.innerHTML += 'Gopesh Profit/Loss: ';
+            if (gopeshTotal >= 0) {
+                profit_loss.innerHTML += '<span class="green-triangle"></span> ' + gopeshTotal;
+            } else {
+                profit_loss.innerHTML += '<span class="red-triangle"></span> ' + gopeshTotal;
+            }
+            profit_loss.innerHTML += '<br>';
+
+            // Display profit/loss for Vivek
+            profit_loss.innerHTML += 'Vivek Profit/Loss: ';
+            if (vivekTotal >= 0) {
+                profit_loss.innerHTML += '<span class="green-triangle"></span> ' + vivekTotal;
+            } else {
+                profit_loss.innerHTML += '<span class="red-triangle"></span> ' + vivekTotal;
+            }
+        }
+
+        // Call the function to calculate and display profit/loss
+        calculateProfit();
+
+        function updateEntryCount() {
+            var filterTeam = document.getElementById('filter-team').value.toUpperCase();
+            var visibleRowCount = 0;
+            var totalRowCount = 0;
+            var rows = document.querySelectorAll('.team-selection tbody tr');
+
+            rows.forEach(function (row) {
+                totalRowCount++;
+
+                var cells = row.getElementsByTagName("td");
+                var found = false;
+
+                // Loop through all cells in the row
+                for (var i = 0; i < cells.length; i++) {
+                    var cell = cells[i];
+                    if (cell.textContent.toUpperCase().indexOf(filterTeam) > -1) {
+                        found = true;
+                        console.log(totalRowCount);
+                        break;
+                    }
+                }
+
+                // Increment the visible row count if the selected team is found in any cell, or if no team is selected
+                if (found || filterTeam === '') {
+                    visibleRowCount++;
+                }
+            });
+
+            // Display the count of visible entries
+            document.getElementById('entry-count-display').textContent = "Showing " + visibleRowCount + " out of " + totalRowCount + " entries";
+        }
+
+        function filterTableByTeam() {
+            var filterTeam = document.getElementById('filter-team').value.toUpperCase();
+            var rows = document.querySelectorAll('.team-selection tbody tr');
+
+            rows.forEach(function (row) {
+                var cells = row.getElementsByTagName("td");
+                var found = false;
+
+                // Loop through all cells in the row
+                for (var i = 0; i < cells.length; i++) {
+                    var cell = cells[i];
+                    if (cell.textContent.toUpperCase().indexOf(filterTeam) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                // Display the row if the selected team is found in any cell, or if no team is selected
+                if (found || filterTeam === '') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Add event listener to the select element for filtering the table by team
+        document.getElementById('filter-team').addEventListener('change', function () {
+            filterTableByTeam();
+            updateEntryCount();
+        });
+
+    </script>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js?v=4q1jwFhaPaZgr8WAUSrux6hAuh0XDg9kPS3xIVq36I0"></script>
+</body>
+</html>
