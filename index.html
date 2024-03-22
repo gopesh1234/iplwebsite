@@ -157,65 +157,65 @@
                             <th class="column-2">Team1</th>
                             <th class="column-3">Team2</th>
                             <th>Won</th>
-                            <th>Select</th>
+                            <th>MoM</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr style="background-color:grey;">
                             <td class="selected-date">22Mar</td>
-                            <td class="team-name" onclick="highlightCell(this)">CSK</td>
-                            <td class="team-name" onclick="highlightCell(this)">RCB</td>
+                            <td>CSK</td>
+                            <td>RCB</td>
+                            <td style="background-color: greenyellow;">CSK</td>
                             <td>NA</td>
-                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
                         </tr>
                         <tr>
                             <td class="selected-date">23Mar</td>
-                            <td class="team-name" onclick="highlightCell(this)">DC</td>
-                            <td class="team-name" onclick="highlightCell(this)">PBKS</td>
+                            <td>DC</td>
+                            <td>PBKS</td>
                             <td>NA</td>
-                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                            <td>NA</td>
                         </tr>
                         <tr>
                             <td class="selected-date">23Mar</td>
-                            <td class="team-name" onclick="highlightCell(this)">KKR</td>
-                            <td class="team-name" onclick="highlightCell(this)">SRH</td>
+                            <td>KKR</td>
+                            <td>SRH</td>
                             <td>NA</td>
-                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                            <td>NA</td>
                         </tr>
                         <tr>
                             <td class="selected-date">24Mar</td>
-                            <td class="team-name" onclick="highlightCell(this)">LSG</td>
-                            <td class="team-name" onclick="highlightCell(this)">RR</td>
+                            <td>LSG</td>
+                            <td>RR</td>
                             <td>NA</td>
-                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                            <td>NA</td>
                         </tr>
                         <tr>
                             <td class="selected-date">24Mar</td>
-                            <td class="team-name" onclick="highlightCell(this)">GT</td>
-                            <td class="team-name" onclick="highlightCell(this)">MI</td>
+                            <td>GT</td>
+                            <td>MI</td>
                             <td>NA</td>
-                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                            <td>NA</td>
                         </tr>
                         <tr>
                             <td class="selected-date">25Mar</td>
-                            <td class="team-name" onclick="highlightCell(this)">PBKS</td>
-                            <td class="team-name" onclick="highlightCell(this)">RCB</td>
+                            <td>PBKS</td>
+                            <td>RCB</td>
                             <td>NA</td>
-                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                            <td>NA</td>
                         </tr>
                         <tr>
                             <td class="selected-date">26Mar</td>
-                            <td class="team-name" onclick="highlightCell(this)">CSK</td>
-                            <td class="team-name" onclick="highlightCell(this)">GT</td>
+                            <td>CSK</td>
+                            <td>GT</td>
                             <td>NA</td>
-                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                            <td>NA</td>
                         </tr>
                         <tr>
                             <td class="selected-date">27Mar</td>
-                            <td class="team-name" onclick="highlightCell(this)">MI</td>
-                            <td class="team-name" onclick="highlightCell(this)">SRH</td>
+                            <td>MI</td>
+                            <td>SRH</td>
                             <td>NA</td>
-                            <td><button class="select-button" onclick="openPopup(this)">Select</button></td>
+                            <td>NA</td>
                         </tr>
                     </tbody>
                 </table>
@@ -232,13 +232,6 @@
             <h2 id="second-popup"></h2>
             <button onclick="closePopup2()">Close</button>
         </div>
-        <div class="team-selection">
-            <div class="selected-team">
-                <p id="selected-team-name"></p>
-            </div>
-            <p>Total Amount: <span id="total-amount">250</span></p>
-            <button onclick="submitTeam()">Submit Team</button>
-        </div>
     </main>
     <main>
         <div class="team-selection">
@@ -251,11 +244,15 @@
                             <th class="column-2">Name</th>
                             <th class="column-3">Team</th>
                             <th class="column-4">Status</th>
-                            <th class="column-5">Edit</th>
-                            <th class="column-6">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td>22Mar</td>
+                            <td>Vivek</td>
+                            <td>CSK</td>
+                            <td>Won</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -263,9 +260,9 @@
         <div id="profit_loss" style="text-align: center; background-color: darkgrey; font-weight: bold; color: white; ">
         </div>
         <div id="profit_loss" style="text-align: center; background-color: darkgrey; font-weight: bold; color: white;">
-            <p>Won by Gopesh: 5</p>
-            <p>Won by Vivek: 2</p>
-            <p>Total: 7</p>
+            <p>Won by Gopesh: 0</p>
+            <p>Won by Vivek: 1</p>
+            <p>Total: 1</p>
         </div>
     </main>
     <div style="margin-left:5%">
@@ -281,34 +278,8 @@
         var noNameError = true;
 
         var dailyData = [
-            { date: 'Mar 22', gopeshProfit: 250, vivekProfit: -250 },
-            { date: 'Mar 23', gopeshProfit: 250, vivekProfit: -250 },
-            { date: 'Mar 23', gopeshProfit: -250, vivekProfit: 250 },
-            { date: 'Mar 24', gopeshProfit: 250, vivekProfit: -250 },
-            { date: 'Mar 24', gopeshProfit: 250, vivekProfit: -250 }
-            // Add more data here
+            { date: 'Mar 22', gopeshProfit: -250, vivekProfit: +250 }
         ];
-
-        window.onload = function () {
-
-            var tableBody = document.querySelector('#users-table tbody');
-
-            for (let [key, value] of Object.entries(localStorage)) {
-                console.log(`${key}: ${JSON.parse(value)}`);
-                var userEntry = JSON.parse(value);
-
-                var newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                        <td>${userEntry.date}</td>
-                        <td>${userEntry.name}</td>
-                        <td>${userEntry.team}</td>
-                        <td class="status">${userEntry.status}</td>
-                        <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
-                        <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
-                    `;
-                tableBody.appendChild(newRow);
-            }
-        };
 
         function editStatus(button) {
             var statusCell = button.parentElement.previousElementSibling;
@@ -352,7 +323,7 @@
                     'status': status
                 });
             });
-            // Clear existing localStorage and set updated data
+
             localStorage.clear();
             for (let key in updatedData) {
                 localStorage.setItem(key, updatedData[key]);
@@ -361,9 +332,6 @@
 
 
         function submitTeam() {
-
-            //localStorage.clear();
-            //localStorage.removeItem('keyName');
 
             var myKey = selectedDate + teamName;
 
@@ -441,14 +409,6 @@
 
         function getSelectedNames() {
 
-            //var selectedNames = [];
-            //var checkboxes = document.querySelectorAll('.popup input[type="radio"]');
-            //checkboxes.forEach(function (checkbox) {
-            //    if (checkbox.checked) {
-            //        selectedNames.push(checkbox.value);
-            //    }
-            //});
-
             try {
                 var selectedName = document.querySelector('input[name="pl1"]:checked').value;
 
@@ -475,15 +435,11 @@
                                 <td>${userEntry.date}</td>
                                 <td>${userEntry.name}</td>
                                 <td>${userEntry.team}</td>
-                                <td>${userEntry.status}</td>
-                                <td><button class="edit-button" onclick="editStatus(this)">Edit</button></td>
-                                <td><button class="delete-button" onclick="deleteRow(this)">Delete</button></td>
+                                <td>${userEntry.status}</td>`;
 
-                            `;
             tableBody.appendChild(newRow);
         }
 
-        // Function to calculate and display profit/loss
         function calculateProfit() {
             var profit_loss = document.getElementById('profit_loss');
             var gopeshTotal = 0;
