@@ -72,6 +72,52 @@
             background-color: #45a049;
         }
 
+        .team-selection2 {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+            .team-selection2 h2 {
+                font-size: 1.5rem;
+                margin-top: 0;
+            }
+
+            .team-selection2 .team table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .team-selection2 th, .team-selection2 td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+
+            .team-selection2 th {
+                background-color: #f2f2f2;
+            }
+
+            .team-selection2 button {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .team-selection2 button:hover {
+                    background-color: #45a049;
+                }
+
         /* Selected team styles */
         .selected-team {
             margin-top: 10px;
@@ -240,6 +286,10 @@
                         </tr>
                     </tbody>
                 </table>
+                <div style="text-align:center;" id="entry-count">
+                    <!-- Footer row to show the number of entries -->
+                    <span id="entry-count-display">Showing 9 out of 9 entries</span>
+                </div>
             </div>
         </div>
         <div class="popup" id="popup">
@@ -255,7 +305,7 @@
         </div>
     </main>
     <main>
-        <div class="team-selection">
+        <div class="team-selection2">
             <h2>Users List</h2>
             <div class="team" style="max-height: 312px; overflow-y: scroll;">
                 <table id="users-table">
@@ -494,23 +544,69 @@
         // Call the function to calculate and display profit/loss
         calculateProfit();
 
-        // Function to filter won matches based on selected team
-        function filterWonMatches() {
-            var filterTeam = document.getElementById('filter-team').value;
+        function updateEntryCount() {
+            var filterTeam = document.getElementById('filter-team').value.toUpperCase();
+            var visibleRowCount = 0;
+            var totalRowCount = 0;
             var rows = document.querySelectorAll('.team-selection tbody tr');
 
             rows.forEach(function (row) {
-                var wonCell = row.cells[4]; // Index of the "Won" column
-                if (filterTeam === '' || wonCell.textContent === filterTeam) {
-                    row.style.display = ''; // Show row if selected team matches or no team selected
+                totalRowCount++;
+
+                var cells = row.getElementsByTagName("td");
+                var found = false;
+
+                // Loop through all cells in the row
+                for (var i = 0; i < cells.length; i++) {
+                    var cell = cells[i];
+                    if (cell.textContent.toUpperCase().indexOf(filterTeam) > -1) {
+                        found = true;
+                        console.log(totalRowCount);
+                        break;
+                    }
+                }
+
+                // Increment the visible row count if the selected team is found in any cell, or if no team is selected
+                if (found || filterTeam === '') {
+                    visibleRowCount++;
+                }
+            });
+
+            // Display the count of visible entries
+            document.getElementById('entry-count-display').textContent = "Showing " + visibleRowCount + " out of " + totalRowCount + " entries";
+        }
+
+        function filterTableByTeam() {
+            var filterTeam = document.getElementById('filter-team').value.toUpperCase();
+            var rows = document.querySelectorAll('.team-selection tbody tr');
+
+            rows.forEach(function (row) {
+                var cells = row.getElementsByTagName("td");
+                var found = false;
+
+                // Loop through all cells in the row
+                for (var i = 0; i < cells.length; i++) {
+                    var cell = cells[i];
+                    if (cell.textContent.toUpperCase().indexOf(filterTeam) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                // Display the row if the selected team is found in any cell, or if no team is selected
+                if (found || filterTeam === '') {
+                    row.style.display = '';
                 } else {
-                    row.style.display = 'none'; // Hide row if selected team doesn't match
+                    row.style.display = 'none';
                 }
             });
         }
 
-        // Add event listener to the select element for filtering won matches
-        document.getElementById('filter-team').addEventListener('change', filterWonMatches);
+        // Add event listener to the select element for filtering the table by team
+        document.getElementById('filter-team').addEventListener('change', function () {
+            filterTableByTeam();
+            updateEntryCount();
+        });
 
     </script>
     <script src="/lib/jquery/dist/jquery.min.js"></script>
