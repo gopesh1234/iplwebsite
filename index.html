@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/site.css" />
     <style>
-        /* General styles */ 
+        /* General styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -34,43 +34,43 @@
             margin-bottom: 20px;
         }
 
-        .team-selection h2 {
-            font-size: 1.5rem;
-            margin-top: 0;
-        }
+            .team-selection h2 {
+                font-size: 1.5rem;
+                margin-top: 0;
+            }
 
-        .team-selection .team table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+            .team-selection .team table {
+                width: 100%;
+                border-collapse: collapse;
+            }
 
-        .team-selection th, .team-selection td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
+            .team-selection th, .team-selection td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
 
-        .team-selection th {
-            background-color: #f2f2f2;
-        }
+            .team-selection th {
+                background-color: #f2f2f2;
+            }
 
-        .team-selection button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+            .team-selection button {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
 
-        .team-selection button:hover {
-            background-color: #45a049;
-        }
+                .team-selection button:hover {
+                    background-color: #45a049;
+                }
 
         .team-selection2 {
             background-color: #f9f9f9;
@@ -186,8 +186,8 @@
             margin-right: 5px;
         }
 
-        .align-text-center{
-            text-align:center;
+        .align-text-center {
+            text-align: center;
         }
     </style>
 </head>
@@ -338,11 +338,6 @@
             <p>Total: 1</p>
         </div>
     </main>
-    <div style="margin-left:5%">
-        <iframe width="340" height="300" src="https://www.cricketlineguru.com/live-scores"></iframe>
-    </div>
-    <div style="height:10px">
-    </div>
     <script>
         var selectedDate = "";
         var userName = "";
@@ -505,10 +500,10 @@
             var tableBody = document.querySelector('#users-table tbody');
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                                <td>${userEntry.date}</td>
-                                <td>${userEntry.name}</td>
-                                <td>${userEntry.team}</td>
-                                <td>${userEntry.status}</td>`;
+                                    <td>${userEntry.date}</td>
+                                    <td>${userEntry.name}</td>
+                                    <td>${userEntry.team}</td>
+                                    <td>${userEntry.status}</td>`;
 
             tableBody.appendChild(newRow);
         }
