@@ -1,616 +1,835 @@
-<!DOCTYPE html>
+@{
+    Layout = null;
+}
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IPL24</title>
-    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/site.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>TYK — Test Your Knowledge</title>
     <style>
-        /* General styles */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        /* Team selection styles */
-        .team-selection {
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-            .team-selection h2 {
-                font-size: 1.5rem;
-                margin-top: 0;
+            :root {
+                --ink: #202943;
+                --muted: #788198;
+                --line: #e2e7f0;
+                --bg: #f4f6fb;
+                --purple: #5b5ce2;
+                --pale: #eeeeff;
+                --green: #16845c;
+                --red: #c54155
             }
 
-            .team-selection .team table {
-                width: 100%;
-                border-collapse: collapse;
+            * {
+                box-sizing: border-box
             }
 
-            .team-selection th, .team-selection td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: center;
+            body {
+                margin: 0;
+                background: var(--bg);
+                color: var(--ink);
+                font: 15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif
             }
 
-            .team-selection th {
-                background-color: #f2f2f2;
+            .app {
+                max-width: 1250px;
+                margin: auto;
+                padding: 22px
             }
 
-            .team-selection button {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                padding: 8px 12px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 14px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
+            .top {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                background: white;
+                border: 1px solid var(--line);
+                border-radius: 16px;
+                padding: 17px 20px;
+                box-shadow: 0 10px 30px #26324b0b
             }
 
-                .team-selection button:hover {
-                    background-color: #45a049;
+            .brand {
+                font-weight: 900;
+                font-size: 21px;
+                letter-spacing: -.5px
+            }
+
+                .brand span {
+                    color: var(--purple)
                 }
 
-        .team-selection2 {
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-            .team-selection2 h2 {
-                font-size: 1.5rem;
-                margin-top: 0;
+            .hello {
+                position: absolute;
+                right: 20px;
+                color: var(--muted);
+                font-size: 13px
             }
 
-            .team-selection2 .team table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            .team-selection2 th, .team-selection2 td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: center;
-            }
-
-            .team-selection2 th {
-                background-color: #f2f2f2;
-            }
-
-            .team-selection2 button {
-                background-color: #4CAF50;
+            .hero {
+                background: linear-gradient(115deg,#292b59,#5758d7);
                 color: white;
-                border: none;
-                padding: 8px 12px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 14px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
+                border-radius: 16px;
+                padding: 18px 22px;
+                margin: 15px 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center
             }
 
-                .team-selection2 button:hover {
-                    background-color: #45a049;
+                .hero h1 {
+                    font-size: 23px;
+                    margin: 0 0 3px
                 }
 
-        /* Selected team styles */
-        .selected-team {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f2f2f2;
-            border-radius: 8px;
-        }
+                .hero p {
+                    margin: 0;
+                    color: #e5e6ff;
+                    font-size: 13px
+                }
 
-        /* Highlighted cell styles */
-        .highlighted {
-            background-color: green;
-            color: white;
-        }
+                .hero .emoji {
+                    font-size: 35px
+                }
 
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 9999;
-        }
-
-            .popup p {
-                margin: 10px 0;
+            .stats {
+                display: grid;
+                grid-template-columns: repeat(3,1fr);
+                gap: 10px;
+                margin-bottom: 15px
             }
 
-            .popup input[type="checkbox"] {
-                margin-right: 10px;
+            .stat {
+                background: white;
+                border: 1px solid var(--line);
+                border-radius: 13px;
+                padding: 12px 15px
             }
 
-        #profit_loss {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 400px;
-            margin: 50px auto;
-        }
+                .stat small {
+                    display: block;
+                    color: var(--muted);
+                    font-size: 11px;
+                    font-weight: 800
+                }
 
-        .profit_label {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+                .stat strong {
+                    font-size: 23px
+                }
 
-        .green-triangle, .red-triangle {
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-        }
+            .layout {
+                display: grid;
+                grid-template-columns: 165px minmax(0,1fr);
+                gap: 15px;
+                align-items: start
+            }
 
-        .green-triangle {
-            border-width: 0 10px 20px 10px;
-            border-color: transparent transparent green transparent;
-            margin-right: 5px;
-        }
+            .panel {
+                background: white;
+                border: 1px solid var(--line);
+                border-radius: 16px;
+                padding: 18px;
+                box-shadow: 0 10px 30px #26324b0b;
+                min-width: 0
+            }
 
-        .red-triangle {
-            border-width: 20px 10px 0 10px;
-            border-color: red transparent transparent transparent;
-            margin-right: 5px;
-        }
+            .sidebar h3 {
+                margin: 0 0 10px;
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: var(--muted)
+            }
 
-        .align-text-center {
-            text-align: center;
-        }
+            .subjects {
+                display: grid;
+                gap: 5px
+            }
+
+            .subject {
+                display: flex;
+                gap: 9px;
+                align-items: center;
+                text-align: left;
+                border: 1px solid transparent;
+                border-radius: 10px;
+                padding: 11px;
+                background: white;
+                color: var(--ink);
+                font-weight: 800;
+                cursor: pointer
+            }
+
+                .subject:hover, .subject.active {
+                    background: var(--pale);
+                    border-color: #d8d9ff;
+                    color: #494acb
+                }
+
+                .subject .ico {
+                    font-size: 18px
+                }
+
+            .side-note {
+                border-top: 1px solid var(--line);
+                margin-top: 15px;
+                padding-top: 13px;
+                color: var(--muted);
+                font-size: 12px
+            }
+
+                .side-note b {
+                    font-size: 21px;
+                    color: var(--ink);
+                    display: block
+                }
+
+            .heading {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                margin-bottom: 16px
+            }
+
+                .heading h2 {
+                    font-size: 21px;
+                    margin: 0
+                }
+
+                .heading p {
+                    font-size: 12px;
+                    color: var(--muted);
+                    margin: 3px 0 0
+                }
+
+            .btn {
+                border: 0;
+                border-radius: 10px;
+                padding: 10px 13px;
+                font-weight: 800;
+                cursor: pointer
+            }
+
+            .primary {
+                background: var(--purple);
+                color: white
+            }
+
+                .primary:hover {
+                    background: #4647c6
+                }
+
+            .soft {
+                background: #f0f2f8;
+                color: #46516a;
+                border: 1px solid var(--line)
+            }
+
+            .danger {
+                background: #fff0f2;
+                color: var(--red)
+            }
+
+            .small {
+                font-size: 11px;
+                padding: 7px 9px
+            }
+
+            .eyebrow {
+                font-size: 11px;
+                font-weight: 900;
+                letter-spacing: 1.2px;
+                color: var(--muted);
+                margin-bottom: 10px
+            }
+
+            .days {
+                display: grid;
+                grid-template-columns: repeat(5,minmax(0,1fr));
+                gap: 9px
+            }
+
+            .day {
+                background: #fff;
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                padding: 12px;
+                text-align: left;
+                min-height: 105px;
+                cursor: pointer;
+                transition: .15s
+            }
+
+                .day:hover {
+                    border-color: #a6a7ff;
+                    transform: translateY(-2px)
+                }
+
+                .day.active {
+                    background: #f2f2ff;
+                    border-color: var(--purple);
+                    box-shadow: 0 0 0 2px #5b5ce218
+                }
+
+                .day strong {
+                    display: block;
+                    font-size: 14px
+                }
+
+                .day small {
+                    display: block;
+                    color: var(--muted);
+                    font-size: 10px;
+                    margin-top: 5px;
+                    line-height: 1.35
+                }
+
+                .day .count {
+                    display: inline-block;
+                    background: #e9eaff;
+                    color: #4b4cc7;
+                    border-radius: 5px;
+                    padding: 3px 6px;
+                    font-size: 10px;
+                    font-weight: 900;
+                    margin-top: 8px
+                }
+
+            .empty {
+                padding: 28px 14px;
+                text-align: center;
+                border: 1px dashed #ccd3e1;
+                border-radius: 13px;
+                color: var(--muted)
+            }
+
+            .quiz-area {
+                border-top: 1px solid var(--line);
+                margin-top: 20px;
+                padding-top: 18px
+            }
+
+            .quizhead {
+                display: flex;
+                justify-content: space-between;
+                gap: 12px;
+                align-items: flex-start
+            }
+
+                .quizhead h3 {
+                    margin: 0;
+                    font-size: 19px
+                }
+
+            .muted {
+                font-size: 12px;
+                color: var(--muted)
+            }
+
+            .score {
+                background: var(--pale);
+                color: #494acb;
+                border-radius: 8px;
+                padding: 7px 10px;
+                font-size: 12px;
+                font-weight: 900;
+                white-space: nowrap
+            }
+
+            .tabs {
+                display: flex;
+                gap: 7px;
+                flex-wrap: wrap;
+                margin: 13px 0
+            }
+
+            .tab {
+                border: 1px solid var(--line);
+                background: #f3f4f9;
+                border-radius: 8px;
+                padding: 7px 10px;
+                color: #556078;
+                font-size: 11px;
+                font-weight: 850;
+                cursor: pointer
+            }
+
+                .tab.active {
+                    background: var(--pale);
+                    color: #4b4cc7;
+                    border-color: #d8d9ff
+                }
+
+            .question {
+                border: 1px solid var(--line);
+                border-radius: 14px;
+                padding: 18px
+            }
+
+            .qmeta {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                color: var(--muted);
+                font-size: 11px;
+                font-weight: 850
+            }
+
+            .qtext {
+                font-size: 17px;
+                font-weight: 800;
+                line-height: 1.5;
+                margin: 12px 0 16px;
+                white-space: pre-wrap
+            }
+
+            .options {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 9px
+            }
+
+            .option {
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 11px;
+                border: 1px solid var(--line);
+                border-radius: 10px;
+                background: white;
+                text-align: left;
+                color: var(--ink);
+                cursor: pointer
+            }
+
+                .option:hover {
+                    border-color: #a4a5ff
+                }
+
+                .option.correct {
+                    background: #eaf9f1;
+                    border-color: #80c9a8
+                }
+
+                .option.wrong {
+                    background: #fff0f2;
+                    border-color: #e49aa6
+                }
+
+            .letter {
+                flex-shrink: 0;
+                width: 26px;
+                height: 26px;
+                border-radius: 7px;
+                background: #f0f2f8;
+                display: grid;
+                place-items: center;
+                font-size: 11px;
+                font-weight: 900
+            }
+
+            .feedback {
+                margin-top: 12px;
+                padding: 12px;
+                border-radius: 10px;
+                font-size: 12px;
+                background: #f2f4fa;
+                color: #46516a
+            }
+
+                .feedback.good {
+                    background: #eaf9f1;
+                    color: #126b47
+                }
+
+                .feedback.bad {
+                    background: #fff0f2;
+                    color: #a52a3f
+                }
+
+            .qnav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                margin-top: 14px
+            }
+
+            .qnums {
+                display: flex;
+                gap: 5px;
+                flex-wrap: wrap;
+                margin-top: 14px
+            }
+
+            .qnum {
+                width: 30px;
+                height: 30px;
+                border: 0;
+                border-radius: 8px;
+                background: #f0f2f8;
+                color: #566178;
+                font-weight: 900;
+                cursor: pointer
+            }
+
+                .qnum.active {
+                    outline: 2px solid var(--purple);
+                    background: var(--pale);
+                    color: #4b4cc7
+                }
+
+                .qnum.done {
+                    background: #dff6e9;
+                    color: #16744f
+                }
+
+            .progress {
+                height: 5px;
+                background: #eceef6;
+                border-radius: 9px;
+                overflow: hidden;
+                margin: 10px 0 15px
+            }
+
+                .progress div {
+                    height: 100%;
+                    background: var(--purple)
+                }
+
+            .admin {
+                margin-top: 16px
+            }
+
+            .adminhead {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 12px
+            }
+
+                .adminhead h2 {
+                    margin: 0;
+                    font-size: 20px
+                }
+
+                .adminhead p {
+                    margin: 3px 0;
+                    color: var(--muted);
+                    font-size: 12px
+                }
+
+            .notice {
+                background: #fff8e7;
+                color: #79591c;
+                padding: 10px 12px;
+                border-radius: 10px;
+                font-size: 12px;
+                margin: 13px 0
+            }
+
+            .admin-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px
+            }
+
+            .formbox {
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                padding: 15px;
+                min-width: 0
+            }
+
+                .formbox h3 {
+                    margin: 0 0 10px;
+                    font-size: 15px
+                }
+
+            .field {
+                display: grid;
+                gap: 5px;
+                margin: 10px 0
+            }
+
+                .field label {
+                    font-size: 11px;
+                    font-weight: 850;
+                    color: #59647a
+                }
+
+                .field input, .field select, .field textarea {
+                    width: 100%;
+                    border: 1px solid #dce1ec;
+                    border-radius: 9px;
+                    padding: 10px;
+                    background: #fff;
+                    color: var(--ink);
+                    font: inherit;
+                    outline: none
+                }
+
+                .field textarea {
+                    min-height: 70px;
+                    resize: vertical
+                }
+
+                    .field input:focus, .field select:focus, .field textarea:focus {
+                        border-color: #898aff;
+                        box-shadow: 0 0 0 3px #5b5ce21a
+                    }
+
+            .twocol {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 9px
+            }
+
+            .check {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 12px;
+                color: var(--muted);
+                margin: 9px 0
+            }
+
+            .adminlist {
+                display: grid;
+                gap: 7px;
+                margin-top: 10px
+            }
+
+            .adminitem {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                border: 1px solid var(--line);
+                border-radius: 9px;
+                padding: 10px
+            }
+
+                .adminitem small {
+                    display: block;
+                    color: var(--muted);
+                    font-size: 11px
+                }
+
+            .actions {
+                display: flex;
+                gap: 5px;
+                flex-wrap: wrap
+            }
+
+            .hidden {
+                display: none !important
+            }
+
+            .footer {
+                text-align: center;
+                color: var(--muted);
+                font-size: 11px;
+                padding: 22px
+            }
+
+            .toast {
+                position: fixed;
+                right: 18px;
+                bottom: 18px;
+                background: #202444;
+                color: white;
+                border-radius: 10px;
+                padding: 12px 16px;
+                z-index: 5;
+                box-shadow: 0 8px 25px #1113
+            }
+            @@media(max - width:950px) {
+                .days {
+                    grid-template-columns: repeat(4,minmax(0,1fr))
+                }
+            }
+            @@media(max - width:720px)
+
+            {
+                .app {
+                    padding: 11px
+                }
+
+                .top {
+                    justify-content: flex-start
+                }
+
+                .hello {
+                    position: static;
+                    margin-left: auto;
+                    font-size: 11px
+                }
+
+                .brand {
+                    font-size: 17px
+                }
+
+                .layout {
+                    grid-template-columns: 1fr
+                }
+
+                .sidebar {
+                    padding: 12px
+                }
+
+                .subjects {
+                    grid-template-columns: repeat(4,minmax(0,1fr))
+                }
+
+                .subject {
+                    display: block;
+                    text-align: center;
+                    padding: 8px 3px;
+                    font-size: 12px
+                }
+
+                    .subject .ico {
+                        display: block
+                    }
+
+                .side-note {
+                    display: none
+                }
+
+                .panel {
+                    padding: 14px
+                }
+
+                .days {
+                    grid-template-columns: repeat(3,minmax(0,1fr));
+                    gap: 7px
+                }
+
+                .day {
+                    padding: 9px;
+                    min-height: 98px
+                }
+
+                    .day strong {
+                        font-size: 12px
+                    }
+
+                .options {
+                    grid-template-columns: 1fr
+                }
+
+                .admin-grid {
+                    grid-template-columns: 1fr
+                }
+
+                .twocol {
+                    grid-template-columns: 1fr
+                }
+
+                .hero {
+                    padding: 15px
+                }
+
+                    .hero h1 {
+                        font-size: 20px
+                    }
+            }
+            @@media(max - width:400px)
+
+            {
+                .days {
+                    grid-template-columns: repeat(2,minmax(0,1fr))
+                }
+
+                .subjects {
+                    grid-template-columns: repeat(2,minmax(0,1fr))
+                }
+
+                .heading {
+                    align-items: flex-start;
+                    flex-direction: column
+                }
+            }
     </style>
 </head>
 <body>
-    <main>
-        <div class="team-selection">
-            <select id="filter-team" style="margin-bottom: 20px; height: 45px; width: 200px; text-align: center; background-color: darkorange; border-radius: 35px;">
-                <option value="">Select Team</option>
-                <option value="CSK">CSK</option>
-                <option value="DC">DC</option>
-                <option value="GT">GT</option>
-                <option value="KKR">KKR</option>
-                <option value="LSG">LSG</option>
-                <option value="MI">MI</option>
-                <option value="PBKS">PBKS</option>
-                <option value="RCB">RCB</option>
-                <option value="RR">RR</option>
-                <option value="SRH">SRH</option>
-            </select>
-            <div class="team" style="max-height: 312px; overflow-y: scroll;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="column-1">SNo</th>
-                            <th class="column-2">Date</th>
-                            <th class="column-3">Team1</th>
-                            <th class="column-4">Team2</th>
-                            <th class="column-5">Won</th>
-                            <th class="column-6">MoM</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="background-color:grey;">
-                            <td>1</td>
-                            <td class="selected-date">22Mar</td>
-                            <td>CSK</td>
-                            <td style="background-color: red; color: white;">RCB</td>
-                            <td style="background-color: green; color: white;">CSK</td>
-                            <td style="background-color: blue; color: white;">Mustafizur(4o-29r-4w)</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td class="selected-date">23Mar</td>
-                            <td>DC</td>
-                            <td>PBKS</td>
-                            <td>NA</td>
-                            <td>NA</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td class="selected-date">23Mar</td>
-                            <td>KKR</td>
-                            <td>SRH</td>
-                            <td>NA</td>
-                            <td>NA</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td class="selected-date">24Mar</td>
-                            <td>LSG</td>
-                            <td>RR</td>
-                            <td>NA</td>
-                            <td>NA</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td class="selected-date">24Mar</td>
-                            <td>GT</td>
-                            <td>MI</td>
-                            <td>NA</td>
-                            <td>NA</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td class="selected-date">25Mar</td>
-                            <td>PBKS</td>
-                            <td>RCB</td>
-                            <td>NA</td>
-                            <td>NA</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td class="selected-date">26Mar</td>
-                            <td>CSK</td>
-                            <td>GT</td>
-                            <td>NA</td>
-                            <td>NA</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td class="selected-date">27Mar</td>
-                            <td>MI</td>
-                            <td>SRH</td>
-                            <td>NA</td>
-                            <td>NA</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div style="text-align:center;" id="entry-count">
-                    <!-- Footer row to show the number of entries -->
-                    <span id="entry-count-display">Showing 9 out of 9 entries</span>
-                </div>
+    <div class="app">
+        <section class="hero"><div><h1>Daily Practice Dashboard</h1></div><div class="emoji">✍️</div></section>
+        <div class="stats"><div class="stat"><small>QUIZ DAYS</small><strong id="statDays">0</strong></div><div class="stat"><small>TOTAL QUESTIONS</small><strong id="statQuestions">0</strong></div><div class="stat"><small>ATTEMPTS</small><strong id="statAttempts">0</strong></div></div>
+        <section class="panel" style="margin-bottom:15px">
+            <div class="heading"><div><h2>📊 Progress & Mistake Tracker</h2><p>Review incorrect answers, retry them, and mark questions mastered.</p></div><button class="btn soft" onclick="requestPersistentStorage()">Protect browser storage</button></div>
+            <div class="stats" style="margin:0 0 14px">
+                <div class="stat"><small>INCORRECT QUESTIONS</small><strong id="wrongCount">0</strong></div>
+                <div class="stat"><small>NEEDS REVIEW</small><strong id="reviewCount">0</strong></div>
+                <div class="stat"><small>MASTERED</small><strong id="masteredCount">0</strong></div>
             </div>
-        </div>
-        <div class="popup" id="popup">
-            <h2>Users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
-            <p><input type="radio" id="gopesh" value="Gopesh" name="pl1"> <label for="gopesh">Gopesh</label></p>
-            <p><input type="radio" id="vivek" value="Vivek" name="pl1"> <label for="vivek">Vivek</label></p>
-            <button onclick="getSelectedNames()">Your name</button>
-            <button onclick="closePopup()">Close</button>
-        </div>
-        <div class="popup" id="popup2">
-            <h2 id="second-popup"></h2>
-            <button onclick="closePopup2()">Close</button>
-        </div>
-    </main>
-    <main>
-        <div class="team-selection2">
-            <h2>Users List</h2>
-            <div class="team" style="max-height: 312px; overflow-y: scroll;">
-                <table id="users-table">
-                    <thead>
-                        <tr>
-                            <th class="column-1">SNo</th>
-                            <th class="column-2">Date</th>
-                            <th class="column-3">Name</th>
-                            <th class="column-4">Team</th>
-                            <th class="column-5">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>22Mar</td>
-                            <td>Vivek</td>
-                            <td>CSK</td>
-                            <td style="background-color: green; color: white;">Won</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+                <button class="btn soft" onclick="setReviewFilter('all')">All mistakes</button>
+                <button class="btn soft" onclick="setReviewFilter('unmastered')">Needs review</button>
+                <button class="btn soft" onclick="setReviewFilter('mastered')">Mastered</button>
+                <button class="btn primary" onclick="exportBackup()">Download backup</button>
             </div>
+            <div id="mistakeList" class="adminlist"><div class="empty">No incorrect answers yet. Mistakes will appear here automatically.</div></div>
+            <div id="storageStatus" class="notice">Storage protection status: checking browser support…</div>
+        </section>
+        <div class="layout">
+            <aside class="panel sidebar"><h3>Subjects</h3><div id="subjects" class="subjects"></div><div class="side-note">Answered questions<b id="statAnswered">0</b>Correct answers: <strong id="statCorrect">0</strong></div></aside>
+            <main class="panel">
+                <div class="heading"><div><h2 id="subjectTitle">English</h2><p id="subjectDesc">Select a day to start.</p></div><button class="btn primary" onclick="toggleAdmin()">＋ Add day / questions</button></div><div class="eyebrow">CHOOSE YOUR DAY</div><div id="days" class="days"></div><div id="noDays" class="empty hidden">No days added for this subject yet. Use <b>Add day / questions</b> to get started.</div>
+                <section class="quiz-area"><div class="quizhead"><div><h3 id="quizTitle">Day 1</h3><div id="quizInfo" class="muted">Select a day to view questions.</div></div><span id="score" class="score">Correct 0</span></div><div id="tabs" class="tabs"></div><div id="quizContent"></div></section>
+            </main>
         </div>
-        <div id="profit_loss" style="text-align: center; background-color: darkgrey; font-weight: bold; color: white; ">
+        <section id="admin" class="panel admin hidden">
+            <div class="adminhead"><div><h2>Admin workspace</h2><p>Create day-wise question sets and add unlimited MCQs.</p></div><button class="btn soft" onclick="toggleAdmin()">Close</button></div><div class="notice"><b>LocalStorage:</b> data is saved in this browser and is not shared with other devices. This demo has no admin login. Export backups regularly.</div><div class="admin-grid">
+            <div class="formbox"><h3>1. Create a day</h3><form onsubmit="createDay(event)"><div class="field"><label for="daySubject">Subject</label><select id="daySubject"></select></div><div class="twocol"><div class="field"><label for="dayNumber">Day number</label><input id="dayNumber" type="number" min="1" value="1" required></div><div class="field"><label for="dayDate">Date</label><input id="dayDate" type="date" required></div></div><div class="field"><label for="dayName">Day title</label><input id="dayName" maxlength="150" placeholder="e.g. English practice — Day 1" required></div><label class="check"><input id="published" type="checkbox" checked> Make this day visible</label><button class="btn primary" type="submit">Create day</button></form><h3 style="margin-top:22px">Manage existing days</h3><div id="adminDays" class="adminlist"></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:14px"><button class="btn soft small" onclick="exportBackup()">Export JSON</button><label class="btn soft small" for="importFile" style="cursor:pointer">Import JSON</label><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importBackup(event)"><button class="btn danger small" onclick="resetAll()">Reset all</button></div></div>
+            <div class="formbox"><h3>2. Add MCQ to a day</h3><form onsubmit="addQuestion(event)"><div class="field"><label for="targetDay">Choose day</label><select id="targetDay" required></select></div><div class="field"><label for="qCategory">Section / topic</label><input id="qCategory" placeholder="e.g. Grammar, Polity, Percentage" required maxlength="100"></div><div class="field"><label for="qText">Question</label><textarea id="qText" required maxlength="3000" placeholder="Write your question"></textarea></div><div class="field"><label for="qA">Option A</label><input id="qA" required maxlength="1000"></div><div class="field"><label for="qB">Option B</label><input id="qB" required maxlength="1000"></div><div class="field"><label for="qC">Option C</label><input id="qC" required maxlength="1000"></div><div class="field"><label for="qD">Option D</label><input id="qD" required maxlength="1000"></div><div class="field"><label for="qCorrect">Correct option</label><select id="qCorrect"><option>A</option><option>B</option><option>C</option><option>D</option></select></div><div class="field"><label for="qExplanation">Explanation (optional)</label><textarea id="qExplanation" maxlength="3000" placeholder="Explain why this answer is correct"></textarea></div><button class="btn primary" type="submit">Save MCQ</button></form></div>
         </div>
-        <div id="profit_loss" style="text-align: center; background-color: darkgrey; font-weight: bold; color: white;">
-            <p>Won by Gopesh: 0</p>
-            <p>Won by Vivek: 1</p>
-            <p>Total: 1</p>
-        </div>
-    </main>
-    <div style="margin-left:5%">
-        <iframe width="340" height="300" src="https://www.cricketlineguru.com/live-scores"></iframe>
-    </div>
-    <div style="height:10px">
-    </div>
-    <script>
-        var selectedDate = "";
-        var userName = "";
-        var teamName = "";
-        var noError = true;
-        var noNameError = true;
+    </section><footer class="footer">TYK · Test Your Knowledge · Your data is stored locally in this browser.</footer>
+</div>
+<div id="toast" class="toast hidden"></div>
+<script>
+        const KEY='tyk_local_v1';const SUBJECTS=[{id:'english',name:'English',icon:'📘',desc:'Grammar, vocabulary, PQRS, voice and narration.'},{id:'gs',name:'GS',icon:'🌍',desc:'History, polity, geography, science and static GK.'},{id:'maths',name:'Maths',icon:'➗',desc:'Arithmetic, algebra, geometry and advanced maths.'},{id:'reasoning',name:'Reasoning',icon:'🧩',desc:'Verbal, non-verbal, coding and logical reasoning.'}];let data=load(),subject='english',dayId=null,category='All',index=0,answers={};
+        function seed(){return{nextDayId:2,nextQId:4,days:[{id:1,subject:'english',number:1,title:'English — Day 1',date:new Date().toISOString().slice(0,10),published:true,questions:[{id:1,category:'Vocabulary',text:'Choose the synonym of “Abundant”.',A:'Scarce',B:'Plentiful',C:'Tiny',D:'Weak',correct:'B',explanation:'Abundant means existing in large quantities; plentiful is a synonym.'},{id:2,category:'Grammar',text:'Choose the grammatically correct sentence.',A:'She have completed her work.',B:'She has completed her work.',C:'She having completed her work.',D:'She were completed her work.',correct:'B',explanation:'With the third-person singular subject “she”, use “has”.'},{id:3,category:'Idioms',text:'What does “once in a blue moon” mean?',A:'Very frequently',B:'At night',C:'Very rarely',D:'Unexpectedly',correct:'C',explanation:'The idiom means something that happens very rarely.'}]}],attempts:[]}}
+        function load(){try{let d=JSON.parse(localStorage.getItem(KEY));if(d&&Array.isArray(d.days)&&Array.isArray(d.attempts)){d.days.forEach(x=>{if(!Array.isArray(x.questions))x.questions=[]});if(!Array.isArray(d.mastered))d.mastered=[];if(!Array.isArray(d.attempts))d.attempts=[];return d}}catch(e){}return seed()}function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){alert('Could not save data in this browser. Export a backup and check available storage space.');}renderAll()}function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function sub(id){return SUBJECTS.find(x=>x.id===id)||SUBJECTS[0]}function activeDay(){return data.days.find(d=>d.id===dayId)}function daysForSubject(){return data.days.filter(d=>d.subject===subject&&d.published).sort((a,b)=>a.number-b.number)}function toast(s){let e=document.getElementById('toast');e.textContent=s;e.classList.remove('hidden');setTimeout(()=>e.classList.add('hidden'),2400)}
+        function renderAll(){renderSubjects();renderDays();renderAdmin();renderStats();renderMistakes()}function renderSubjects(){document.getElementById('subjects').innerHTML=SUBJECTS.map(s=>`<button class="subject ${s.id===subject?'active':''}" onclick="chooseSubject('${s.id}')"><span class="ico">${s.icon}</span>${s.name}</button>`).join('');document.getElementById('subjectTitle').textContent=sub(subject).name;document.getElementById('subjectDesc').textContent=sub(subject).desc}function chooseSubject(id){subject=id;dayId=null;category='All';index=0;answers={};renderAll()}
+        function renderDays(){let ds=daysForSubject(),el=document.getElementById('days');el.classList.toggle('hidden',!ds.length);document.getElementById('noDays').classList.toggle('hidden',!!ds.length);if(!ds.some(d=>d.id===dayId))dayId=ds[0]?.id??null;el.innerHTML=ds.map(d=>`<button class="day ${d.id===dayId?'active':''}" onclick="chooseDay(${d.id})"><strong>Day ${d.number}</strong><small>${esc(d.title)}</small><span class="count">${d.questions.length} MCQs</span></button>`).join('');renderQuiz()}function chooseDay(id){dayId=id;category='All';index=0;answers={};renderDays();renderAdmin()}function filtered(){let d=activeDay();return d?d.questions.filter(q=>category==='All'||q.category===category):[]}function renderQuiz(){let d=activeDay(),box=document.getElementById('quizContent'),tabs=document.getElementById('tabs');if(!d){document.getElementById('quizTitle').textContent='Choose a day';document.getElementById('quizInfo').textContent='Select or create a day to see its MCQs.';document.getElementById('score').textContent='Correct 0';tabs.innerHTML='';box.innerHTML='<div class="empty">Create a day and add questions using the admin panel.</div>';return}document.getElementById('quizTitle').textContent=`Day ${d.number} · ${d.title}`;let cats=['All',...new Set(d.questions.map(q=>q.category).filter(Boolean))];if(!cats.includes(category))category='All';tabs.innerHTML=cats.map(c=>`<button class="tab ${category===c?'active':''}" onclick="chooseCategory('${esc(c).replace(/'/g,'&#39;')}')">${esc(c)}${c==='All'?' ('+d.questions.length+')':''}</button>`).join('');let qs=filtered();index=Math.min(index,Math.max(0,qs.length-1));document.getElementById('quizInfo').textContent=`${qs.length} questions in this section · ${d.questions.length} total for this day`;document.getElementById('score').textContent='Correct '+d.questions.filter(q=>answers[q.id]===q.correct).length;if(!qs.length){box.innerHTML='<div class="empty">No questions yet. Add MCQs in the admin panel.</div>';return}let q=qs[index],a=answers[q.id];box.innerHTML=`<div class="progress"><div style="width:${(index+1)/qs.length*100}%"></div></div><div class="question"><div class="qmeta"><span>QUESTION ${index+1} OF ${qs.length}</span><span>${esc(q.category)}</span></div><div class="qtext">${esc(q.text)}</div><div class="options">${['A','B','C','D'].map(k=>`<button class="option ${a?(k===q.correct?'correct':k===a?'wrong':''):''}" ${a?'disabled':''} onclick="chooseAnswer('${k}')"><span class="letter">${k}</span><span>${esc(q[k])}</span></button>`).join('')}</div>${a?`<div class="feedback ${a===q.correct?'good':'bad'}"><b>${a===q.correct?'Correct!':'Incorrect.'}</b> Correct answer: ${q.correct}. ${esc(q[q.correct])}${q.explanation?'<br><br>'+esc(q.explanation):''}</div>`:''}<div class="qnav"><button class="btn soft" onclick="move(-1)" ${index===0?'disabled':''}>← Previous</button><span class="muted">${Object.keys(answers).filter(k=>d.questions.some(q=>q.id===Number(k))).length} answered</span><button class="btn primary" onclick="move(1)">${index===qs.length-1?'Finish day':'Next →'}</button></div><div class="qnums">${qs.map((x,i)=>`<button class="qnum ${i===index?'active':''} ${answers[x.id]?'done':''}" onclick="go(${i})">${i+1}</button>`).join('')}</div></div>`}function chooseCategory(c){category=c;index=0;renderQuiz()}function chooseAnswer(k){let q=filtered()[index];if(!q||answers[q.id])return;answers[q.id]=k;data.attempts.push({questionId:q.id,dayId:activeDay()?.id,subject:subject,chosen:k,correct:k===q.correct,at:new Date().toISOString()});save()}function move(n){let qs=filtered();if(!qs.length)return;if(index+n<qs.length){index+=n;renderQuiz()}else{toast(`Section finished: ${qs.filter(q=>answers[q.id]===q.correct).length}/${qs.length} correct`);index=0;renderQuiz()}}function go(i){index=i;renderQuiz()}
 
-        var dailyData = [
-            { date: 'Mar 22', gopeshProfit: -250, vivekProfit: +250 }
-        ];
-
-        function editStatus(button) {
-            var statusCell = button.parentElement.previousElementSibling;
-            var newStatus = prompt("Enter new status:");
-
-            const fourDigitPin = newStatus.split(" ");
-
-            if (fourDigitPin.length == 2) {
-                let pin = fourDigitPin[1];
-
-                if (pin == "0000" && fourDigitPin[0] !== null) {
-                    statusCell.textContent = fourDigitPin[0];
-                    updateLocalStorage();
-                }
-            }
+        let reviewFilter='all';
+        function allQuestions(){return data.days.flatMap(d=>d.questions.map(q=>({...q,dayId:d.id,dayNumber:d.number,dayTitle:d.title,subjectId:d.subject})));}
+        function mistakeRecords(){
+         const qs=allQuestions(), map=new Map(qs.map(q=>[q.id,q]));
+         const wrongIds=new Set(data.attempts.filter(a=>!a.correct).map(a=>a.questionId));
+         return [...wrongIds].map(id=>({q:map.get(id),attempts:data.attempts.filter(a=>a.questionId===id),mastered:(data.mastered||[]).includes(id)})).filter(x=>x.q);
         }
-
-        function deleteRow(button) {
-
-            var pin = prompt("Enter pin:");
-
-            if (pin == "0000") {
-                var row = button.parentElement.parentElement;
-                row.remove();
-                updateLocalStorage();
-            }
+        function renderMistakes(){
+         const items=mistakeRecords();
+         document.getElementById('wrongCount').textContent=items.length;
+         document.getElementById('reviewCount').textContent=items.filter(x=>!x.mastered).length;
+         document.getElementById('masteredCount').textContent=items.filter(x=>x.mastered).length;
+         const shown=items.filter(x=>reviewFilter==='all'||(reviewFilter==='mastered'?x.mastered:!x.mastered)).sort((a,b)=>new Date(b.attempts[b.attempts.length-1].at)-new Date(a.attempts[a.attempts.length-1].at));
+         const el=document.getElementById('mistakeList');
+         if(!shown.length){el.innerHTML='<div class="empty">'+(items.length?'No questions in this filter.':'No incorrect answers yet. Answer a question incorrectly and it will be tracked here.')+'</div>';return;}
+         el.innerHTML=shown.map(({q,attempts,mastered})=>`<div class="adminitem" style="align-items:flex-start"><div style="flex:1;min-width:0"><b>${esc(sub(q.subjectId).name)} · Day ${q.dayNumber} · ${esc(q.category)}</b><div style="margin:5px 0;font-weight:750;white-space:pre-wrap">${esc(q.text)}</div><small>Correct: ${q.correct}. ${esc(q[q.correct])} · Wrong attempts: ${attempts.filter(a=>!a.correct).length}${attempts.length?' · Last tried: '+new Date(attempts[attempts.length-1].at).toLocaleDateString():''}</small>${q.explanation?`<small style="margin-top:5px">Explanation: ${esc(q.explanation)}</small>`:''}</div><div class="actions"><button class="btn soft small" onclick="retryMistake(${q.id},${q.dayId})">Retry</button><button class="btn ${mastered?'soft':'primary'} small" onclick="toggleMastered(${q.id})">${mastered?'Unmark':'Mastered ✓'}</button></div></div>`).join('');
         }
-
-        function updateLocalStorage() {
-            // Update localStorage with the updated status values
-            var rows = document.querySelectorAll('#users-table tbody tr');
-            var updatedData = {};
-            rows.forEach(function (row) {
-                var date = row.cells[0].textContent;
-                var team = row.cells[2].textContent;
-                var status = row.cells[3].textContent;
-                updatedData[date + team] = JSON.stringify({
-                    'date': date,
-                    'name': row.cells[1].textContent,
-                    'team': team,
-                    'status': status
-                });
-            });
-
-            localStorage.clear();
-            for (let key in updatedData) {
-                localStorage.setItem(key, updatedData[key]);
-            }
+        function setReviewFilter(v){reviewFilter=v;renderMistakes();}
+        function toggleMastered(id){if(!Array.isArray(data.mastered))data.mastered=[];data.mastered.includes(id)?data.mastered=data.mastered.filter(x=>x!==id):data.mastered.push(id);save();}
+        function retryMistake(qid,did){const d=data.days.find(x=>x.id===did);if(!d)return;subject=d.subject;dayId=d.id;category='All';const idx=d.questions.findIndex(q=>q.id===qid);answers={};renderAll();const visible=filtered();index=Math.max(0,visible.findIndex(q=>q.id===qid));document.getElementById('quizContent').scrollIntoView({behavior:'smooth',block:'center'});renderQuiz();}
+        async function requestPersistentStorage(){
+         const el=document.getElementById('storageStatus');
+         try{
+          if(!navigator.storage||!navigator.storage.persist){el.textContent='This browser does not offer the persistent-storage permission here. Use Download backup regularly; browser/site-data clearing can still remove local data.';return;}
+          const already=await navigator.storage.persisted();
+          const granted=already||await navigator.storage.persist();
+          el.textContent=granted?'Persistent storage is enabled/requested successfully. The browser is less likely to clear this site’s data automatically, but this cannot protect against manually clearing browser data, uninstalling the browser, or device failure.':'The browser did not grant persistent storage. Download a JSON backup regularly; local data can be deleted by browser settings or device cleanup.';
+         }catch(e){el.textContent='Could not check persistent storage. Download a JSON backup regularly to protect your questions and progress.';}
         }
+        function showStorageStatus(){const el=document.getElementById('storageStatus');if(!el)return;if(navigator.storage&&navigator.storage.persisted){navigator.storage.persisted().then(v=>{el.textContent=v?'Persistent storage is active. Manual browser-data clearing can still delete your data.':'Storage is saved in this browser, but persistent storage is not yet active. Click “Protect browser storage” and keep a backup.';}).catch(()=>{});} }
 
-
-        function submitTeam() {
-
-            var myKey = selectedDate + teamName;
-
-            if (noNameError) {
-
-                if (noError) {
-
-                    if (localStorage.getItem(myKey) == null) {
-
-                        var userData = { 'date': selectedDate, 'name': userName, 'team': teamName, 'status': 'Progress' };
-                        localStorage.setItem(myKey, JSON.stringify(userData));
-
-                        addRow(myKey);
-                    } else {
-                        openPopup2('Already scheduled !!');
-                    }
-
-                } else {
-                    openPopup2('Team not selected !!');
-                }
-            }
-            else {
-                openPopup2('No name selected !!');
-            }
-        }
-
-        function openPopup2(msg) {
-            var popup = document.getElementById('popup2');
-            document.getElementById('second-popup').textContent = msg;
-            popup.style.display = 'block';
-        }
-
-        function closePopup2() {
-            var popup = document.getElementById('popup2');
-            popup.style.display = 'none';
-        }
-
-        function highlightCell(cell) {
-            var teamNames = document.querySelectorAll('.team-name');
-
-            teamNames.forEach(function (element) {
-                element.classList.remove('highlighted');
-            });
-            cell.classList.add('highlighted');
-        }
-
-        function selectTeam(button, name) {
-
-            try {
-                var selectedTeam = button.parentElement.parentElement.querySelector('.highlighted').textContent;
-                selectedDate = button.parentElement.parentElement.querySelector('.selected-date').textContent;
-
-                document.getElementById('selected-team-name').textContent = "Selected Team: " + selectedTeam;
-
-                teamName = selectedTeam;
-                userName = name;
-                noError = true;
-            }
-            catch (err) {
-                noError = false;
-                console.log('Team not selected');
-            }
-        }
-
-        function openPopup(button) {
-            var popup = document.getElementById('popup');
-            popup.style.display = 'block';
-            teamName = button;
-        }
-
-        function closePopup() {
-            var popup = document.getElementById('popup');
-            popup.style.display = 'none';
-        }
-
-        function getSelectedNames() {
-
-            try {
-                var selectedName = document.querySelector('input[name="pl1"]:checked').value;
-
-                closePopup();
-                selectTeam(teamName, selectedName);
-                console.log(selectedName);
-                noNameError = true;
-            }
-            catch (err) {
-                noNameError = false;
-            }
-        }
-
-        function addRow(myKey) {
-
-            var items = localStorage.getItem(myKey);
-            var userEntry = JSON.parse(items);
-
-            console.log(JSON.parse(items));
-
-            var tableBody = document.querySelector('#users-table tbody');
-            var newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                                    <td>${userEntry.date}</td>
-                                    <td>${userEntry.name}</td>
-                                    <td>${userEntry.team}</td>
-                                    <td>${userEntry.status}</td>`;
-
-            tableBody.appendChild(newRow);
-        }
-
-        function calculateProfit() {
-            var profit_loss = document.getElementById('profit_loss');
-            var gopeshTotal = 0;
-            var vivekTotal = 0;
-
-            dailyData.forEach(function (data) {
-                gopeshTotal += data.gopeshProfit;
-                vivekTotal += data.vivekProfit;
-            });
-
-            // Display profit/loss for Gopesh
-            profit_loss.innerHTML += 'Gopesh Profit/Loss: ';
-            if (gopeshTotal >= 0) {
-                profit_loss.innerHTML += '<span class="green-triangle"></span> ' + gopeshTotal;
-            } else {
-                profit_loss.innerHTML += '<span class="red-triangle"></span> ' + gopeshTotal;
-            }
-            profit_loss.innerHTML += '<br>';
-
-            // Display profit/loss for Vivek
-            profit_loss.innerHTML += 'Vivek Profit/Loss: ';
-            if (vivekTotal >= 0) {
-                profit_loss.innerHTML += '<span class="green-triangle"></span> ' + vivekTotal;
-            } else {
-                profit_loss.innerHTML += '<span class="red-triangle"></span> ' + vivekTotal;
-            }
-        }
-
-        // Call the function to calculate and display profit/loss
-        calculateProfit();
-
-        function updateEntryCount() {
-            var filterTeam = document.getElementById('filter-team').value.toUpperCase();
-            var visibleRowCount = 0;
-            var totalRowCount = 0;
-            var rows = document.querySelectorAll('.team-selection tbody tr');
-
-            rows.forEach(function (row) {
-                totalRowCount++;
-
-                var cells = row.getElementsByTagName("td");
-                var found = false;
-
-                // Loop through all cells in the row
-                for (var i = 0; i < cells.length; i++) {
-                    var cell = cells[i];
-                    if (cell.textContent.toUpperCase().indexOf(filterTeam) > -1) {
-                        found = true;
-                        console.log(totalRowCount);
-                        break;
-                    }
-                }
-
-                // Increment the visible row count if the selected team is found in any cell, or if no team is selected
-                if (found || filterTeam === '') {
-                    visibleRowCount++;
-                }
-            });
-
-            // Display the count of visible entries
-            document.getElementById('entry-count-display').textContent = "Showing " + visibleRowCount + " out of " + totalRowCount + " entries";
-        }
-
-        function filterTableByTeam() {
-            var filterTeam = document.getElementById('filter-team').value.toUpperCase();
-            var rows = document.querySelectorAll('.team-selection tbody tr');
-
-            rows.forEach(function (row) {
-                var cells = row.getElementsByTagName("td");
-                var found = false;
-
-                // Loop through all cells in the row
-                for (var i = 0; i < cells.length; i++) {
-                    var cell = cells[i];
-                    if (cell.textContent.toUpperCase().indexOf(filterTeam) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                // Display the row if the selected team is found in any cell, or if no team is selected
-                if (found || filterTeam === '') {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
-
-        // Add event listener to the select element for filtering the table by team
-        document.getElementById('filter-team').addEventListener('change', function () {
-            filterTableByTeam();
-            updateEntryCount();
-        });
-
-    </script>
-    <script src="/lib/jquery/dist/jquery.min.js"></script>
-    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/site.js?v=4q1jwFhaPaZgr8WAUSrux6hAuh0XDg9kPS3xIVq36I0"></script>
+        function renderStats(){document.getElementById('statDays').textContent=data.days.length;document.getElementById('statQuestions').textContent=data.days.reduce((n,d)=>n+d.questions.length,0);document.getElementById('statAttempts').textContent=data.attempts.length;document.getElementById('statAnswered').textContent=new Set(data.attempts.map(a=>a.questionId)).size;document.getElementById('statCorrect').textContent=data.attempts.filter(a=>a.correct).length}
+        function toggleAdmin(){document.getElementById('admin').classList.toggle('hidden');renderAdmin();if(!document.getElementById('admin').classList.contains('hidden'))document.getElementById('admin').scrollIntoView({behavior:'smooth'})}function renderAdmin(){let ss=document.getElementById('daySubject'),td=document.getElementById('targetDay'),old=ss.value||subject,oldDay=td.value;ss.innerHTML=SUBJECTS.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');ss.value=SUBJECTS.some(s=>s.id===old)?old:subject;let all=[...data.days].sort((a,b)=>a.subject.localeCompare(b.subject)||a.number-b.number);td.innerHTML=all.map(d=>`<option value="${d.id}">${sub(d.subject).name} — Day ${d.number}: ${esc(d.title)}</option>`).join('');if(all.some(d=>String(d.id)===oldDay))td.value=oldDay;document.getElementById('adminDays').innerHTML=all.length?all.map(d=>`<div class="adminitem"><div><b>${sub(d.subject).name} · Day ${d.number}</b><small>${esc(d.title)} · ${d.questions.length} MCQs · ${d.published?'Visible':'Hidden'}</small></div><div class="actions"><button class="btn soft small" onclick="togglePublish(${d.id})">${d.published?'Hide':'Publish'}</button><button class="btn danger small" onclick="deleteDay(${d.id})">Delete</button></div></div>`).join(''):'<div class="empty">No days created.</div>'}
+        function createDay(e){e.preventDefault();let s=document.getElementById('daySubject').value,n=Number(document.getElementById('dayNumber').value);if(data.days.some(d=>d.subject===s&&d.number===n)){toast('This day number already exists for the subject.');return}let id=data.nextDayId||Math.max(0,...data.days.map(d=>d.id))+1;let d={id,subject:s,number:n,title:document.getElementById('dayName').value.trim(),date:document.getElementById('dayDate').value,published:document.getElementById('published').checked,questions:[]};if(!d.title||!d.date)return;data.nextDayId=id+1;data.days.push(d);subject=s;dayId=id;category='All';index=0;answers={};document.getElementById('dayName').value='';save();document.getElementById('targetDay').value=String(id);toast('Day created. Add MCQs now.')}function addQuestion(e){e.preventDefault();let d=data.days.find(x=>x.id===Number(document.getElementById('targetDay').value));if(!d){toast('Create a day first.');return}let id=data.nextQId||Math.max(0,...data.days.flatMap(x=>x.questions).map(q=>q.id))+1;let q={id,category:document.getElementById('qCategory').value.trim(),text:document.getElementById('qText').value.trim(),A:document.getElementById('qA').value.trim(),B:document.getElementById('qB').value.trim(),C:document.getElementById('qC').value.trim(),D:document.getElementById('qD').value.trim(),correct:document.getElementById('qCorrect').value,explanation:document.getElementById('qExplanation').value.trim()};if(!q.text||!q.A||!q.B||!q.C||!q.D){toast('Fill the question and all four options.');return}data.nextQId=id+1;d.questions.push(q);['qText','qA','qB','qC','qD','qExplanation'].forEach(x=>document.getElementById(x).value='');save();toast('MCQ saved to the selected day.')}function togglePublish(id){let d=data.days.find(x=>x.id===id);if(d){d.published=!d.published;save();toast(d.published?'Day published':'Day hidden')}}function deleteDay(id){let d=data.days.find(x=>x.id===id);if(!d||!confirm(`Delete Day ${d.number} and all its questions?`))return;data.days=data.days.filter(x=>x.id!==id);if(dayId===id)dayId=null;save();toast('Day deleted')}function exportBackup(){let b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='tyk-backup.json';a.click();URL.revokeObjectURL(u)}function importBackup(e){let f=e.target.files?.[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.days)||!Array.isArray(d.attempts)||!d.days.every(x=>Array.isArray(x.questions)))throw 0;if(!confirm('Replace current data with this backup?'))return;if(!Array.isArray(d.mastered))d.mastered=[];data=d;save();toast('Backup imported')}catch(_){alert('Invalid TYK backup file')}finally{e.target.value=''}};r.readAsText(f)}function resetAll(){if(!confirm('Delete all quiz days, questions and attempts saved in this browser?'))return;data={nextDayId:1,nextQId:1,days:[],attempts:[],mastered:[]};dayId=null;answers={};save();toast('All local data cleared')}
+        document.getElementById('dayDate').value=new Date().toISOString().slice(0,10);renderAll();showStorageStatus();
+    window.addEventListener('pagehide',()=>{try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}});</script>
 </body>
 </html>
