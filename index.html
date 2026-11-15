@@ -1,2142 +1,2900 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Study Progress Tracker</title>
-
-<style>
-:root {
-    --bg: #f4f6fb;
-    --card: #ffffff;
-    --text: #172033;
-    --muted: #778198;
-    --primary: #635bdb;
-    --border: #e8eaf2;
-    --green: #16a779;
-    --red: #dc4c4c;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    padding: 20px;
-}
-
-.container {
-    max-width: 1050px;
-    margin: auto;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    gap: 12px;
-}
-
-header h1 {
-    font-size: 25px;
-    font-weight: 800;
-}
-
-header p {
-    color: var(--muted);
-    font-size: 13px;
-    margin-top: 5px;
-}
-
-.date {
-    background: white;
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 12px;
-    color: var(--muted);
-    white-space: nowrap;
-}
-
-/* DASHBOARD */
-
-.dashboard {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.stat-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-}
-
-.stat-card small {
-    color: var(--muted);
-    font-size: 12px;
-}
-
-.stat-card h2 {
-    font-size: 28px;
-    margin-top: 9px;
-}
-
-/* BACKUP */
-
-.backup-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 25px;
-}
-
-.backup-actions button {
-    padding: 11px 16px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-}
-
-.export-btn {
-    background: #e8f7ef;
-    color: #168454;
-}
-
-.import-btn {
-    background: #eeedff;
-    color: #635bdb;
-}
-
-/* SECTION */
-
-.section-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 25px 0 15px;
-    gap: 10px;
-}
-
-.section-heading h2 {
-    font-size: 19px;
-}
-
-.btn {
-    border: none;
-    background: var(--primary);
-    color: white;
-    padding: 11px 16px;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.btn-light {
-    background: #eeedff;
-    color: var(--primary);
-}
-
-.sections {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-}
-
-.section-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 20px;
-    min-width: 0;
-}
-
-.section-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 17px;
-}
-
-.section-top h3 {
-    font-size: 18px;
-    overflow-wrap: anywhere;
-}
-
-.section-actions {
-    display: flex;
-    gap: 6px;
-}
-
-.icon-btn {
-    border: none;
-    background: #f2f3f8;
-    padding: 7px 9px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.progress-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 8px;
-}
-
-.progress {
-    height: 9px;
-    background: #eceef4;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #635bdb, #9585ff);
-    border-radius: 20px;
-    transition: width .3s;
-}
-
-/* SUBJECT */
-
-.subject {
-    padding: 14px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 10px;
-    background: #fff;
-}
-
-.subject-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-}
-
-.subject-name {
-    font-size: 14px;
-    font-weight: 700;
-    overflow-wrap: anywhere;
-}
-
-.subject-percent {
-    font-size: 12px;
-    color: var(--green);
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.subject-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 5px 9px;
-    border-radius: 20px;
-    white-space: nowrap;
-}
-
-.status-completed {
-    color: #128052;
-    background: #e6f7ee;
-}
-
-.status-progress {
-    color: #d44848;
-    background: #fff0f0;
-}
-
-.status-pending {
-    color: #778198;
-    background: #f0f1f5;
-}
-
-.status-icon {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 900;
-    flex-shrink: 0;
-}
-
-.status-completed .status-icon {
-    background: #16a779;
-    color: white;
-}
-
-.status-progress .status-icon {
-    background: #dc4c4c;
-    color: white;
-}
-
-.status-pending .status-icon {
-    background: #9ba3b3;
-    color: white;
-}
-
-.subject .progress {
-    height: 6px;
-    margin: 12px 0;
-}
-
-.subject .progress-fill {
-    background: var(--green);
-}
-
-.topic-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-}
-
-.topic-controls span {
-    font-size: 12px;
-    color: var(--muted);
-}
-
-.counter {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.counter button {
-    width: 29px;
-    height: 29px;
-    border: none;
-    background: #f0efff;
-    color: var(--primary);
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.counter strong {
-    font-size: 13px;
-    min-width: 42px;
-    text-align: center;
-}
-
-.subject-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 12px;
-    gap: 5px;
-    flex-wrap: wrap;
-}
-
-.subject-tools {
-    display: flex;
-    gap: 6px;
-}
-
-/* VIDEO LIBRARY */
-
-.video-area {
-    margin-top: 13px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-}
-
-.video-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.video-heading strong {
-    font-size: 12px;
-}
-
-.video-count {
-    background: #fff1e7;
-    color: #d66a28;
-    padding: 4px 8px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: 700;
-}
-
-.video-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 9px 10px;
-    background: #f8f8fc;
-    border-radius: 9px;
-    margin-bottom: 7px;
-}
-
-.video-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #635bdb;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 600;
-    min-width: 0;
-    overflow-wrap: anywhere;
-}
-
-.video-link:hover {
-    text-decoration: underline;
-}
-
-.video-delete {
-    background: #fff0f0;
-    color: var(--red);
-    border: none;
-    padding: 5px 8px;
-    border-radius: 7px;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.add-video-btn,
-.add-subject {
-    width: 100%;
-    padding: 11px;
-    border: 1px dashed #c7c4ee;
-    color: var(--primary);
-    background: #f8f7ff;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    margin-top: 5px;
-    font-size: 12px;
-}
-
-.empty {
-    text-align: center;
-    color: var(--muted);
-    padding: 22px 5px;
-    font-size: 13px;
-}
-
-.empty-video {
-    font-size: 11px;
-    color: var(--muted);
-    padding: 5px 0;
-}
-
-/* MODALS */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: #10162b88;
-    z-index: 10;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-}
-
-.modal-content {
-    width: 100%;
-    max-width: 400px;
-    background: white;
-    border-radius: 18px;
-    padding: 23px;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-content h3 {
-    margin-bottom: 8px;
-}
-
-.modal-description {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 17px;
-}
-
-.modal-content label {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    margin: 10px 0 7px;
-}
-
-.modal-content input {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-size: 14px;
-    outline-color: var(--primary);
-}
-
-.modal-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 17px;
-}
-
-.modal-buttons button {
-    flex: 1;
-}
-
-.footer {
-    text-align: center;
-    padding: 30px 0 10px;
-    font-size: 12px;
-    color: var(--muted);
-}
-
-/* MOBILE */
-
-@@media(max-width:650px) {
-
-    body {
-        padding: 13px;
-    }
-
-    header h1 {
-        font-size: 20px;
-    }
-
-    .dashboard {
-        gap: 8px;
-    }
-
-    .stat-card {
-        padding: 13px 10px;
-        border-radius: 12px;
-    }
-
-    .stat-card h2 {
-        font-size: 22px;
-    }
-
-    .stat-card small {
-        font-size: 10px;
-    }
-
-    .sections {
-        grid-template-columns: 1fr;
-    }
-
-    .section-card {
-        padding: 15px;
-    }
-
-    .section-heading h2 {
-        font-size: 17px;
-    }
-
-    .date {
-        display: none;
-    }
-
-    .backup-actions button {
-        flex: 1;
-        padding: 12px 8px;
-        font-size: 12px;
-    }
-}
-
-@@media(max-width:380px) {
-    .subject-top {
-        flex-wrap: wrap;
-    }
-
-    .subject-top-right {
-        flex-wrap: wrap;
-    }
-
-    .subject-status {
-        font-size: 9px;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Progress Tracker</title>
+
+    <style>
+            :root {
+                --bg: #f4f6fb;
+                --card: #ffffff;
+                --text: #172033;
+                --muted: #778198;
+                --primary: #635bdb;
+                --border: #e8eaf2;
+                --green: #16a779;
+                --red: #dc4c4c;
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: 'Segoe UI', Arial, sans-serif;
+                background: var(--bg);
+                color: var(--text);
+                padding: 20px;
+            }
+
+            button, input {
+                font: inherit;
+            }
+
+            button {
+                cursor: pointer;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: auto;
+            }
+
+            /* HEADER */
+
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 25px;
+                gap: 12px;
+            }
+
+                header h1 {
+                    font-size: 25px;
+                    font-weight: 800;
+                }
+
+            .date {
+                background: white;
+                padding: 10px 14px;
+                border-radius: 12px;
+                font-size: 12px;
+                color: var(--muted);
+            }
+
+            /* DASHBOARD */
+
+            .dashboard {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+
+            .stat-card {
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: 16px;
+                padding: 20px;
+            }
+
+                .stat-card small {
+                    color: var(--muted);
+                    font-size: 12px;
+                }
+
+                .stat-card h2 {
+                    font-size: 28px;
+                    margin-top: 9px;
+                }
+
+            /* ACTIONS */
+
+            .backup-actions {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-bottom: 22px;
+            }
+
+                .backup-actions button {
+                    padding: 11px 16px;
+                    border-radius: 10px;
+                    font-size: 13px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    border: none;
+                }
+
+            .export-btn {
+                background: #e8f7ef;
+                color: #168454;
+            }
+
+            .import-btn {
+                background: #eeedff;
+                color: #635bdb;
+            }
+
+            .btn {
+                border: none;
+                background: var(--primary);
+                color: white;
+                padding: 11px 16px;
+                border-radius: 10px;
+                font-weight: 600;
+                cursor: pointer;
+                font-size: 13px;
+            }
+
+            .btn-light {
+                background: #eeedff;
+                color: var(--primary);
+            }
+
+            .btn-danger {
+                background: #fff0f0;
+                color: var(--red);
+            }
+
+            /* LEGEND */
+
+            .legend {
+                display: flex;
+                gap: 9px;
+                flex-wrap: wrap;
+                margin-bottom: 22px;
+            }
+
+            .subject-status {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 11px;
+                font-weight: 700;
+                padding: 7px 10px;
+                border-radius: 20px;
+                white-space: nowrap;
+            }
+
+            .status-completed {
+                color: #128052;
+                background: #e6f7ee;
+            }
+
+            .status-progress {
+                color: #d44848;
+                background: #fff0f0;
+            }
+
+            .status-pending {
+                color: #778198;
+                background: #f0f1f5;
+            }
+
+            .status-icon {
+                width: 17px;
+                height: 17px;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 11px;
+                font-weight: 900;
+                flex-shrink: 0;
+            }
+
+            .status-completed .status-icon {
+                background: var(--green);
+                color: white;
+            }
+
+            .status-progress .status-icon {
+                background: var(--red);
+                color: white;
+            }
+
+            .status-pending .status-icon {
+                background: #9ba3b3;
+                color: white;
+            }
+
+            /* SECTION HEADER */
+
+            .section-heading-main {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 25px 0 18px;
+                gap: 10px;
+            }
+
+                .section-heading-main h2 {
+                    font-size: 20px;
+                }
+
+            /* SECTIONS */
+
+            .sections {
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+            }
+
+            .section-card {
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: 20px;
+                padding: 22px;
+                min-width: 0;
+                transition: background .2s, opacity .2s;
+            }
+
+                .section-card.dragging {
+                    opacity: .35;
+                }
+
+                .section-card.drag-over {
+                    outline: 2px dashed var(--primary);
+                    background: #eeedff;
+                }
+
+            .section-top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 17px;
+            }
+
+            .section-title-area {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                min-width: 0;
+            }
+
+            .section-top h3 {
+                font-size: 23px;
+                overflow-wrap: anywhere;
+            }
+
+            .drag-handle {
+                border: none;
+                background: #eeedff;
+                color: var(--primary);
+                width: 38px;
+                height: 38px;
+                border-radius: 11px;
+                font-size: 21px;
+                cursor: grab;
+                touch-action: none;
+                flex-shrink: 0;
+            }
+
+                .drag-handle:active {
+                    cursor: grabbing;
+                }
+
+            .section-actions {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+            .icon-btn {
+                border: none;
+                background: #f2f3f8;
+                padding: 9px 11px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 13px;
+                color: var(--text);
+            }
+
+                .icon-btn:disabled {
+                    opacity: .3;
+                    cursor: not-allowed;
+                }
+
+            .add-subject {
+                border: none;
+                background: var(--primary);
+                color: white;
+                padding: 10px 13px;
+                border-radius: 9px;
+                cursor: pointer;
+                font-weight: 700;
+                font-size: 12px;
+            }
+
+            /* SECTION PROGRESS */
+
+            .section-progress-info {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 13px;
+                color: var(--muted);
+                margin-bottom: 9px;
+            }
+
+                .section-progress-info strong {
+                    color: var(--green);
+                    font-size: 19px;
+                }
+
+            .section-progress {
+                height: 10px;
+                background: #e6e8f0;
+                border-radius: 20px;
+                overflow: hidden;
+                margin-bottom: 22px;
+            }
+
+            .section-progress-fill {
+                height: 100%;
+                background: var(--green);
+                border-radius: 20px;
+                transition: width .2s;
+            }
+
+            /* SUBJECT SCROLL */
+
+            .subject-scroll-wrapper {
+                position: relative;
+                min-width: 0;
+            }
+
+            .subject-scroll {
+                display: flex;
+                gap: 15px;
+                overflow-x: auto;
+                scroll-behavior: smooth;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: thin;
+                scrollbar-color: #c9c8e9 transparent;
+                padding: 2px 2px 13px;
+                overscroll-behavior-x: contain;
+            }
+
+                .subject-scroll::-webkit-scrollbar {
+                    height: 6px;
+                }
+
+                .subject-scroll::-webkit-scrollbar-thumb {
+                    background: #c9c8e9;
+                    border-radius: 20px;
+                }
+
+            .scroll-controls {
+                display: flex;
+                justify-content: flex-end;
+                gap: 7px;
+                margin-bottom: 9px;
+            }
+
+            .scroll-btn {
+                border: none;
+                background: #eeedff;
+                color: var(--primary);
+                border-radius: 8px;
+                width: 32px;
+                height: 30px;
+                font-size: 19px;
+                font-weight: bold;
+            }
+
+                .scroll-btn:disabled {
+                    opacity: .3;
+                    cursor: not-allowed;
+                }
+
+            /* SUBJECT CARD */
+
+            .subject {
+                flex: 0 0 300px;
+                width: 300px;
+                min-width: 0;
+                background: white;
+                border: 1px solid var(--border);
+                border-radius: 17px;
+                padding: 19px;
+                scroll-snap-align: start;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .subject-top {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 8px;
+                margin-bottom: 17px;
+            }
+
+            .subject-name {
+                font-size: 21px;
+                font-weight: 750;
+                overflow-wrap: anywhere;
+            }
+
+            .subject-percent {
+                font-size: 19px;
+                color: var(--green);
+                font-weight: 750;
+                white-space: nowrap;
+            }
+
+            /* STATUS */
+
+            .subject-status {
+                margin-bottom: 20px;
+                width: fit-content;
+            }
+
+            /* SLIDER */
+
+            .slider-area {
+                margin-bottom: 22px;
+            }
+
+            .slider-heading {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 17px;
+                font-size: 15px;
+                color: var(--muted);
+            }
+
+                .slider-heading strong {
+                    color: var(--green);
+                    font-size: 20px;
+                }
+
+            .subject-slider {
+                width: 100%;
+                height: 9px;
+                border-radius: 20px;
+                appearance: none;
+                -webkit-appearance: none;
+                background: #e6e8f0;
+                outline: none;
+                cursor: pointer;
+                touch-action: pan-y;
+            }
+
+                .subject-slider::-webkit-slider-thumb {
+                    appearance: none;
+                    -webkit-appearance: none;
+                    width: 24px;
+                    height: 24px;
+                    border: 4px solid white;
+                    border-radius: 50%;
+                    background: var(--primary);
+                    box-shadow: 0 1px 7px #0003;
+                }
+
+                .subject-slider::-moz-range-thumb {
+                    width: 16px;
+                    height: 16px;
+                    border: 4px solid white;
+                    border-radius: 50%;
+                    background: var(--primary);
+                    box-shadow: 0 1px 7px #0003;
+                }
+
+            .slider-scale {
+                display: flex;
+                justify-content: space-between;
+                color: var(--muted);
+                font-size: 12px;
+                margin-top: 11px;
+            }
+
+            /* VIDEO LIBRARY */
+
+            .video-area {
+                margin-top: auto;
+                padding-top: 14px;
+                border-top: 1px solid var(--border);
+            }
+
+            .video-heading {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 7px;
+                margin-bottom: 10px;
+            }
+
+                .video-heading strong {
+                    font-size: 13px;
+                }
+
+            .video-count {
+                background: #fff1e7;
+                color: #d66a28;
+                padding: 4px 8px;
+                border-radius: 20px;
+                font-size: 10px;
+                font-weight: 700;
+            }
+
+            .video-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                padding: 9px 10px;
+                background: #f8f8fc;
+                border-radius: 9px;
+                margin-bottom: 7px;
+            }
+
+            .video-link {
+                color: var(--primary);
+                text-decoration: none;
+                font-size: 12px;
+                font-weight: 600;
+                min-width: 0;
+                overflow-wrap: anywhere;
+            }
+
+                .video-link:hover {
+                    text-decoration: underline;
+                }
+
+            .video-delete {
+                background: #fff0f0;
+                color: var(--red);
+                border: none;
+                padding: 5px 8px;
+                border-radius: 7px;
+                cursor: pointer;
+                flex-shrink: 0;
+            }
+
+            .add-video-btn {
+                width: 100%;
+                padding: 10px;
+                border: 1px dashed #c7c4ee;
+                color: var(--primary);
+                background: #f8f7ff;
+                border-radius: 10px;
+                cursor: pointer;
+                font-weight: 600;
+                margin-top: 7px;
+                font-size: 12px;
+            }
+
+            /* SUBJECT ACTIONS */
+
+            .subject-footer {
+                display: flex;
+                justify-content: flex-end;
+                gap: 7px;
+                margin-top: 14px;
+            }
+
+            .subject-edit {
+                border: none;
+                background: #eeedff;
+                color: var(--primary);
+                padding: 9px 12px;
+                border-radius: 9px;
+                font-size: 12px;
+                font-weight: 700;
+            }
+
+            .subject-delete {
+                border: none;
+                background: #fff0f0;
+                color: var(--red);
+                padding: 9px 12px;
+                border-radius: 9px;
+                font-size: 12px;
+                font-weight: 700;
+            }
+
+            .empty {
+                text-align: center;
+                color: var(--muted);
+                padding: 22px 10px;
+                font-size: 13px;
+                background: #fafaff;
+                border: 1px dashed var(--border);
+                border-radius: 12px;
+                min-width: 230px;
+            }
+
+            .empty-video {
+                font-size: 11px;
+                color: var(--muted);
+                padding: 5px 0;
+            }
+
+            /* MODALS */
+
+            .modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: #10162b88;
+                z-index: 1000;
+                align-items: center;
+                justify-content: center;
+                padding: 15px;
+            }
+
+            .modal-content {
+                width: 100%;
+                max-width: 450px;
+                background: white;
+                border-radius: 20px;
+                padding: 25px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+                .modal-content h3 {
+                    font-size: 23px;
+                    margin-bottom: 8px;
+                }
+
+            .modal-description {
+                font-size: 12px;
+                color: var(--muted);
+                margin-bottom: 18px;
+            }
+
+            .modal-content label {
+                display: block;
+                font-size: 13px;
+                font-weight: 700;
+                margin: 14px 0 7px;
+            }
+
+            .modal-content input {
+                width: 100%;
+                padding: 14px;
+                border: 1px solid var(--border);
+                border-radius: 11px;
+                font-size: 15px;
+                outline-color: var(--primary);
+            }
+
+            .modal-buttons {
+                display: flex;
+                gap: 10px;
+                margin-top: 22px;
+            }
+
+                .modal-buttons button {
+                    flex: 1;
+                }
+
+            .footer {
+                text-align: center;
+                padding: 30px 0 10px;
+                font-size: 12px;
+                color: var(--muted);
+            }
+
+            /* MOBILE */
+
+            @@media(max-width: 650px) {
+                body {
+                    padding: 13px;
+                }
+
+                header h1 {
+                    font-size: 21px;
+                }
+
+                .dashboard {
+                    gap: 8px;
+                }
+
+                .stat-card {
+                    padding: 13px 10px;
+                    border-radius: 12px;
+                }
+
+                    .stat-card h2 {
+                        font-size: 21px;
+                    }
+
+                    .stat-card small {
+                        font-size: 10px;
+                    }
+
+                .section-card {
+                    padding: 15px;
+                }
+
+                .section-top {
+                    flex-wrap: wrap;
+                }
+
+                .section-title-area {
+                    flex: 1 1 100%;
+                }
+
+                .section-top h3 {
+                    font-size: 20px;
+                }
+
+                .section-actions {
+                    width: 100%;
+                    flex-wrap: wrap;
+                }
+
+                .add-subject {
+                    margin-left: auto;
+                }
+
+                .subject {
+                    flex-basis: 85%;
+                    width: 85%;
+                }
+
+                .date {
+                    display: none;
+                }
+
+                .backup-actions button {
+                    flex: 1;
+                    padding: 12px 8px;
+                    font-size: 12px;
+                }
+            }
+
+            @@media(max-width: 380px) {
+                .subject {
+                    flex-basis: 92%;
+                    width: 92%;
+                }
+
+                .dashboard {
+                    gap: 6px;
+                }
+
+                .stat-card h2 {
+                    font-size: 19px;
+                }
+            }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<header>
-    <div>
-        <h1>📚 Study Tracker</h1>
-    </div>
-    <div class="date" id="today"></div>
-</header>
-
-<!-- DASHBOARD -->
-
-<div class="dashboard">
-
-    <div class="stat-card">
-        <small>📖 Total Subjects</small>
-        <h2 id="totalSubjects">0</h2>
-    </div>
-
-    <div class="stat-card">
-        <small>✅ Topics Completed</small>
-        <h2 id="completedTopics">0</h2>
-    </div>
-
-    <div class="stat-card">
-        <small>📊 Overall Progress</small>
-        <h2 id="overallProgress">0%</h2>
-    </div>
-
-</div>
-
-<!-- XML BACKUP -->
-
-<div class="backup-actions">
-
-    <button class="export-btn" onclick="exportXML()">
-        ↓ Export XML
-    </button>
-
-    <button class="import-btn"
-        onclick="document.getElementById('xmlFile').click()">
-        ↑ Import XML
-    </button>
-
-    <input type="file"
-        id="xmlFile"
-        accept=".xml,text/xml,application/xml"
-        style="display:none"
-        onchange="importXML(event)">
-
-</div>
-
-<!-- STATUS LEGEND -->
-
-<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px;">
-
-    <span class="subject-status status-completed">
-        <span class="status-icon">✓</span>
-        Completed
-    </span>
-
-    <span class="subject-status status-progress">
-        <span class="status-icon">!</span>
-        In Progress
-    </span>
-
-    <span class="subject-status status-pending">
-        <span class="status-icon">−</span>
-        Not Started
-    </span>
-
-</div>
-
-<!-- SECTIONS -->
-
-<div class="section-heading">
-
-    <h2>My Sections</h2>
-
-    <button class="btn" onclick="openSectionModal()">
-        + Add Section
-    </button>
-
-</div>
-
-<div class="sections" id="sections"></div>
-
-<div class="footer">
-</div>
-
-</div>
-
-
-<!-- GENERAL MODAL -->
-
-<div class="modal" id="modal">
-
-    <div class="modal-content">
-
-        <h3 id="modalTitle">Add Section</h3>
-
-        <p class="modal-description" id="modalDescription"></p>
-
-        <div id="nameField">
-
-            <label id="nameLabel">Name</label>
-
-            <input id="nameInput"
-                type="text"
-                placeholder="Enter name">
-
-        </div>
-
-        <div id="extraInputs">
-
-            <label>Total Topics</label>
-
-            <input id="totalInput"
-                type="number"
-                placeholder="Enter total topics"
-                min="1">
-
-        </div>
-
-        <div class="modal-buttons">
-
-            <button class="btn btn-light"
-                onclick="closeModal()">
-                Cancel
-            </button>
-
-            <button class="btn" onclick="saveModal()">
-                Save
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- VIDEO MODAL -->
-
-<div class="modal" id="videoModal">
-
-    <div class="modal-content">
-
-        <h3>🎬 Add Video Link</h3>
-
-        <p class="modal-description">
-            Attach a lecture or video to this subject.
-        </p>
-
-        <label>Video Title</label>
-
-        <input type="text"
-            id="videoTitle"
-            placeholder="Example: Percentage Lecture 1">
-
-        <label>Video URL</label>
-
-        <input type="url"
-            id="videoURL"
-            placeholder="https://www.youtube.com/watch?v=...">
-
-        <div class="modal-buttons">
-
-            <button class="btn btn-light"
-                onclick="closeVideoModal()">
-                Cancel
-            </button>
-
-            <button class="btn" onclick="saveVideo()">
-                Add Video
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<script>
-
-// ==========================================
-// 1. LOCAL STORAGE
-// ==========================================
-
-const STORAGE_KEY = "studyTrackerDataV1";
-
-const DEFAULT_DATA = {
-    sections: [
-        { id: 1, name: "Section 1", subjects: [] },
-        { id: 2, name: "Section 2", subjects: [] }
-    ]
-};
-
-function loadData() {
-
-    try {
-
-        const saved = localStorage.getItem(STORAGE_KEY);
-
-        if (!saved) return structuredClone(DEFAULT_DATA);
-
-        const parsed = JSON.parse(saved);
-
-        if (!parsed || !Array.isArray(parsed.sections)) {
-            throw new Error("Invalid saved data");
-        }
-
-        parsed.sections.forEach(section => {
-
-            section.subjects.forEach(subject => {
-
-                if (!Array.isArray(subject.videos)) {
-                    subject.videos = [];
-                }
-
-            });
-
-        });
-
-        return parsed;
-
-    } catch (error) {
-
-        alert("Saved data could not be read. Original storage has not been overwritten.");
-
-        return structuredClone(DEFAULT_DATA);
-
-    }
-}
-
-let data = loadData();
-
-let modalMode = "";
-let activeSection = null;
-let editingSection = null;
-
-let activeVideoSection = null;
-let activeVideoSubject = null;
-
-
-function saveData() {
-
-    try {
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(data)
-        );
-
-        render();
-
-    } catch (error) {
-
-        alert("Unable to save data. Please export a backup or free browser storage.");
-
-    }
-
-}
-
-
-// ==========================================
-// 2. UNIQUE ID
-// ==========================================
-
-function makeId() {
-
-    let id = Date.now();
-
-    const allIds = [];
-
-    data.sections.forEach(section => {
-
-        allIds.push(Number(section.id));
-
-        section.subjects.forEach(subject => {
-
-            allIds.push(Number(subject.id));
-
-            (subject.videos || []).forEach(video => {
-                allIds.push(Number(video.id));
-            });
-
-        });
-
-    });
-
-    while (allIds.includes(id)) {
-        id++;
-    }
-
-    return id;
-}
-
-
-// ==========================================
-// 3. SUBJECT STATUS
-// ==========================================
-
-function getSubjectStatus(subject) {
-
-    if (subject.done >= subject.total) {
-
-        return {
-            className: "status-completed",
-            icon: "✓",
-            label: "Completed"
-        };
-
-    }
-
-    if (subject.done > 0) {
-
-        return {
-            className: "status-progress",
-            icon: "!",
-            label: "In Progress"
-        };
-
-    }
-
-    return {
-        className: "status-pending",
-        icon: "−",
-        label: "Not Started"
-    };
-
-}
-
-
-// ==========================================
-// 4. DASHBOARD
-// ==========================================
-
-function updateDashboard() {
-
-    let subjects = data.sections.flatMap(
-        section => section.subjects
-    );
-
-    let completed = subjects.reduce(
-        (sum, subject) => sum + subject.done,
-        0
-    );
-
-    let total = subjects.reduce(
-        (sum, subject) => sum + subject.total,
-        0
-    );
-
-    document.getElementById("totalSubjects").innerText =
-        subjects.length;
-
-    document.getElementById("completedTopics").innerText =
-        completed;
-
-    document.getElementById("overallProgress").innerText =
-        (total ? Math.round(completed / total * 100) : 0) + "%";
-
-}
-
-
-// ==========================================
-// 5. RENDER SECTIONS
-// ==========================================
-
-function render() {
-
-    const container = document.getElementById("sections");
-
-    container.innerHTML = "";
-
-    data.sections.forEach(section => {
-
-        let completed = section.subjects.reduce(
-            (sum, subject) => sum + subject.done,
-            0
-        );
-
-        let total = section.subjects.reduce(
-            (sum, subject) => sum + subject.total,
-            0
-        );
-
-        let percent = total
-            ? Math.round(completed / total * 100)
-            : 0;
-
-        let html = `
-
-        <div class="section-card">
-
-            <div class="section-top">
-
-                <h3>${escapeHTML(section.name)}</h3>
-
-                <div class="section-actions">
-
-                    <button class="icon-btn"
-                        onclick="editSection(${section.id})">
-                        ✏️
-                    </button>
-
-                    <button class="icon-btn"
-                        onclick="deleteSection(${section.id})">
-                        🗑️
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div class="progress-info">
-
-                <span>Section Progress</span>
-
-                <strong>${percent}%</strong>
-
-            </div>
-
-            <div class="progress">
-
-                <div class="progress-fill"
-                    style="width:${percent}%">
-                </div>
-
-            </div>
-
+        <header>
             <div>
+                <h1>📚 Study Tracker</h1>
+            </div>
+            <div class="date" id="today"></div>
+        </header>
 
-                ${section.subjects.length
-                    ? section.subjects.map(subject =>
-                        subjectHTML(section.id, subject)
-                    ).join("")
-                    : `<div class="empty">No subjects added yet.</div>`
-                }
+        <!-- DASHBOARD -->
 
+        <div class="dashboard">
+
+            <div class="stat-card">
+                <small>📖 Total Subjects</small>
+                <h2 id="totalSubjects">0</h2>
             </div>
 
-            <button class="add-subject"
-                onclick="openSubjectModal(${section.id})">
+            <div class="stat-card">
+                <small>✅ Topics Completed</small>
+                <h2 id="completedTopics">0</h2>
+            </div>
 
-                + Add Subject
+            <div class="stat-card">
+                <small>📊 Overall Progress</small>
+                <h2 id="overallProgress">0%</h2>
+            </div>
 
+        </div>
+
+        <!-- XML BACKUP -->
+
+        <div class="backup-actions">
+
+            <button class="export-btn" onclick="exportXML()">
+                ↓ Export XML
             </button>
 
-        </div>`;
+            <button class="import-btn"
+                    onclick="document.getElementById('xmlFile').click()">
+                ↑ Import XML
+            </button>
 
-        container.insertAdjacentHTML("beforeend", html);
+            <input type="file"
+                   id="xmlFile"
+                   accept=".xml,text/xml,application/xml"
+                   style="display:none"
+                   onchange="importXML(event)">
 
-    });
+        </div>
 
-    updateDashboard();
+        <!-- STATUS LEGEND -->
 
-}
+        <div class="legend">
 
-
-// ==========================================
-// 6. SUBJECT HTML
-// ==========================================
-
-function subjectHTML(sectionId, subject) {
-
-    let percent = subject.total
-        ? Math.round(subject.done / subject.total * 100)
-        : 0;
-
-    const videos = subject.videos || [];
-
-    const status = getSubjectStatus(subject);
-
-    return `
-
-    <div class="subject">
-
-        <div class="subject-top">
-
-            <span class="subject-name">
-                ${escapeHTML(subject.name)}
+            <span class="subject-status status-completed">
+                <span class="status-icon">✓</span>
+                Completed
             </span>
 
-            <span class="subject-percent">
-                ${percent}%
+            <span class="subject-status status-progress">
+                <span class="status-icon">!</span>
+                In Progress
+            </span>
+
+            <span class="subject-status status-pending">
+                <span class="status-icon">−</span>
+                Not Started
             </span>
 
         </div>
 
-        <!-- AUTOMATIC STATUS BADGE -->
+        <!-- SECTIONS -->
 
-        <div style="margin-top:9px;">
+        <div class="section-heading-main">
 
-            <span class="subject-status ${status.className}">
+            <h2>My Sections</h2>
 
-                <span class="status-icon">
-                    ${status.icon}
-                </span>
-
-                ${status.label}
-
-            </span>
-
-        </div>
-
-        <div class="progress">
-
-            <div class="progress-fill"
-                style="width:${percent}%">
-            </div>
-
-        </div>
-
-        <div class="topic-controls">
-
-            <span>Topics completed</span>
-
-            <div class="counter">
-
-                <button onclick="changeProgress(${sectionId},${subject.id},-1)">
-                    −
-                </button>
-
-                <strong>${subject.done}/${subject.total}</strong>
-
-                <button onclick="changeProgress(${sectionId},${subject.id},1)">
-                    +
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- VIDEO LIBRARY -->
-
-        <div class="video-area">
-
-            <div class="video-heading">
-
-                <strong>🎬 Video Library</strong>
-
-                <span class="video-count">
-                    ${videos.length} VIDEOS
-                </span>
-
-            </div>
-
-            ${videos.length
-                ? videos.map(video =>
-                    videoHTML(sectionId, subject.id, video)
-                ).join("")
-                : `<div class="empty-video">No video links added yet.</div>`
-            }
-
-            <button class="add-video-btn"
-                onclick="openVideoModal(${sectionId},${subject.id})">
-
-                + Add Video Link
-
+            <button class="btn" onclick="openSectionModal()">
+                + Add Section
             </button>
 
         </div>
 
-        <div class="subject-footer">
+        <div class="sections" id="sections"></div>
 
-            <span style="font-size:11px;color:#778198">
-                ${videos.length} attached video(s)
-            </span>
+        <div class="footer">
+            Your progress is saved automatically on this device.
+        </div>
 
-            <div class="subject-tools">
+    </div>
 
-                <button class="icon-btn"
-                    onclick="deleteSubject(${sectionId},${subject.id})">
-                    🗑️ Delete Subject
+
+    <!-- GENERAL MODAL -->
+
+    <div class="modal" id="modal">
+
+        <div class="modal-content">
+
+            <h3 id="modalTitle">Add Section</h3>
+
+            <p class="modal-description" id="modalDescription"></p>
+
+            <div id="nameField">
+
+                <label id="nameLabel">Name</label>
+
+                <input id="nameInput"
+                       type="text"
+                       maxlength="100"
+                       placeholder="Enter name">
+
+            </div>
+
+            <div id="extraInputs">
+
+                <label>Total Topics</label>
+
+                <input id="totalInput"
+                       type="number"
+                       placeholder="Enter total topics"
+                       min="1"
+                       max="10000">
+
+            </div>
+
+            <div class="modal-buttons">
+
+                <button class="btn btn-light"
+                        onclick="closeModal()">
+                    Cancel
+                </button>
+
+                <button class="btn" onclick="saveModal()">
+                    Save
                 </button>
 
             </div>
 
         </div>
 
-    </div>`;
+    </div>
 
-}
 
+    <!-- VIDEO MODAL -->
 
-// ==========================================
-// 7. VIDEO HTML
-// ==========================================
+    <div class="modal" id="videoModal">
 
-function videoHTML(sectionId, subjectId, video) {
+        <div class="modal-content">
 
-    const safeURL = escapeHTML(video.url);
+            <h3>🎬 Add Video Link</h3>
 
-    return `
+            <p class="modal-description">
+                Attach a lecture or video to this subject.
+            </p>
 
-    <div class="video-item">
+            <label>Video Title</label>
 
-        <a class="video-link"
-            href="${safeURL}"
-            target="_blank"
-            rel="noopener noreferrer">
+            <input type="text"
+                   id="videoTitle"
+                   maxlength="150"
+                   placeholder="Example: Percentage Lecture 1">
 
-            <span>▶️</span>
+            <label>Video URL</label>
 
-            <span>${escapeHTML(video.title)}</span>
+            <input type="url"
+                   id="videoURL"
+                   placeholder="https://www.youtube.com/watch?v=...">
 
-        </a>
+            <div class="modal-buttons">
 
-        <button class="video-delete"
-            title="Delete video"
-            onclick="deleteVideo(${sectionId},${subjectId},${video.id})">
+                <button class="btn btn-light"
+                        onclick="closeVideoModal()">
+                    Cancel
+                </button>
 
-            ✕
+                <button class="btn" onclick="saveVideo()">
+                    Add Video
+                </button>
 
-        </button>
+            </div>
 
-    </div>`;
+        </div>
 
-}
+    </div>
 
 
-// ==========================================
-// 8. HTML ESCAPING
-// ==========================================
+    <script>
 
-function escapeHTML(value) {
+            /* ==========================================
+               1. LOCAL STORAGE
+            ========================================== */
 
-    return String(value).replace(/[&<>"']/g, c => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-    })[c]);
+            const STORAGE_KEY = "studyTrackerDataV1";
 
-}
+            const DEFAULT_DATA = {
+                sections: [
+                    { id: 1, name: "Section 1", subjects: [] },
+                    { id: 2, name: "Section 2", subjects: [] }
+                ]
+            };
 
-
-// ==========================================
-// 9. GENERAL MODAL
-// ==========================================
-
-function openSectionModal() {
-
-    modalMode = "section";
-    editingSection = null;
-
-    document.getElementById("modalTitle").innerText =
-        "Add Section";
-
-    document.getElementById("modalDescription").innerText =
-        "Create a new study section.";
-
-    document.getElementById("nameLabel").innerText =
-        "Section Name";
-
-    document.getElementById("nameInput").value = "";
-
-    document.getElementById("extraInputs").style.display =
-        "none";
-
-    showModal();
-
-}
-
-
-function editSection(id) {
-
-    const section = data.sections.find(s => s.id === id);
-
-    if (!section) return;
-
-    modalMode = "editSection";
-    editingSection = id;
-
-    document.getElementById("modalTitle").innerText =
-        "Rename Section";
-
-    document.getElementById("modalDescription").innerText =
-        "Change your section name.";
-
-    document.getElementById("nameLabel").innerText =
-        "Section Name";
-
-    document.getElementById("nameInput").value =
-        section.name;
-
-    document.getElementById("extraInputs").style.display =
-        "none";
-
-    showModal();
-
-}
-
-
-function openSubjectModal(id) {
-
-    modalMode = "subject";
-    activeSection = id;
-
-    document.getElementById("modalTitle").innerText =
-        "Add Subject";
-
-    document.getElementById("modalDescription").innerText =
-        "Add a subject and its total topics.";
-
-    document.getElementById("nameLabel").innerText =
-        "Subject Name";
-
-    document.getElementById("nameInput").value = "";
-
-    document.getElementById("totalInput").value = "";
-
-    document.getElementById("extraInputs").style.display =
-        "block";
-
-    showModal();
-
-}
-
-
-function showModal() {
-
-    document.getElementById("modal").style.display = "flex";
-
-    document.getElementById("nameInput").focus();
-
-}
-
-
-function closeModal() {
-
-    document.getElementById("modal").style.display = "none";
-
-}
-
-
-// ==========================================
-// 10. SAVE GENERAL MODAL
-// ==========================================
-
-function saveModal() {
-
-    const name = document.getElementById("nameInput")
-        .value.trim();
-
-    if (!name || name.length > 100) {
-
-        alert("Enter a name between 1 and 100 characters.");
-
-        return;
-
-    }
-
-    if (modalMode === "section") {
-
-        data.sections.push({
-
-            id: makeId(),
-
-            name: name,
-
-            subjects: []
-
-        });
-
-    }
-
-    else if (modalMode === "editSection") {
-
-        const section = data.sections.find(
-            s => s.id === editingSection
-        );
-
-        if (section) section.name = name;
-
-    }
-
-    else if (modalMode === "subject") {
-
-        const total = Number(
-            document.getElementById("totalInput").value
-        );
-
-        if (!Number.isSafeInteger(total) || total < 1) {
-
-            alert("Enter a valid total topic count.");
-
-            return;
-
-        }
-
-        const section = data.sections.find(
-            s => s.id === activeSection
-        );
-
-        if (section) {
-
-            section.subjects.push({
-
-                id: makeId(),
-
-                name: name,
-
-                total: total,
-
-                done: 0,
-
-                videos: []
-
-            });
-
-        }
-
-    }
-
-    closeModal();
-
-    saveData();
-
-}
-
-
-// ==========================================
-// 11. PROGRESS TRACKING
-// ==========================================
-
-function changeProgress(sectionId, subjectId, amount) {
-
-    const section = data.sections.find(
-        s => s.id === sectionId
-    );
-
-    const subject = section?.subjects.find(
-        s => s.id === subjectId
-    );
-
-    if (!subject) return;
-
-    subject.done = Math.max(
-
-        0,
-
-        Math.min(
-            subject.total,
-            subject.done + amount
-        )
-
-    );
-
-    // Render recalculates the status automatically.
-    saveData();
-
-}
-
-
-// ==========================================
-// 12. DELETE SECTION
-// ==========================================
-
-function deleteSection(id) {
-
-    if (!confirm(
-        "Delete this section and all its subjects and videos?"
-    )) return;
-
-    data.sections = data.sections.filter(
-        s => s.id !== id
-    );
-
-    saveData();
-
-}
-
-
-// ==========================================
-// 13. DELETE SUBJECT
-// ==========================================
-
-function deleteSubject(sectionId, subjectId) {
-
-    if (!confirm(
-        "Delete this subject and its video links?"
-    )) return;
-
-    const section = data.sections.find(
-        s => s.id === sectionId
-    );
-
-    if (!section) return;
-
-    section.subjects = section.subjects.filter(
-        s => s.id !== subjectId
-    );
-
-    saveData();
-
-}
-
-
-// ==========================================
-// 14. VIDEO MODAL
-// ==========================================
-
-function openVideoModal(sectionId, subjectId) {
-
-    activeVideoSection = sectionId;
-
-    activeVideoSubject = subjectId;
-
-    document.getElementById("videoTitle").value = "";
-
-    document.getElementById("videoURL").value = "";
-
-    document.getElementById("videoModal").style.display =
-        "flex";
-
-    document.getElementById("videoTitle").focus();
-
-}
-
-
-function closeVideoModal() {
-
-    document.getElementById("videoModal").style.display =
-        "none";
-
-}
-
-
-// ==========================================
-// 15. SAVE VIDEO
-// ==========================================
-
-function saveVideo() {
-
-    const title = document.getElementById("videoTitle")
-        .value.trim();
-
-    const url = document.getElementById("videoURL")
-        .value.trim();
-
-    if (!title || title.length > 150) {
-
-        alert("Enter a video title (maximum 150 characters).");
-
-        return;
-
-    }
-
-    if (!url || url.length > 2048) {
-
-        alert("Enter a valid video URL.");
-
-        return;
-
-    }
-
-    let parsedURL;
-
-    try {
-
-        parsedURL = new URL(url);
-
-    } catch {
-
-        alert("Invalid video URL.");
-
-        return;
-
-    }
-
-    if (!["http:", "https:"].includes(parsedURL.protocol)) {
-
-        alert("Only HTTP and HTTPS links are allowed.");
-
-        return;
-
-    }
-
-    const section = data.sections.find(
-        s => s.id === activeVideoSection
-    );
-
-    const subject = section?.subjects.find(
-        s => s.id === activeVideoSubject
-    );
-
-    if (!subject) {
-
-        alert("Subject not found.");
-
-        return;
-
-    }
-
-    if (!Array.isArray(subject.videos)) {
-        subject.videos = [];
-    }
-
-    subject.videos.push({
-
-        id: makeId(),
-
-        title: title,
-
-        url: parsedURL.href
-
-    });
-
-    closeVideoModal();
-
-    saveData();
-
-}
-
-
-// ==========================================
-// 16. DELETE VIDEO
-// ==========================================
-
-function deleteVideo(sectionId, subjectId, videoId) {
-
-    if (!confirm("Delete this video link?")) return;
-
-    const section = data.sections.find(
-        s => s.id === sectionId
-    );
-
-    const subject = section?.subjects.find(
-        s => s.id === subjectId
-    );
-
-    if (!subject) return;
-
-    subject.videos = subject.videos.filter(
-        v => v.id !== videoId
-    );
-
-    saveData();
-
-}
-
-
-// ==========================================
-// 17. XML EXPORT
-// ==========================================
-
-function exportXML() {
-
-    const xmlDoc = document.implementation.createDocument(
-        "",
-        "StudyTracker",
-        null
-    );
-
-    const root = xmlDoc.documentElement;
-
-    root.setAttribute("version", "2.0");
-
-    data.sections.forEach(section => {
-
-        const sectionNode =
-            xmlDoc.createElement("Section");
-
-        sectionNode.setAttribute("id", section.id);
-
-        const name = xmlDoc.createElement("Name");
-
-        name.textContent = section.name;
-
-        sectionNode.appendChild(name);
-
-        const subjectsNode =
-            xmlDoc.createElement("Subjects");
-
-        section.subjects.forEach(subject => {
-
-            const subjectNode =
-                xmlDoc.createElement("Subject");
-
-            subjectNode.setAttribute("id", subject.id);
-
-            const subjectName =
-                xmlDoc.createElement("Name");
-
-            subjectName.textContent = subject.name;
-
-            const total =
-                xmlDoc.createElement("Total");
-
-            total.textContent = subject.total;
-
-            const done =
-                xmlDoc.createElement("Completed");
-
-            done.textContent = subject.done;
-
-            subjectNode.appendChild(subjectName);
-            subjectNode.appendChild(total);
-            subjectNode.appendChild(done);
-
-            const videosNode =
-                xmlDoc.createElement("Videos");
-
-            (subject.videos || []).forEach(video => {
-
-                const videoNode =
-                    xmlDoc.createElement("Video");
-
-                videoNode.setAttribute("id", video.id);
-
-                const title =
-                    xmlDoc.createElement("Title");
-
-                title.textContent = video.title;
-
-                const url =
-                    xmlDoc.createElement("URL");
-
-                url.textContent = video.url;
-
-                videoNode.appendChild(title);
-                videoNode.appendChild(url);
-
-                videosNode.appendChild(videoNode);
-
-            });
-
-            subjectNode.appendChild(videosNode);
-
-            subjectsNode.appendChild(subjectNode);
-
-        });
-
-        sectionNode.appendChild(subjectsNode);
-
-        root.appendChild(sectionNode);
-
-    });
-
-    const xmlString = new XMLSerializer()
-        .serializeToString(xmlDoc);
-
-    const finalXML =
-        '<?xml version="1.0" encoding="UTF-8"?>\n' +
-        xmlString;
-
-    const blob = new Blob(
-        [finalXML],
-        { type: "application/xml;charset=utf-8" }
-    );
-
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-
-    link.href = url;
-
-    link.download =
-        "StudyTracker_Backup_" +
-        new Date().toISOString().slice(0, 10) +
-        ".xml";
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    link.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-}
-
-
-// ==========================================
-// 18. XML VALIDATION
-// ==========================================
-
-function validateXML(xmlDoc) {
-
-    const root = xmlDoc.documentElement;
-
-    if (!root || root.tagName !== "StudyTracker") {
-        throw new Error("Invalid backup file.");
-    }
-
-    const sections = [];
-
-    const sectionNodes = Array.from(root.children)
-        .filter(node => node.tagName === "Section");
-
-    const sectionIds = new Set();
-    const subjectIds = new Set();
-    const videoIds = new Set();
-
-    function getChild(parent, tag) {
-
-        return Array.from(parent.children)
-            .find(node => node.tagName === tag);
-
-    }
-
-    function readNumber(value, label, min = 0) {
-
-        const text = String(value ?? "").trim();
-
-        if (!/^\d+$/.test(text)) {
-            throw new Error("Invalid " + label + ".");
-        }
-
-        const number = Number(text);
-
-        if (!Number.isSafeInteger(number) || number < min) {
-            throw new Error("Invalid " + label + ".");
-        }
-
-        return number;
-
-    }
-
-    if (sectionNodes.length > 200) {
-        throw new Error("Too many sections.");
-    }
-
-    sectionNodes.forEach(sectionNode => {
-
-        const id = readNumber(
-            sectionNode.getAttribute("id"),
-            "section ID",
-            1
-        );
-
-        if (sectionIds.has(id)) {
-            throw new Error("Duplicate section ID.");
-        }
-
-        sectionIds.add(id);
-
-        const nameNode = getChild(sectionNode, "Name");
-        const subjectsNode = getChild(sectionNode, "Subjects");
-
-        if (!nameNode || !subjectsNode) {
-            throw new Error("Incomplete section data.");
-        }
-
-        const name = nameNode.textContent.trim();
-
-        if (!name || name.length > 100) {
-            throw new Error("Invalid section name.");
-        }
-
-        const subjects = [];
-
-        const subjectNodes = Array.from(subjectsNode.children)
-            .filter(node => node.tagName === "Subject");
-
-        if (subjectNodes.length > 500) {
-            throw new Error("Too many subjects in a section.");
-        }
-
-        subjectNodes.forEach(subjectNode => {
-
-            const subjectId = readNumber(
-                subjectNode.getAttribute("id"),
-                "subject ID",
-                1
-            );
-
-            if (subjectIds.has(subjectId)) {
-                throw new Error("Duplicate subject ID.");
+            function cloneDefaultData() {
+                return JSON.parse(JSON.stringify(DEFAULT_DATA));
             }
 
-            subjectIds.add(subjectId);
+            function loadData() {
 
-            const subjectNameNode =
-                getChild(subjectNode, "Name");
+                try {
 
-            const totalNode =
-                getChild(subjectNode, "Total");
+                    const saved = localStorage.getItem(STORAGE_KEY);
 
-            const doneNode =
-                getChild(subjectNode, "Completed");
+                    if (!saved) return cloneDefaultData();
 
-            if (!subjectNameNode || !totalNode || !doneNode) {
-                throw new Error("Incomplete subject data.");
-            }
+                    const parsed = JSON.parse(saved);
 
-            const subjectName =
-                subjectNameNode.textContent.trim();
+                    if (!parsed || !Array.isArray(parsed.sections)) {
+                        throw new Error("Invalid saved data");
+                    }
 
-            const total = readNumber(
-                totalNode.textContent,
-                "total topics",
-                1
-            );
+                    parsed.sections.forEach(section => {
 
-            const done = readNumber(
-                doneNode.textContent,
-                "completed topics"
-            );
+                        if (!Array.isArray(section.subjects)) {
+                            section.subjects = [];
+                        }
 
-            if (!subjectName || subjectName.length > 100) {
-                throw new Error("Invalid subject name.");
-            }
+                        section.subjects.forEach(subject => {
 
-            if (done > total) {
-                throw new Error("Completed topics cannot exceed total topics.");
-            }
+                            subject.total = Math.max(
+                                1,
+                                Number(subject.total) || 1
+                            );
 
-            const videos = [];
+                            subject.done = Math.max(
+                                0,
+                                Math.min(
+                                    subject.total,
+                                    Number(subject.done) || 0
+                                )
+                            );
 
-            const videosNode = getChild(subjectNode, "Videos");
+                            // Older versions did not store a slider percentage.
+                            if (
+                                subject.progress === undefined ||
+                                !Number.isFinite(Number(subject.progress))
+                            ) {
+                                subject.progress =
+                                    subject.total > 0
+                                        ? subject.done / subject.total * 100
+                                        : 0;
+                            }
 
-            if (videosNode) {
+                            subject.progress = Math.max(
+                                0,
+                                Math.min(100, Number(subject.progress))
+                            );
 
-                const videoNodes = Array.from(videosNode.children)
-                    .filter(node => node.tagName === "Video");
+                            subject.done = Math.round(
+                                subject.total * subject.progress / 100
+                            );
 
-                if (videoNodes.length > 200) {
-                    throw new Error("Too many videos for a subject.");
-                }
+                            if (!Array.isArray(subject.videos)) {
+                                subject.videos = [];
+                            }
 
-                videoNodes.forEach(videoNode => {
+                        });
 
-                    const videoId = readNumber(
-                        videoNode.getAttribute("id"),
-                        "video ID",
-                        1
+                    });
+
+                    return parsed;
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Saved data could not be read. " +
+                        "Original storage has not been overwritten."
                     );
 
-                    if (videoIds.has(videoId)) {
-                        throw new Error("Duplicate video ID.");
-                    }
+                    return cloneDefaultData();
+                }
+            }
 
-                    videoIds.add(videoId);
+            let data = loadData();
 
-                    const titleNode =
-                        getChild(videoNode, "Title");
+            let modalMode = "";
+            let activeSection = null;
+            let editingSection = null;
+            let editingSubject = null;
 
-                    const urlNode =
-                        getChild(videoNode, "URL");
+            let activeVideoSection = null;
+            let activeVideoSubject = null;
 
-                    if (!titleNode || !urlNode) {
-                        throw new Error("Incomplete video data.");
-                    }
 
-                    const title = titleNode.textContent.trim();
-                    const url = urlNode.textContent.trim();
+            /* ==========================================
+               2. SAVE DATA
+            ========================================== */
 
-                    if (!title || title.length > 150) {
-                        throw new Error("Invalid video title.");
-                    }
+            function saveData() {
 
-                    if (!url || url.length > 2048) {
-                        throw new Error("Invalid video URL.");
-                    }
+                try {
 
-                    let parsedURL;
+                    localStorage.setItem(
+                        STORAGE_KEY,
+                        JSON.stringify(data)
+                    );
 
-                    try {
-                        parsedURL = new URL(url);
-                    } catch {
-                        throw new Error("Invalid video URL.");
-                    }
+                    render();
 
-                    if (!["http:", "https:"].includes(parsedURL.protocol)) {
-                        throw new Error("Only HTTP and HTTPS video links are allowed.");
-                    }
+                    return true;
 
-                    videos.push({
-                        id: videoId,
-                        title: title,
-                        url: parsedURL.href
+                } catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Unable to save data. " +
+                        "Please export a backup or free browser storage."
+                    );
+
+                    return false;
+                }
+            }
+
+
+            /* ==========================================
+               3. UNIQUE ID
+            ========================================== */
+
+            function makeId() {
+
+                let id = Date.now();
+
+                const allIds = [];
+
+                data.sections.forEach(section => {
+
+                    allIds.push(Number(section.id));
+
+                    section.subjects.forEach(subject => {
+
+                        allIds.push(Number(subject.id));
+
+                        (subject.videos || []).forEach(video => {
+                            allIds.push(Number(video.id));
+                        });
+
+                    });
+
+                });
+
+                while (allIds.includes(id)) {
+                    id++;
+                }
+
+                return id;
+            }
+
+
+            /* ==========================================
+               4. SUBJECT STATUS
+            ========================================== */
+
+            function getSubjectStatus(subject) {
+
+                const progress = Number(subject.progress) || 0;
+
+                if (progress >= 100) {
+
+                    return {
+                        className: "status-completed",
+                        icon: "✓",
+                        label: "Completed"
+                    };
+
+                }
+
+                if (progress > 0) {
+
+                    return {
+                        className: "status-progress",
+                        icon: "!",
+                        label: "In Progress"
+                    };
+
+                }
+
+                return {
+                    className: "status-pending",
+                    icon: "−",
+                    label: "Not Started"
+                };
+            }
+
+
+            /* ==========================================
+               5. PROGRESS CALCULATIONS
+            ========================================== */
+
+            // Weighted section percentage.
+            // A subject with more total topics contributes more.
+
+            function getSectionStats(section) {
+
+                let totalTopics = 0;
+                let completedEquivalent = 0;
+
+                section.subjects.forEach(subject => {
+
+                    const total = Number(subject.total) || 1;
+                    const progress = Number(subject.progress) || 0;
+
+                    totalTopics += total;
+
+                    completedEquivalent +=
+                        total * progress / 100;
+
+                });
+
+                const percentage = totalTopics
+                    ? Math.round(completedEquivalent / totalTopics * 100)
+                    : 0;
+
+                return {
+                    totalTopics,
+                    completedEquivalent,
+                    completedTopics: Math.round(completedEquivalent),
+                    percentage
+                };
+            }
+
+
+            /* ==========================================
+               6. DASHBOARD
+            ========================================== */
+
+            function updateDashboard() {
+
+                let subjects = [];
+                let completed = 0;
+                let total = 0;
+
+                data.sections.forEach(section => {
+
+                    section.subjects.forEach(subject => {
+
+                        subjects.push(subject);
+
+                        const subjectTotal = Number(subject.total) || 1;
+                        const progress = Number(subject.progress) || 0;
+
+                        total += subjectTotal;
+
+                        completed +=
+                            subjectTotal * progress / 100;
+
+                    });
+
+                });
+
+                document.getElementById("totalSubjects").innerText =
+                    subjects.length;
+
+                document.getElementById("completedTopics").innerText =
+                    Math.round(completed);
+
+                document.getElementById("overallProgress").innerText =
+                    (total ? Math.round(completed / total * 100) : 0) + "%";
+
+            }
+
+
+            /* ==========================================
+               7. RENDER SECTIONS
+            ========================================== */
+
+            function render() {
+
+                const container = document.getElementById("sections");
+
+                container.innerHTML = "";
+
+                data.sections.forEach((section, index) => {
+
+                    const stats = getSectionStats(section);
+
+                    const html = `
+
+                    <div class="section-card"
+                         data-section-id="${escapeHTML(section.id)}">
+
+                        <div class="section-top">
+
+                            <div class="section-title-area">
+
+                                <button class="drag-handle"
+                                    data-section-id="${escapeHTML(section.id)}"
+                                    title="Drag section to reorder">
+                                    ⠿
+                                </button>
+
+                                <h3>${escapeHTML(section.name)}</h3>
+
+                            </div>
+
+                            <div class="section-actions">
+
+                                <button class="icon-btn"
+                                    onclick="moveSection('${escapeJS(section.id)}',-1)"
+                                    title="Move section up"
+                                    ${index === 0 ? "disabled" : ""}>
+                                    ↑
+                                </button>
+
+                                <button class="icon-btn"
+                                    onclick="moveSection('${escapeJS(section.id)}',1)"
+                                    title="Move section down"
+                                    ${index === data.sections.length - 1 ? "disabled" : ""}>
+                                    ↓
+                                </button>
+
+                                <button class="icon-btn"
+                                    onclick="editSection('${escapeJS(section.id)}')"
+                                    title="Edit section">
+                                    ✏️
+                                </button>
+
+                                <button class="icon-btn"
+                                    onclick="deleteSection('${escapeJS(section.id)}')"
+                                    title="Delete section">
+                                    🗑️
+                                </button>
+
+                                <button class="add-subject"
+                                    onclick="openSubjectModal('${escapeJS(section.id)}')">
+                                    + Subject
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="section-progress-info">
+
+                            <span>Section Average Progress</span>
+
+                            <strong id="section-percent-${escapeHTML(section.id)}">
+                                ${stats.percentage}%
+                            </strong>
+
+                        </div>
+
+                        <div class="section-progress">
+
+                            <div class="section-progress-fill"
+                                id="section-bar-${escapeHTML(section.id)}"
+                                style="width:${stats.percentage}%">
+                            </div>
+
+                        </div>
+
+                        <div class="subject-scroll-wrapper">
+
+                            <div class="scroll-controls">
+
+                                <button class="scroll-btn"
+                                    onclick="scrollSubjects('${escapeJS(section.id)}',-1)"
+                                    id="left-${escapeHTML(section.id)}">
+                                    ‹
+                                </button>
+
+                                <button class="scroll-btn"
+                                    onclick="scrollSubjects('${escapeJS(section.id)}',1)"
+                                    id="right-${escapeHTML(section.id)}">
+                                    ›
+                                </button>
+
+                            </div>
+
+                            <div class="subject-scroll"
+                                id="scroll-${escapeHTML(section.id)}">
+
+                                ${section.subjects.length
+                                    ? section.subjects.map(subject =>
+                                        subjectHTML(section.id, subject)
+                                    ).join("")
+                                    : `<div class="empty">No subjects added yet.</div>`
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>`;
+
+                    container.insertAdjacentHTML("beforeend", html);
+
+                });
+
+                updateDashboard();
+
+                requestAnimationFrame(() => {
+
+                    data.sections.forEach(section => {
+                        updateScrollButtons(section.id);
                     });
 
                 });
 
             }
 
-            subjects.push({
-                id: subjectId,
-                name: subjectName,
-                total: total,
-                done: done,
-                videos: videos
+
+            /* ==========================================
+               8. SUBJECT HTML
+            ========================================== */
+
+            function subjectHTML(sectionId, subject) {
+
+                const percent = Math.round(Number(subject.progress) || 0);
+
+                const videos = subject.videos || [];
+
+                const status = getSubjectStatus(subject);
+
+                return `
+
+                <div class="subject"
+                    data-subject-id="${escapeHTML(subject.id)}">
+
+                    <div class="subject-top">
+
+                        <span class="subject-name">
+                            ${escapeHTML(subject.name)}
+                        </span>
+
+                        <span class="subject-percent"
+                            id="subject-percent-${escapeHTML(subject.id)}">
+                            ${percent}%
+                        </span>
+
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+
+                        <span class="subject-status ${status.className}"
+                            id="subject-status-${escapeHTML(subject.id)}">
+
+                            <span class="status-icon">
+                                ${status.icon}
+                            </span>
+
+                            <span class="status-label">
+                                ${status.label}
+                            </span>
+
+                        </span>
+
+                    </div>
+
+                    <!-- SUBJECT PROGRESS SLIDER -->
+
+                    <div class="slider-area">
+
+                        <div class="slider-heading">
+
+                            <span>Progress</span>
+
+                            <strong id="slider-percent-${escapeHTML(subject.id)}">
+                                ${percent}%
+                            </strong>
+
+                        </div>
+
+                        <input
+                            type="range"
+                            class="subject-slider"
+                            min="0"
+                            max="100"
+                            step="1"
+                            value="${percent}"
+                            data-section-id="${escapeHTML(sectionId)}"
+                            data-subject-id="${escapeHTML(subject.id)}"
+                            oninput="updateSubjectProgress(this)"
+                            onchange="saveSliderProgress()"
+                            aria-label="Subject progress">
+
+                        <div class="slider-scale">
+                            <span>0%</span>
+                            <span>100%</span>
+                        </div>
+
+                    </div>
+
+                    <!-- VIDEO LIBRARY -->
+
+                    <div class="video-area">
+
+                        <div class="video-heading">
+
+                            <strong>🎬 Video Library</strong>
+
+                            <span class="video-count">
+                                ${videos.length} VIDEOS
+                            </span>
+
+                        </div>
+
+                        ${videos.length
+                            ? videos.map(video =>
+                                videoHTML(sectionId, subject.id, video)
+                            ).join("")
+                            : `<div class="empty-video">No video links added yet.</div>`
+                        }
+
+                        <button class="add-video-btn"
+                            onclick="openVideoModal('${escapeJS(sectionId)}','${escapeJS(subject.id)}')">
+
+                            + Add Video Link
+
+                        </button>
+
+                    </div>
+
+                    <!-- SUBJECT EDIT / DELETE -->
+
+                    <div class="subject-footer">
+
+                        <button class="subject-edit"
+                            onclick="editSubject('${escapeJS(sectionId)}','${escapeJS(subject.id)}')">
+                            ✏️ Edit Subject
+                        </button>
+
+                        <button class="subject-delete"
+                            onclick="deleteSubject('${escapeJS(sectionId)}','${escapeJS(subject.id)}')">
+                            🗑️ Delete
+                        </button>
+
+                    </div>
+
+                </div>`;
+            }
+
+
+            /* ==========================================
+               9. VIDEO HTML
+            ========================================== */
+
+            function videoHTML(sectionId, subjectId, video) {
+
+                return `
+
+                <div class="video-item">
+
+                    <a class="video-link"
+                        href="${escapeHTML(video.url)}"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
+                        ▶ ${escapeHTML(video.title)}
+
+                    </a>
+
+                    <button class="video-delete"
+                        title="Delete video"
+                        onclick="deleteVideo('${escapeJS(sectionId)}','${escapeJS(subjectId)}','${escapeJS(video.id)}')">
+
+                        ✕
+
+                    </button>
+
+                </div>`;
+            }
+
+
+            /* ==========================================
+               10. HTML ESCAPING
+            ========================================== */
+
+            function escapeHTML(value) {
+
+                return String(value ?? "").replace(/[&<>"']/g, c => ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                })[c]);
+
+            }
+
+            function escapeJS(value) {
+                return String(value ?? "")
+                    .replace(/\\/g, "\\\\")
+                    .replace(/'/g, "\\'")
+                    .replace(/\r/g, "\\r")
+                    .replace(/\n/g, "\\n");
+            }
+
+
+            /* ==========================================
+               11. LIVE SUBJECT SLIDER
+            ========================================== */
+
+            function updateSubjectProgress(slider) {
+
+                const sectionId = slider.dataset.sectionId;
+                const subjectId = slider.dataset.subjectId;
+
+                const section = data.sections.find(
+                    s => String(s.id) === String(sectionId)
+                );
+
+                if (!section) return;
+
+                const subject = section.subjects.find(
+                    s => String(s.id) === String(subjectId)
+                );
+
+                if (!subject) return;
+
+                const progress = Math.max(
+                    0,
+                    Math.min(100, Number(slider.value))
+                );
+
+                subject.progress = progress;
+
+                // Keep the old completed-topic field compatible.
+                subject.done = Math.round(
+                    subject.total * progress / 100
+                );
+
+                updateSubjectProgressDisplay(section, subject);
+            }
+
+            function updateSubjectProgressDisplay(section, subject) {
+
+                const percent = Math.round(subject.progress);
+
+                const percentElement = document.getElementById(
+                    "subject-percent-" + subject.id
+                );
+
+                const sliderPercent = document.getElementById(
+                    "slider-percent-" + subject.id
+                );
+
+                if (percentElement) {
+                    percentElement.textContent = percent + "%";
+                }
+
+                if (sliderPercent) {
+                    sliderPercent.textContent = percent + "%";
+                }
+
+                const status = getSubjectStatus(subject);
+
+                const statusElement = document.getElementById(
+                    "subject-status-" + subject.id
+                );
+
+                if (statusElement) {
+
+                    statusElement.className =
+                        "subject-status " + status.className;
+
+                    const icon = statusElement.querySelector(".status-icon");
+                    const label = statusElement.querySelector(".status-label");
+
+                    if (icon) icon.textContent = status.icon;
+                    if (label) label.textContent = status.label;
+                }
+
+                // Recalculate the corresponding section average.
+                const stats = getSectionStats(section);
+
+                const sectionPercent = document.getElementById(
+                    "section-percent-" + section.id
+                );
+
+                const sectionBar = document.getElementById(
+                    "section-bar-" + section.id
+                );
+
+                if (sectionPercent) {
+                    sectionPercent.textContent = stats.percentage + "%";
+                }
+
+                if (sectionBar) {
+                    sectionBar.style.width = stats.percentage + "%";
+                }
+
+                // Recalculate dashboard.
+                updateDashboard();
+            }
+
+            function saveSliderProgress() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                } catch (error) {
+                    alert("Unable to save progress. Please check browser storage.");
+                }
+            }
+
+
+            /* ==========================================
+               12. HORIZONTAL SUBJECT SCROLLING
+            ========================================== */
+
+            function scrollSubjects(sectionId, direction) {
+
+                const element = document.getElementById(
+                    "scroll-" + sectionId
+                );
+
+                if (!element) return;
+
+                const card = element.querySelector(".subject");
+
+                const distance = card
+                    ? card.getBoundingClientRect().width + 15
+                    : 300;
+
+                element.scrollBy({
+                    left: direction * distance,
+                    behavior: "smooth"
+                });
+
+                setTimeout(() => updateScrollButtons(sectionId), 350);
+            }
+
+            function updateScrollButtons(sectionId) {
+
+                const element = document.getElementById(
+                    "scroll-" + sectionId
+                );
+
+                if (!element) return;
+
+                const left = document.getElementById(
+                    "left-" + sectionId
+                );
+
+                const right = document.getElementById(
+                    "right-" + sectionId
+                );
+
+                if (!left || !right) return;
+
+                left.disabled = element.scrollLeft <= 2;
+
+                right.disabled =
+                    element.scrollLeft + element.clientWidth >=
+                    element.scrollWidth - 2;
+            }
+
+            // Use a delegated scroll listener so newly rendered sections work too.
+            document.addEventListener("scroll", function(event) {
+
+                if (!event.target.classList ||
+                    !event.target.classList.contains("subject-scroll")) return;
+
+                const sectionId = event.target.id.replace("scroll-", "");
+
+                updateScrollButtons(sectionId);
+
+            }, true);
+
+
+            /* ==========================================
+               13. SECTION MODAL
+            ========================================== */
+
+            function openSectionModal() {
+
+                modalMode = "section";
+                editingSection = null;
+
+                document.getElementById("modalTitle").innerText =
+                    "Add Section";
+
+                document.getElementById("modalDescription").innerText =
+                    "Create a new study section.";
+
+                document.getElementById("nameLabel").innerText =
+                    "Section Name";
+
+                document.getElementById("nameInput").value = "";
+
+                document.getElementById("extraInputs").style.display =
+                    "none";
+
+                showModal();
+            }
+
+            function editSection(id) {
+
+                const section = data.sections.find(
+                    s => String(s.id) === String(id)
+                );
+
+                if (!section) return;
+
+                modalMode = "editSection";
+                editingSection = id;
+
+                document.getElementById("modalTitle").innerText =
+                    "Edit Section";
+
+                document.getElementById("modalDescription").innerText =
+                    "Change your section name.";
+
+                document.getElementById("nameLabel").innerText =
+                    "Section Name";
+
+                document.getElementById("nameInput").value =
+                    section.name;
+
+                document.getElementById("extraInputs").style.display =
+                    "none";
+
+                showModal();
+            }
+
+
+            /* ==========================================
+               14. ADD SUBJECT
+            ========================================== */
+
+            function openSubjectModal(id) {
+
+                const section = data.sections.find(
+                    s => String(s.id) === String(id)
+                );
+
+                if (!section) {
+                    alert("Section not found.");
+                    return;
+                }
+
+                modalMode = "subject";
+                activeSection = id;
+                editingSubject = null;
+
+                document.getElementById("modalTitle").innerText =
+                    "Add Subject";
+
+                document.getElementById("modalDescription").innerText =
+                    "Add a subject and its total topics.";
+
+                document.getElementById("nameLabel").innerText =
+                    "Subject Name";
+
+                document.getElementById("nameInput").value = "";
+
+                document.getElementById("totalInput").value = "";
+
+                document.getElementById("extraInputs").style.display =
+                    "block";
+
+                showModal();
+            }
+
+
+            /* ==========================================
+               15. EDIT SUBJECT
+            ========================================== */
+
+            function editSubject(sectionId, subjectId) {
+
+                const section = data.sections.find(
+                    s => String(s.id) === String(sectionId)
+                );
+
+                if (!section) return;
+
+                const subject = section.subjects.find(
+                    s => String(s.id) === String(subjectId)
+                );
+
+                if (!subject) return;
+
+                modalMode = "editSubject";
+                activeSection = sectionId;
+                editingSubject = subjectId;
+
+                document.getElementById("modalTitle").innerText =
+                    "Edit Subject";
+
+                document.getElementById("modalDescription").innerText =
+                    "Update the subject name or total topics. Its percentage will be preserved.";
+
+                document.getElementById("nameLabel").innerText =
+                    "Subject Name";
+
+                document.getElementById("nameInput").value =
+                    subject.name;
+
+                document.getElementById("totalInput").value =
+                    subject.total;
+
+                document.getElementById("extraInputs").style.display =
+                    "block";
+
+                showModal();
+            }
+
+
+            /* ==========================================
+               16. MODAL HELPERS
+            ========================================== */
+
+            function showModal() {
+
+                document.getElementById("modal").style.display = "flex";
+
+                setTimeout(() => {
+                    document.getElementById("nameInput").focus();
+                }, 50);
+            }
+
+            function closeModal() {
+
+                document.getElementById("modal").style.display = "none";
+
+            }
+
+
+            /* ==========================================
+               17. SAVE GENERAL MODAL
+            ========================================== */
+
+            function saveModal() {
+
+                const name = document.getElementById("nameInput")
+                    .value.trim();
+
+                if (!name || name.length > 100) {
+
+                    alert("Enter a name between 1 and 100 characters.");
+
+                    return;
+                }
+
+                if (modalMode === "section") {
+
+                    data.sections.push({
+
+                        id: makeId(),
+                        name: name,
+                        subjects: []
+
+                    });
+
+                }
+
+                else if (modalMode === "editSection") {
+
+                    const section = data.sections.find(
+                        s => String(s.id) === String(editingSection)
+                    );
+
+                    if (!section) {
+                        alert("Section not found.");
+                        return;
+                    }
+
+                    section.name = name;
+
+                }
+
+                else if (modalMode === "subject") {
+
+                    const total = Number(
+                        document.getElementById("totalInput").value
+                    );
+
+                    if (!Number.isSafeInteger(total) ||
+                        total < 1 || total > 10000) {
+
+                        alert("Enter a valid total topic count (1–10000).");
+
+                        return;
+                    }
+
+                    const section = data.sections.find(
+                        s => String(s.id) === String(activeSection)
+                    );
+
+                    if (!section) {
+                        alert("Section not found.");
+                        return;
+                    }
+
+                    section.subjects.push({
+
+                        id: makeId(),
+                        name: name,
+                        total: total,
+                        done: 0,
+                        progress: 0,
+                        videos: []
+
+                    });
+
+                }
+
+                else if (modalMode === "editSubject") {
+
+                    const section = data.sections.find(
+                        s => String(s.id) === String(activeSection)
+                    );
+
+                    if (!section) {
+                        alert("Section not found.");
+                        return;
+                    }
+
+                    const subject = section.subjects.find(
+                        s => String(s.id) === String(editingSubject)
+                    );
+
+                    if (!subject) {
+                        alert("Subject not found.");
+                        return;
+                    }
+
+                    const total = Number(
+                        document.getElementById("totalInput").value
+                    );
+
+                    if (!Number.isSafeInteger(total) ||
+                        total < 1 || total > 10000) {
+
+                        alert("Enter a valid total topic count (1–10000).");
+
+                        return;
+                    }
+
+                    subject.name = name;
+                    subject.total = total;
+
+                    // Keep current slider percentage.
+                    subject.done = Math.round(
+                        total * subject.progress / 100
+                    );
+
+                }
+
+                else {
+                    alert("Invalid form operation.");
+                    return;
+                }
+
+                closeModal();
+
+                saveData();
+            }
+
+
+            /* ==========================================
+               18. DELETE SECTION
+            ========================================== */
+
+            function deleteSection(id) {
+
+                const section = data.sections.find(
+                    s => String(s.id) === String(id)
+                );
+
+                if (!section) return;
+
+                if (!confirm(
+                    `Delete "${section.name}" and all its subjects and videos?`
+                )) return;
+
+                data.sections = data.sections.filter(
+                    s => String(s.id) !== String(id)
+                );
+
+                saveData();
+            }
+
+
+            /* ==========================================
+               19. DELETE SUBJECT
+            ========================================== */
+
+            function deleteSubject(sectionId, subjectId) {
+
+                const section = data.sections.find(
+                    s => String(s.id) === String(sectionId)
+                );
+
+                if (!section) return;
+
+                const subject = section.subjects.find(
+                    s => String(s.id) === String(subjectId)
+                );
+
+                if (!subject) return;
+
+                if (!confirm(
+                    `Delete "${subject.name}" and its video links?`
+                )) return;
+
+                section.subjects = section.subjects.filter(
+                    s => String(s.id) !== String(subjectId)
+                );
+
+                saveData();
+            }
+
+
+            /* ==========================================
+               20. MOVE SECTION UP / DOWN
+            ========================================== */
+
+            function moveSection(id, direction) {
+
+                const index = data.sections.findIndex(
+                    s => String(s.id) === String(id)
+                );
+
+                if (index < 0) return;
+
+                const newIndex = index + direction;
+
+                if (newIndex < 0 || newIndex >= data.sections.length) {
+                    return;
+                }
+
+                const temp = data.sections[index];
+
+                data.sections[index] = data.sections[newIndex];
+
+                data.sections[newIndex] = temp;
+
+                saveData();
+            }
+
+
+            /* ==========================================
+               21. DRAG SECTIONS
+            ========================================== */
+
+            let dragSectionId = null;
+            let dragPointerId = null;
+            let dragStarted = false;
+            let dragStartY = 0;
+
+            document.addEventListener("pointerdown", function(event) {
+
+                const handle = event.target.closest(".drag-handle");
+
+                if (!handle) return;
+
+                if (event.button !== undefined && event.button !== 0) return;
+
+                dragSectionId = handle.dataset.sectionId;
+                dragPointerId = event.pointerId;
+                dragStartY = event.clientY;
+                dragStarted = false;
+
+                event.preventDefault();
+
+                document.addEventListener("pointermove", handleSectionDrag);
+                document.addEventListener("pointerup", finishSectionDrag);
+                document.addEventListener("pointercancel", finishSectionDrag);
+
             });
 
-        });
+            function handleSectionDrag(event) {
 
-        sections.push({
-            id: id,
-            name: name,
-            subjects: subjects
-        });
+                if (dragSectionId === null ||
+                    event.pointerId !== dragPointerId) return;
 
-    });
+                if (!dragStarted &&
+                    Math.abs(event.clientY - dragStartY) < 5) return;
 
-    return { sections: sections };
+                dragStarted = true;
 
-}
+                const dragged = Array.from(
+                    document.querySelectorAll(".section-card")
+                ).find(card =>
+                    card.dataset.sectionId === String(dragSectionId)
+                );
 
+                if (!dragged) return;
 
-// ==========================================
-// 19. XML IMPORT
-// ==========================================
+                dragged.classList.add("dragging");
 
-function importXML(event) {
+                const target = document.elementFromPoint(
+                    event.clientX,
+                    event.clientY
+                );
 
-    const file = event.target.files[0];
+                const targetCard = target
+                    ? target.closest(".section-card")
+                    : null;
 
-    if (!file) return;
+                if (!targetCard || targetCard === dragged) return;
 
-    event.target.value = "";
+                const rect = targetCard.getBoundingClientRect();
 
-    if (!file.name.toLowerCase().endsWith(".xml")) {
-        alert("Please select a valid XML file.");
-        return;
-    }
+                const insertAfter =
+                    event.clientY > rect.top + rect.height / 2;
 
-    if (file.size > 5 * 1024 * 1024) {
-        alert("XML file is too large. Maximum size is 5 MB.");
-        return;
-    }
+                const container = document.getElementById("sections");
 
-    const reader = new FileReader();
+                if (insertAfter) {
 
-    reader.onload = function(e) {
+                    if (targetCard.nextElementSibling !== dragged) {
+                        container.insertBefore(
+                            dragged,
+                            targetCard.nextElementSibling
+                        );
+                    }
 
-        try {
+                } else {
 
-            const xmlText = e.target.result;
+                    if (targetCard.previousElementSibling !== dragged) {
+                        container.insertBefore(dragged, targetCard);
+                    }
 
-            if (/<!DOCTYPE/i.test(xmlText)) {
-                throw new Error("DOCTYPE declarations are not allowed.");
+                }
             }
 
-            const parser = new DOMParser();
+            function finishSectionDrag(event) {
 
-            const xmlDoc = parser.parseFromString(
-                xmlText,
-                "application/xml"
-            );
+                if (dragSectionId === null) return;
 
-            if (xmlDoc.querySelector("parsererror")) {
-                throw new Error("XML file is corrupted.");
+                document.removeEventListener("pointermove", handleSectionDrag);
+                document.removeEventListener("pointerup", finishSectionDrag);
+                document.removeEventListener("pointercancel", finishSectionDrag);
+
+                document.querySelectorAll(".section-card").forEach(card => {
+                    card.classList.remove("dragging", "drag-over");
+                });
+
+                if (dragStarted) {
+
+                    const order = Array.from(
+                        document.querySelectorAll("#sections > .section-card")
+                    ).map(card => card.dataset.sectionId);
+
+                    data.sections.sort((a, b) =>
+                        order.indexOf(String(a.id)) -
+                        order.indexOf(String(b.id))
+                    );
+
+                    // Save order without re-rendering unnecessarily.
+                    try {
+                        localStorage.setItem(
+                            STORAGE_KEY,
+                            JSON.stringify(data)
+                        );
+                    } catch (error) {
+                        alert("Unable to save the new section order.");
+                    }
+
+                    render();
+                }
+
+                dragSectionId = null;
+                dragPointerId = null;
+                dragStarted = false;
             }
 
-            const importedData = validateXML(xmlDoc);
 
-            const totalSubjects =
-                importedData.sections.reduce(
-                    (sum, s) => sum + s.subjects.length,
-                    0
-                );
+            /* ==========================================
+               22. VIDEO MODAL
+            ========================================== */
 
-            const totalVideos =
-                importedData.sections.reduce(
-                    (sum, s) =>
-                        sum + s.subjects.reduce(
-                            (count, subject) =>
-                                count + subject.videos.length,
-                            0
-                        ),
-                    0
-                );
+            function openVideoModal(sectionId, subjectId) {
 
-            const confirmed = confirm(
+                activeVideoSection = sectionId;
+                activeVideoSubject = subjectId;
 
-                "Restore this backup?\n\n" +
+                document.getElementById("videoTitle").value = "";
+                document.getElementById("videoURL").value = "";
 
-                "Sections: " +
-                importedData.sections.length +
+                document.getElementById("videoModal").style.display =
+                    "flex";
 
-                "\nSubjects: " +
-                totalSubjects +
+                setTimeout(() => {
+                    document.getElementById("videoTitle").focus();
+                }, 50);
+            }
 
-                "\nVideo Links: " +
-                totalVideos +
+            function closeVideoModal() {
 
-                "\n\nCurrent tracker data will be replaced."
+                document.getElementById("videoModal").style.display =
+                    "none";
 
-            );
+            }
 
-            if (!confirmed) return;
 
-            const oldData = localStorage.getItem(STORAGE_KEY);
+            /* ==========================================
+               23. SAVE VIDEO
+            ========================================== */
 
-            try {
+            function saveVideo() {
 
-                localStorage.setItem(
-                    STORAGE_KEY,
-                    JSON.stringify(importedData)
-                );
+                const title = document.getElementById("videoTitle")
+                    .value.trim();
 
-                data = importedData;
+                const url = document.getElementById("videoURL")
+                    .value.trim();
 
-                render();
+                if (!title || title.length > 150) {
 
-                alert(
-                    "Backup restored successfully!\n\n" +
-                    "Sections: " + importedData.sections.length +
-                    "\nSubjects: " + totalSubjects +
-                    "\nVideos: " + totalVideos
-                );
+                    alert("Enter a video title (maximum 150 characters).");
 
-            } catch (saveError) {
+                    return;
+                }
+
+                if (!url || url.length > 2048) {
+
+                    alert("Enter a valid video URL.");
+
+                    return;
+                }
+
+                let parsedURL;
 
                 try {
 
-                    if (oldData === null) {
-                        localStorage.removeItem(STORAGE_KEY);
-                    } else {
-                        localStorage.setItem(STORAGE_KEY, oldData);
-                    }
+                    parsedURL = new URL(url);
 
-                } catch (_) {}
+                } catch {
 
-                throw new Error(
-                    "Unable to restore backup. Browser storage may be full."
+                    alert("Invalid video URL.");
+
+                    return;
+                }
+
+                if (!["http:", "https:"].includes(parsedURL.protocol)) {
+
+                    alert("Only HTTP and HTTPS links are allowed.");
+
+                    return;
+                }
+
+                const section = data.sections.find(
+                    s => String(s.id) === String(activeVideoSection)
                 );
+
+                const subject = section?.subjects.find(
+                    s => String(s.id) === String(activeVideoSubject)
+                );
+
+                if (!subject) {
+
+                    alert("Subject not found.");
+
+                    return;
+                }
+
+                if (!Array.isArray(subject.videos)) {
+                    subject.videos = [];
+                }
+
+                subject.videos.push({
+
+                    id: makeId(),
+                    title: title,
+                    url: parsedURL.href
+
+                });
+
+                closeVideoModal();
+
+                saveData();
+            }
+
+
+            /* ==========================================
+               24. DELETE VIDEO
+            ========================================== */
+
+            function deleteVideo(sectionId, subjectId, videoId) {
+
+                if (!confirm("Delete this video link?")) return;
+
+                const section = data.sections.find(
+                    s => String(s.id) === String(sectionId)
+                );
+
+                const subject = section?.subjects.find(
+                    s => String(s.id) === String(subjectId)
+                );
+
+                if (!subject) return;
+
+                subject.videos = subject.videos.filter(
+                    v => String(v.id) !== String(videoId)
+                );
+
+                saveData();
+            }
+
+
+            /* ==========================================
+               25. XML EXPORT
+            ========================================== */
+
+            function exportXML() {
+
+                const xmlDoc = document.implementation.createDocument(
+                    "",
+                    "StudyTracker",
+                    null
+                );
+
+                const root = xmlDoc.documentElement;
+
+                root.setAttribute("version", "2.1");
+
+                function addElement(parent, tag, value) {
+
+                    const node = xmlDoc.createElement(tag);
+
+                    node.textContent = String(value);
+
+                    parent.appendChild(node);
+
+                    return node;
+                }
+
+                data.sections.forEach(section => {
+
+                    const sectionNode =
+                        xmlDoc.createElement("Section");
+
+                    sectionNode.setAttribute("id", section.id);
+
+                    addElement(sectionNode, "Name", section.name);
+
+                    const subjectsNode =
+                        xmlDoc.createElement("Subjects");
+
+                    section.subjects.forEach(subject => {
+
+                        const subjectNode =
+                            xmlDoc.createElement("Subject");
+
+                        subjectNode.setAttribute("id", subject.id);
+
+                        addElement(subjectNode, "Name", subject.name);
+                        addElement(subjectNode, "Total", subject.total);
+                        addElement(subjectNode, "Completed", subject.done);
+                        addElement(subjectNode, "Progress", subject.progress);
+
+                        const videosNode =
+                            xmlDoc.createElement("Videos");
+
+                        (subject.videos || []).forEach(video => {
+
+                            const videoNode =
+                                xmlDoc.createElement("Video");
+
+                            videoNode.setAttribute("id", video.id);
+
+                            addElement(videoNode, "Title", video.title);
+                            addElement(videoNode, "URL", video.url);
+
+                            videosNode.appendChild(videoNode);
+
+                        });
+
+                        subjectNode.appendChild(videosNode);
+
+                        subjectsNode.appendChild(subjectNode);
+
+                    });
+
+                    sectionNode.appendChild(subjectsNode);
+
+                    root.appendChild(sectionNode);
+
+                });
+
+                const xmlString = new XMLSerializer()
+                    .serializeToString(xmlDoc);
+
+                const finalXML =
+                    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+                    xmlString;
+
+                const blob = new Blob(
+                    [finalXML],
+                    { type: "application/xml;charset=utf-8" }
+                );
+
+                const url = URL.createObjectURL(blob);
+
+                const link = document.createElement("a");
+
+                link.href = url;
+
+                link.download =
+                    "StudyTracker_Backup_" +
+                    new Date().toISOString().slice(0, 10) +
+                    ".xml";
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                link.remove();
+
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
 
             }
 
-        } catch (error) {
 
-            alert("Import failed: " + error.message);
+            /* ==========================================
+               26. XML VALIDATION
+            ========================================== */
 
-        }
+            function validateXML(xmlDoc) {
 
-    };
+                const root = xmlDoc.documentElement;
 
-    reader.onerror = function() {
-        alert("Unable to read the selected file.");
-    };
+                if (!root || root.tagName !== "StudyTracker") {
+                    throw new Error("Invalid backup file.");
+                }
 
-    reader.readAsText(file);
+                const sections = [];
 
-}
+                const sectionNodes = Array.from(root.children)
+                    .filter(node => node.tagName === "Section");
+
+                const sectionIds = new Set();
+                const subjectIds = new Set();
+                const videoIds = new Set();
+
+                function getChild(parent, tag) {
+
+                    return Array.from(parent.children)
+                        .find(node => node.tagName === tag);
+
+                }
+
+                function readNumber(value, label, min = 0) {
+
+                    const text = String(value ?? "").trim();
+
+                    if (!/^\d+$/.test(text)) {
+                        throw new Error("Invalid " + label + ".");
+                    }
+
+                    const number = Number(text);
+
+                    if (!Number.isSafeInteger(number) || number < min) {
+                        throw new Error("Invalid " + label + ".");
+                    }
+
+                    return number;
+                }
+
+                if (sectionNodes.length > 200) {
+                    throw new Error("Too many sections.");
+                }
+
+                sectionNodes.forEach(sectionNode => {
+
+                    const id = readNumber(
+                        sectionNode.getAttribute("id"),
+                        "section ID",
+                        1
+                    );
+
+                    if (sectionIds.has(id)) {
+                        throw new Error("Duplicate section ID.");
+                    }
+
+                    sectionIds.add(id);
+
+                    const nameNode = getChild(sectionNode, "Name");
+                    const subjectsNode = getChild(sectionNode, "Subjects");
+
+                    if (!nameNode || !subjectsNode) {
+                        throw new Error("Incomplete section data.");
+                    }
+
+                    const name = nameNode.textContent.trim();
+
+                    if (!name || name.length > 100) {
+                        throw new Error("Invalid section name.");
+                    }
+
+                    const subjects = [];
+
+                    const subjectNodes = Array.from(subjectsNode.children)
+                        .filter(node => node.tagName === "Subject");
+
+                    if (subjectNodes.length > 500) {
+                        throw new Error("Too many subjects in a section.");
+                    }
+
+                    subjectNodes.forEach(subjectNode => {
+
+                        const subjectId = readNumber(
+                            subjectNode.getAttribute("id"),
+                            "subject ID",
+                            1
+                        );
+
+                        if (subjectIds.has(subjectId)) {
+                            throw new Error("Duplicate subject ID.");
+                        }
+
+                        subjectIds.add(subjectId);
+
+                        const subjectNameNode =
+                            getChild(subjectNode, "Name");
+
+                        const totalNode =
+                            getChild(subjectNode, "Total");
+
+                        const doneNode =
+                            getChild(subjectNode, "Completed");
+
+                        if (!subjectNameNode || !totalNode || !doneNode) {
+                            throw new Error("Incomplete subject data.");
+                        }
+
+                        const subjectName =
+                            subjectNameNode.textContent.trim();
+
+                        const total = readNumber(
+                            totalNode.textContent,
+                            "total topics",
+                            1
+                        );
+
+                        const done = readNumber(
+                            doneNode.textContent,
+                            "completed topics"
+                        );
+
+                        if (!subjectName || subjectName.length > 100) {
+                            throw new Error("Invalid subject name.");
+                        }
+
+                        if (total > 10000 || done > total) {
+                            throw new Error("Invalid topic values.");
+                        }
+
+                        // Old backups have no Progress field.
+                        const progressNode =
+                            getChild(subjectNode, "Progress");
+
+                        let progress = progressNode
+                            ? Number(progressNode.textContent.trim())
+                            : done / total * 100;
+
+                        if (!Number.isFinite(progress) ||
+                            progress < 0 || progress > 100) {
+                            throw new Error("Invalid subject progress.");
+                        }
+
+                        const videos = [];
+
+                        const videosNode = getChild(subjectNode, "Videos");
+
+                        if (videosNode) {
+
+                            const videoNodes = Array.from(videosNode.children)
+                                .filter(node => node.tagName === "Video");
+
+                            if (videoNodes.length > 200) {
+                                throw new Error("Too many videos for a subject.");
+                            }
+
+                            videoNodes.forEach(videoNode => {
+
+                                const videoId = readNumber(
+                                    videoNode.getAttribute("id"),
+                                    "video ID",
+                                    1
+                                );
+
+                                if (videoIds.has(videoId)) {
+                                    throw new Error("Duplicate video ID.");
+                                }
+
+                                videoIds.add(videoId);
+
+                                const titleNode =
+                                    getChild(videoNode, "Title");
+
+                                const urlNode =
+                                    getChild(videoNode, "URL");
+
+                                if (!titleNode || !urlNode) {
+                                    throw new Error("Incomplete video data.");
+                                }
+
+                                const title = titleNode.textContent.trim();
+                                const url = urlNode.textContent.trim();
+
+                                if (!title || title.length > 150) {
+                                    throw new Error("Invalid video title.");
+                                }
+
+                                if (!url || url.length > 2048) {
+                                    throw new Error("Invalid video URL.");
+                                }
+
+                                let parsedURL;
+
+                                try {
+                                    parsedURL = new URL(url);
+                                } catch {
+                                    throw new Error("Invalid video URL.");
+                                }
+
+                                if (!["http:", "https:"].includes(parsedURL.protocol)) {
+                                    throw new Error("Only HTTP and HTTPS video links are allowed.");
+                                }
+
+                                videos.push({
+                                    id: videoId,
+                                    title: title,
+                                    url: parsedURL.href
+                                });
+
+                            });
+
+                        }
+
+                        subjects.push({
+
+                            id: subjectId,
+                            name: subjectName,
+                            total: total,
+                            done: Math.round(total * progress / 100),
+                            progress: progress,
+                            videos: videos
+
+                        });
+
+                    });
+
+                    sections.push({
+
+                        id: id,
+                        name: name,
+                        subjects: subjects
+
+                    });
+
+                });
+
+                return { sections: sections };
+
+            }
 
 
-// ==========================================
-// 20. INITIALIZE
-// ==========================================
+            /* ==========================================
+               27. XML IMPORT
+            ========================================== */
 
-document.getElementById("today").innerText =
-    new Date().toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "short",
-        year: "numeric"
-    });
+            function importXML(event) {
 
-render();
+                const file = event.target.files[0];
 
-</script>
+                if (!file) return;
+
+                event.target.value = "";
+
+                if (!file.name.toLowerCase().endsWith(".xml")) {
+                    alert("Please select a valid XML file.");
+                    return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) {
+                    alert("XML file is too large. Maximum size is 5 MB.");
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+
+                    try {
+
+                        const xmlText = e.target.result;
+
+                        if (/<!DOCTYPE/i.test(xmlText)) {
+                            throw new Error("DOCTYPE declarations are not allowed.");
+                        }
+
+                        const parser = new DOMParser();
+
+                        const xmlDoc = parser.parseFromString(
+                            xmlText,
+                            "application/xml"
+                        );
+
+                        if (xmlDoc.querySelector("parsererror")) {
+                            throw new Error("XML file is corrupted.");
+                        }
+
+                        const importedData = validateXML(xmlDoc);
+
+                        const totalSubjects =
+                            importedData.sections.reduce(
+                                (sum, s) => sum + s.subjects.length,
+                                0
+                            );
+
+                        const totalVideos =
+                            importedData.sections.reduce(
+                                (sum, s) =>
+                                    sum + s.subjects.reduce(
+                                        (count, subject) =>
+                                            count + subject.videos.length,
+                                        0
+                                    ),
+                                0
+                            );
+
+                        const confirmed = confirm(
+
+                            "Restore this backup?\n\n" +
+
+                            "Sections: " +
+                            importedData.sections.length +
+
+                            "\nSubjects: " +
+                            totalSubjects +
+
+                            "\nVideo Links: " +
+                            totalVideos +
+
+                            "\n\nCurrent tracker data will be replaced."
+
+                        );
+
+                        if (!confirmed) return;
+
+                        const oldData = localStorage.getItem(STORAGE_KEY);
+                        const oldTrackerData = data;
+
+                        try {
+
+                            localStorage.setItem(
+                                STORAGE_KEY,
+                                JSON.stringify(importedData)
+                            );
+
+                            data = importedData;
+
+                            render();
+
+                            alert(
+                                "Backup restored successfully!\n\n" +
+                                "Sections: " + importedData.sections.length +
+                                "\nSubjects: " + totalSubjects +
+                                "\nVideos: " + totalVideos
+                            );
+
+                        } catch (saveError) {
+
+                            data = oldTrackerData;
+
+                            try {
+
+                                if (oldData === null) {
+                                    localStorage.removeItem(STORAGE_KEY);
+                                } else {
+                                    localStorage.setItem(STORAGE_KEY, oldData);
+                                }
+
+                            } catch (_) {}
+
+                            render();
+
+                            throw new Error(
+                                "Unable to restore backup. Browser storage may be full."
+                            );
+
+                        }
+
+                    } catch (error) {
+
+                        alert("Import failed: " + error.message);
+
+                    }
+
+                };
+
+                reader.onerror = function() {
+                    alert("Unable to read the selected file.");
+                };
+
+                reader.readAsText(file);
+
+            }
+
+
+            /* ==========================================
+               28. INITIALIZE
+            ========================================== */
+
+            document.getElementById("today").innerText =
+                new Date().toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric"
+                });
+
+            render();
+
+    </script>
 
 </body>
 </html>
