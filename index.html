@@ -1,876 +1,2142 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>TYK — Test Your Knowledge</title>
-    <style>
-            :root {
-                --ink: #202943;
-                --muted: #788198;
-                --line: #e2e7f0;
-                --bg: #f4f6fb;
-                --purple: #5b5ce2;
-                --pale: #eeeeff;
-                --green: #16845c;
-                --red: #c54155
-            }
-
-            * {
-                box-sizing: border-box
-            }
-
-            body {
-                margin: 0;
-                background: var(--bg);
-                color: var(--ink);
-                font: 15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif
-            }
-
-            .app {
-                max-width: 1250px;
-                margin: auto;
-                padding: 22px
-            }
-
-            .top {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: relative;
-                background: white;
-                border: 1px solid var(--line);
-                border-radius: 16px;
-                padding: 17px 20px;
-                box-shadow: 0 10px 30px #26324b0b
-            }
-
-            .brand {
-                font-weight: 900;
-                font-size: 21px;
-                letter-spacing: -.5px
-            }
-
-                .brand span {
-                    color: var(--purple)
-                }
-
-            .hello {
-                position: absolute;
-                right: 20px;
-                color: var(--muted);
-                font-size: 13px
-            }
-
-            .hero {
-                background: linear-gradient(115deg,#292b59,#5758d7);
-                color: white;
-                border-radius: 16px;
-                padding: 18px 22px;
-                margin: 15px 0;
-                display: flex;
-                justify-content: space-between;
-                align-items: center
-            }
-
-                .hero h1 {
-                    font-size: 23px;
-                    margin: 0 0 3px
-                }
-
-                .hero p {
-                    margin: 0;
-                    color: #e5e6ff;
-                    font-size: 13px
-                }
-
-                .hero .emoji {
-                    font-size: 35px
-                }
-
-            .stats {
-                display: grid;
-                grid-template-columns: repeat(3,1fr);
-                gap: 10px;
-                margin-bottom: 15px
-            }
-
-            .stat {
-                background: white;
-                border: 1px solid var(--line);
-                border-radius: 13px;
-                padding: 12px 15px
-            }
-
-                .stat small {
-                    display: block;
-                    color: var(--muted);
-                    font-size: 11px;
-                    font-weight: 800
-                }
-
-                .stat strong {
-                    font-size: 23px
-                }
-
-            .layout {
-                display: grid;
-                grid-template-columns: 165px minmax(0,1fr);
-                gap: 15px;
-                align-items: start
-            }
-
-            .panel {
-                background: white;
-                border: 1px solid var(--line);
-                border-radius: 16px;
-                padding: 18px;
-                box-shadow: 0 10px 30px #26324b0b;
-                min-width: 0
-            }
-
-            .sidebar h3 {
-                margin: 0 0 10px;
-                font-size: 12px;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: var(--muted)
-            }
-
-            .subjects {
-                display: grid;
-                gap: 5px
-            }
-
-            .subject {
-                display: flex;
-                gap: 9px;
-                align-items: center;
-                text-align: left;
-                border: 1px solid transparent;
-                border-radius: 10px;
-                padding: 11px;
-                background: white;
-                color: var(--ink);
-                font-weight: 800;
-                cursor: pointer
-            }
-
-                .subject:hover, .subject.active {
-                    background: var(--pale);
-                    border-color: #d8d9ff;
-                    color: #494acb
-                }
-
-                .subject .ico {
-                    font-size: 18px
-                }
-
-            .side-note {
-                border-top: 1px solid var(--line);
-                margin-top: 15px;
-                padding-top: 13px;
-                color: var(--muted);
-                font-size: 12px
-            }
-
-                .side-note b {
-                    font-size: 21px;
-                    color: var(--ink);
-                    display: block
-                }
-
-            .heading {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 12px;
-                margin-bottom: 16px
-            }
-
-                .heading h2 {
-                    font-size: 21px;
-                    margin: 0
-                }
-
-                .heading p {
-                    font-size: 12px;
-                    color: var(--muted);
-                    margin: 3px 0 0
-                }
-
-            .btn {
-                border: 0;
-                border-radius: 10px;
-                padding: 10px 13px;
-                font-weight: 800;
-                cursor: pointer
-            }
-
-            .primary {
-                background: var(--purple);
-                color: white
-            }
-
-                .primary:hover {
-                    background: #4647c6
-                }
-
-            .soft {
-                background: #f0f2f8;
-                color: #46516a;
-                border: 1px solid var(--line)
-            }
-
-            .danger {
-                background: #fff0f2;
-                color: var(--red)
-            }
-
-            .small {
-                font-size: 11px;
-                padding: 7px 9px
-            }
-
-            .eyebrow {
-                font-size: 11px;
-                font-weight: 900;
-                letter-spacing: 1.2px;
-                color: var(--muted);
-                margin-bottom: 10px
-            }
-
-            .days {
-                display: grid;
-                grid-template-columns: repeat(5,minmax(0,1fr));
-                gap: 9px
-            }
-
-            .day {
-                background: #fff;
-                border: 1px solid var(--line);
-                border-radius: 12px;
-                padding: 12px;
-                text-align: left;
-                min-height: 105px;
-                cursor: pointer;
-                transition: .15s
-            }
-
-                .day:hover {
-                    border-color: #a6a7ff;
-                    transform: translateY(-2px)
-                }
-
-                .day.active {
-                    background: #f2f2ff;
-                    border-color: var(--purple);
-                    box-shadow: 0 0 0 2px #5b5ce218
-                }
-
-                .day strong {
-                    display: block;
-                    font-size: 14px
-                }
-
-                .day small {
-                    display: block;
-                    color: var(--muted);
-                    font-size: 10px;
-                    margin-top: 5px;
-                    line-height: 1.35
-                }
-
-                .day .count {
-                    display: inline-block;
-                    background: #e9eaff;
-                    color: #4b4cc7;
-                    border-radius: 5px;
-                    padding: 3px 6px;
-                    font-size: 10px;
-                    font-weight: 900;
-                    margin-top: 8px
-                }
-
-            .empty {
-                padding: 28px 14px;
-                text-align: center;
-                border: 1px dashed #ccd3e1;
-                border-radius: 13px;
-                color: var(--muted)
-            }
-
-            .quiz-area {
-                border-top: 1px solid var(--line);
-                margin-top: 20px;
-                padding-top: 18px
-            }
-
-            .quizhead {
-                display: flex;
-                justify-content: space-between;
-                gap: 12px;
-                align-items: flex-start
-            }
-
-                .quizhead h3 {
-                    margin: 0;
-                    font-size: 19px
-                }
-
-            .muted {
-                font-size: 12px;
-                color: var(--muted)
-            }
-
-            .score {
-                background: var(--pale);
-                color: #494acb;
-                border-radius: 8px;
-                padding: 7px 10px;
-                font-size: 12px;
-                font-weight: 900;
-                white-space: nowrap
-            }
-
-            .tabs {
-                display: flex;
-                gap: 7px;
-                flex-wrap: wrap;
-                margin: 13px 0
-            }
-
-            .tab {
-                border: 1px solid var(--line);
-                background: #f3f4f9;
-                border-radius: 8px;
-                padding: 7px 10px;
-                color: #556078;
-                font-size: 11px;
-                font-weight: 850;
-                cursor: pointer
-            }
-
-                .tab.active {
-                    background: var(--pale);
-                    color: #4b4cc7;
-                    border-color: #d8d9ff
-                }
-
-            .question {
-                border: 1px solid var(--line);
-                border-radius: 14px;
-                padding: 18px
-            }
-
-            .qmeta {
-                display: flex;
-                justify-content: space-between;
-                gap: 10px;
-                color: var(--muted);
-                font-size: 11px;
-                font-weight: 850
-            }
-
-            .qtext {
-                font-size: 17px;
-                font-weight: 800;
-                line-height: 1.5;
-                margin: 12px 0 16px;
-                white-space: pre-wrap
-            }
-
-            .options {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 9px
-            }
-
-            .option {
-                display: flex;
-                align-items: flex-start;
-                gap: 10px;
-                padding: 11px;
-                border: 1px solid var(--line);
-                border-radius: 10px;
-                background: white;
-                text-align: left;
-                color: var(--ink);
-                cursor: pointer
-            }
-
-                .option:hover {
-                    border-color: #a4a5ff
-                }
-
-                .option.correct {
-                    background: #eaf9f1;
-                    border-color: #80c9a8
-                }
-
-                .option.wrong {
-                    background: #fff0f2;
-                    border-color: #e49aa6
-                }
-
-            .letter {
-                flex-shrink: 0;
-                width: 26px;
-                height: 26px;
-                border-radius: 7px;
-                background: #f0f2f8;
-                display: grid;
-                place-items: center;
-                font-size: 11px;
-                font-weight: 900
-            }
-
-            .feedback {
-                margin-top: 12px;
-                padding: 12px;
-                border-radius: 10px;
-                font-size: 12px;
-                background: #f2f4fa;
-                color: #46516a
-            }
-
-                .feedback.good {
-                    background: #eaf9f1;
-                    color: #126b47
-                }
-
-                .feedback.bad {
-                    background: #fff0f2;
-                    color: #a52a3f
-                }
-
-            .qnav {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                gap: 10px;
-                margin-top: 14px
-            }
-
-            .qnums {
-                display: flex;
-                gap: 5px;
-                flex-wrap: wrap;
-                margin-top: 14px
-            }
-
-            .qnum {
-                width: 30px;
-                height: 30px;
-                border: 0;
-                border-radius: 8px;
-                background: #f0f2f8;
-                color: #566178;
-                font-weight: 900;
-                cursor: pointer
-            }
-
-                .qnum.active {
-                    outline: 2px solid var(--purple);
-                    background: var(--pale);
-                    color: #4b4cc7
-                }
-
-                .qnum.done {
-                    background: #dff6e9;
-                    color: #16744f
-                }
-
-            .progress {
-                height: 5px;
-                background: #eceef6;
-                border-radius: 9px;
-                overflow: hidden;
-                margin: 10px 0 15px
-            }
-
-                .progress div {
-                    height: 100%;
-                    background: var(--purple)
-                }
-
-            .admin {
-                margin-top: 16px
-            }
-
-            .adminhead {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                gap: 12px
-            }
-
-                .adminhead h2 {
-                    margin: 0;
-                    font-size: 20px
-                }
-
-                .adminhead p {
-                    margin: 3px 0;
-                    color: var(--muted);
-                    font-size: 12px
-                }
-
-            .notice {
-                background: #fff8e7;
-                color: #79591c;
-                padding: 10px 12px;
-                border-radius: 10px;
-                font-size: 12px;
-                margin: 13px 0
-            }
-
-            .admin-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 15px
-            }
-
-            .formbox {
-                border: 1px solid var(--line);
-                border-radius: 12px;
-                padding: 15px;
-                min-width: 0
-            }
-
-                .formbox h3 {
-                    margin: 0 0 10px;
-                    font-size: 15px
-                }
-
-            .field {
-                display: grid;
-                gap: 5px;
-                margin: 10px 0
-            }
-
-                .field label {
-                    font-size: 11px;
-                    font-weight: 850;
-                    color: #59647a
-                }
-
-                .field input, .field select, .field textarea {
-                    width: 100%;
-                    border: 1px solid #dce1ec;
-                    border-radius: 9px;
-                    padding: 10px;
-                    background: #fff;
-                    color: var(--ink);
-                    font: inherit;
-                    outline: none
-                }
-
-                .field textarea {
-                    min-height: 70px;
-                    resize: vertical
-                }
-
-                    .field input:focus, .field select:focus, .field textarea:focus {
-                        border-color: #898aff;
-                        box-shadow: 0 0 0 3px #5b5ce21a
-                    }
-
-            .twocol {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 9px
-            }
-
-            .check {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                font-size: 12px;
-                color: var(--muted);
-                margin: 9px 0
-            }
-
-            .adminlist {
-                display: grid;
-                gap: 7px;
-                margin-top: 10px
-            }
-
-            .adminitem {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 8px;
-                border: 1px solid var(--line);
-                border-radius: 9px;
-                padding: 10px
-            }
-
-                .adminitem small {
-                    display: block;
-                    color: var(--muted);
-                    font-size: 11px
-                }
-
-            .actions {
-                display: flex;
-                gap: 5px;
-                flex-wrap: wrap
-            }
-
-            .hidden {
-                display: none !important
-            }
-
-            .footer {
-                text-align: center;
-                color: var(--muted);
-                font-size: 11px;
-                padding: 22px
-            }
-
-            .toast {
-                position: fixed;
-                right: 18px;
-                bottom: 18px;
-                background: #202444;
-                color: white;
-                border-radius: 10px;
-                padding: 12px 16px;
-                z-index: 5;
-                box-shadow: 0 8px 25px #1113
-            }
-
-            @@media(max - width:950px) {
-                .days {
-                    grid-template-columns: repeat(4,minmax(0,1fr))
-                }
-            }
-
-            @@media(max - width:720px) {
-                .app {
-                    padding: 11px
-                }
-
-                .top {
-                    justify-content: flex-start
-                }
-
-                .hello {
-                    position: static;
-                    margin-left: auto;
-                    font-size: 11px
-                }
-
-                .brand {
-                    font-size: 17px
-                }
-
-                .layout {
-                    grid-template-columns: 1fr
-                }
-
-                .sidebar {
-                    padding: 12px
-                }
-
-                .subjects {
-                    grid-template-columns: repeat(4,minmax(0,1fr))
-                }
-
-                .subject {
-                    display: block;
-                    text-align: center;
-                    padding: 8px 3px;
-                    font-size: 12px
-                }
-
-                    .subject .ico {
-                        display: block
-                    }
-
-                .side-note {
-                    display: none
-                }
-
-                .panel {
-                    padding: 14px
-                }
-
-                .days {
-                    grid-template-columns: repeat(3,minmax(0,1fr));
-                    gap: 7px
-                }
-
-                .day {
-                    padding: 9px;
-                    min-height: 98px
-                }
-
-                    .day strong {
-                        font-size: 12px
-                    }
-
-                .options {
-                    grid-template-columns: 1fr
-                }
-
-                .admin-grid {
-                    grid-template-columns: 1fr
-                }
-
-                .twocol {
-                    grid-template-columns: 1fr
-                }
-
-                .hero {
-                    padding: 15px
-                }
-
-                    .hero h1 {
-                        font-size: 20px
-                    }
-            }
-
-            @@media(max - width:400px) {
-                .days {
-                    grid-template-columns: repeat(2,minmax(0,1fr))
-                }
-
-                .subjects {
-                    grid-template-columns: repeat(2,minmax(0,1fr))
-                }
-
-                .heading {
-                    align-items: flex-start;
-                    flex-direction: column
-                }
-            }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Progress Tracker</title>
+
+<style>
+:root {
+    --bg: #f4f6fb;
+    --card: #ffffff;
+    --text: #172033;
+    --muted: #778198;
+    --primary: #635bdb;
+    --border: #e8eaf2;
+    --green: #16a779;
+    --red: #dc4c4c;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+}
+
+.container {
+    max-width: 1050px;
+    margin: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 12px;
+}
+
+header h1 {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+header p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.date {
+    background: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+/* DASHBOARD */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.stat-card small {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.stat-card h2 {
+    font-size: 28px;
+    margin-top: 9px;
+}
+
+/* BACKUP */
+
+.backup-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.backup-actions button {
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+}
+
+.export-btn {
+    background: #e8f7ef;
+    color: #168454;
+}
+
+.import-btn {
+    background: #eeedff;
+    color: #635bdb;
+}
+
+/* SECTION */
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 25px 0 15px;
+    gap: 10px;
+}
+
+.section-heading h2 {
+    font-size: 19px;
+}
+
+.btn {
+    border: none;
+    background: var(--primary);
+    color: white;
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.btn-light {
+    background: #eeedff;
+    color: var(--primary);
+}
+
+.sections {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.section-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 20px;
+    min-width: 0;
+}
+
+.section-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 17px;
+}
+
+.section-top h3 {
+    font-size: 18px;
+    overflow-wrap: anywhere;
+}
+
+.section-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.icon-btn {
+    border: none;
+    background: #f2f3f8;
+    padding: 7px 9px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.progress {
+    height: 9px;
+    background: #eceef4;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #635bdb, #9585ff);
+    border-radius: 20px;
+    transition: width .3s;
+}
+
+/* SUBJECT */
+
+.subject {
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    background: #fff;
+}
+
+.subject-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.subject-name {
+    font-size: 14px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.subject-percent {
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.subject-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.status-completed {
+    color: #128052;
+    background: #e6f7ee;
+}
+
+.status-progress {
+    color: #d44848;
+    background: #fff0f0;
+}
+
+.status-pending {
+    color: #778198;
+    background: #f0f1f5;
+}
+
+.status-icon {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+
+.status-completed .status-icon {
+    background: #16a779;
+    color: white;
+}
+
+.status-progress .status-icon {
+    background: #dc4c4c;
+    color: white;
+}
+
+.status-pending .status-icon {
+    background: #9ba3b3;
+    color: white;
+}
+
+.subject .progress {
+    height: 6px;
+    margin: 12px 0;
+}
+
+.subject .progress-fill {
+    background: var(--green);
+}
+
+.topic-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.topic-controls span {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.counter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.counter button {
+    width: 29px;
+    height: 29px;
+    border: none;
+    background: #f0efff;
+    color: var(--primary);
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.counter strong {
+    font-size: 13px;
+    min-width: 42px;
+    text-align: center;
+}
+
+.subject-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.subject-tools {
+    display: flex;
+    gap: 6px;
+}
+
+/* VIDEO LIBRARY */
+
+.video-area {
+    margin-top: 13px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.video-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.video-heading strong {
+    font-size: 12px;
+}
+
+.video-count {
+    background: #fff1e7;
+    color: #d66a28;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.video-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 9px 10px;
+    background: #f8f8fc;
+    border-radius: 9px;
+    margin-bottom: 7px;
+}
+
+.video-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #635bdb;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.video-link:hover {
+    text-decoration: underline;
+}
+
+.video-delete {
+    background: #fff0f0;
+    color: var(--red);
+    border: none;
+    padding: 5px 8px;
+    border-radius: 7px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.add-video-btn,
+.add-subject {
+    width: 100%;
+    padding: 11px;
+    border: 1px dashed #c7c4ee;
+    color: var(--primary);
+    background: #f8f7ff;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 22px 5px;
+    font-size: 13px;
+}
+
+.empty-video {
+    font-size: 11px;
+    color: var(--muted);
+    padding: 5px 0;
+}
+
+/* MODALS */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #10162b88;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 18px;
+    padding: 23px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-content h3 {
+    margin-bottom: 8px;
+}
+
+.modal-description {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 17px;
+}
+
+.modal-content label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 10px 0 7px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    outline-color: var(--primary);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 17px;
+}
+
+.modal-buttons button {
+    flex: 1;
+}
+
+.footer {
+    text-align: center;
+    padding: 30px 0 10px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* MOBILE */
+
+@@media(max-width:650px) {
+
+    body {
+        padding: 13px;
+    }
+
+    header h1 {
+        font-size: 20px;
+    }
+
+    .dashboard {
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 13px 10px;
+        border-radius: 12px;
+    }
+
+    .stat-card h2 {
+        font-size: 22px;
+    }
+
+    .stat-card small {
+        font-size: 10px;
+    }
+
+    .sections {
+        grid-template-columns: 1fr;
+    }
+
+    .section-card {
+        padding: 15px;
+    }
+
+    .section-heading h2 {
+        font-size: 17px;
+    }
+
+    .date {
+        display: none;
+    }
+
+    .backup-actions button {
+        flex: 1;
+        padding: 12px 8px;
+        font-size: 12px;
+    }
+}
+
+@@media(max-width:380px) {
+    .subject-top {
+        flex-wrap: wrap;
+    }
+
+    .subject-top-right {
+        flex-wrap: wrap;
+    }
+
+    .subject-status {
+        font-size: 9px;
+    }
+}
+</style>
 </head>
+
 <body>
-    <div class="app">
-        <section class="hero"><div><h1>Daily Practice Dashboard</h1></div><div class="emoji">✍️</div></section>
-        <div class="stats"><div class="stat"><small>QUIZ DAYS</small><strong id="statDays">0</strong></div><div class="stat"><small>TOTAL QUESTIONS</small><strong id="statQuestions">0</strong></div><div class="stat"><small>ATTEMPTS</small><strong id="statAttempts">0</strong></div></div>
-        <section class="panel" style="margin-bottom:15px">
-            <div class="heading"><div><h2>📊 Progress & Mistake Tracker</h2><p>Review incorrect answers, retry them, and mark questions mastered.</p></div><button class="btn soft" onclick="requestPersistentStorage()">Protect browser storage</button></div>
-            <div class="stats" style="margin:0 0 14px">
-                <div class="stat"><small>INCORRECT QUESTIONS</small><strong id="wrongCount">0</strong></div>
-                <div class="stat"><small>NEEDS REVIEW</small><strong id="reviewCount">0</strong></div>
-                <div class="stat"><small>MASTERED</small><strong id="masteredCount">0</strong></div>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-                <button class="btn soft" onclick="setReviewFilter('all')">All mistakes</button>
-                <button class="btn soft" onclick="setReviewFilter('unmastered')">Needs review</button>
-                <button class="btn soft" onclick="setReviewFilter('mastered')">Mastered</button>
-                <button class="btn primary" onclick="exportBackup()">Download backup</button>
-            </div>
-            <div id="mistakeList" class="adminlist"><div class="empty">No incorrect answers yet. Mistakes will appear here automatically.</div></div>
-            <div id="storageStatus" class="notice">Storage protection status: checking browser support…</div>
-        </section>
-        <div class="layout">
-            <aside class="panel sidebar"><h3>Subjects</h3><div id="subjects" class="subjects"></div><div class="side-note">Answered questions<b id="statAnswered">0</b>Correct answers: <strong id="statCorrect">0</strong></div></aside>
-            <main class="panel">
-                <div class="heading"><div><h2 id="subjectTitle">English</h2><p id="subjectDesc">Select a day to start.</p></div><button class="btn primary" onclick="toggleAdmin()">＋ Add day / questions</button></div><div class="eyebrow">CHOOSE YOUR DAY</div><div id="days" class="days"></div><div id="noDays" class="empty hidden">No days added for this subject yet. Use <b>Add day / questions</b> to get started.</div>
-                <section class="quiz-area"><div class="quizhead"><div><h3 id="quizTitle">Day 1</h3><div id="quizInfo" class="muted">Select a day to view questions.</div></div><span id="score" class="score">Correct 0</span></div><div id="tabs" class="tabs"></div><div id="quizContent"></div></section>
-            </main>
-        </div>
-        <section id="admin" class="panel admin hidden">
-            <div class="adminhead"><div><h2>Admin workspace</h2><p>Create day-wise question sets and add unlimited MCQs.</p></div><button class="btn soft" onclick="toggleAdmin()">Close</button></div><div class="notice"><b>LocalStorage:</b> data is saved in this browser and is not shared with other devices. This demo has no admin login. Export backups regularly.</div><div class="admin-grid">
-            <div class="formbox"><h3>1. Create a day</h3><form onsubmit="createDay(event)"><div class="field"><label for="daySubject">Subject</label><select id="daySubject"></select></div><div class="twocol"><div class="field"><label for="dayNumber">Day number</label><input id="dayNumber" type="number" min="1" value="1" required></div><div class="field"><label for="dayDate">Date</label><input id="dayDate" type="date" required></div></div><div class="field"><label for="dayName">Day title</label><input id="dayName" maxlength="150" placeholder="e.g. English practice — Day 1" required></div><label class="check"><input id="published" type="checkbox" checked> Make this day visible</label><button class="btn primary" type="submit">Create day</button></form><h3 style="margin-top:22px">Manage existing days</h3><div id="adminDays" class="adminlist"></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:14px"><button class="btn soft small" onclick="exportBackup()">Export JSON</button><label class="btn soft small" for="importFile" style="cursor:pointer">Import JSON</label><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importBackup(event)"><button class="btn danger small" onclick="resetAll()">Reset all</button></div></div>
-            <div class="formbox"><h3>2. Add MCQ to a day</h3><form onsubmit="addQuestion(event)"><div class="field"><label for="targetDay">Choose day</label><select id="targetDay" required></select></div><div class="field"><label for="qCategory">Section / topic</label><input id="qCategory" placeholder="e.g. Grammar, Polity, Percentage" required maxlength="100"></div><div class="field"><label for="qText">Question</label><textarea id="qText" required maxlength="3000" placeholder="Write your question"></textarea></div><div class="field"><label for="qA">Option A</label><input id="qA" required maxlength="1000"></div><div class="field"><label for="qB">Option B</label><input id="qB" required maxlength="1000"></div><div class="field"><label for="qC">Option C</label><input id="qC" required maxlength="1000"></div><div class="field"><label for="qD">Option D</label><input id="qD" required maxlength="1000"></div><div class="field"><label for="qCorrect">Correct option</label><select id="qCorrect"><option>A</option><option>B</option><option>C</option><option>D</option></select></div><div class="field"><label for="qExplanation">Explanation (optional)</label><textarea id="qExplanation" maxlength="3000" placeholder="Explain why this answer is correct"></textarea></div><button class="btn primary" type="submit">Save MCQ</button></form></div>
-        </div>
-    </section><footer class="footer">TYK · Test Your Knowledge · Your data is stored locally in this browser.</footer>
+
+<div class="container">
+
+<header>
+    <div>
+        <h1>📚 Study Tracker</h1>
+    </div>
+    <div class="date" id="today"></div>
+</header>
+
+<!-- DASHBOARD -->
+
+<div class="dashboard">
+
+    <div class="stat-card">
+        <small>📖 Total Subjects</small>
+        <h2 id="totalSubjects">0</h2>
+    </div>
+
+    <div class="stat-card">
+        <small>✅ Topics Completed</small>
+        <h2 id="completedTopics">0</h2>
+    </div>
+
+    <div class="stat-card">
+        <small>📊 Overall Progress</small>
+        <h2 id="overallProgress">0%</h2>
+    </div>
+
 </div>
-<div id="toast" class="toast hidden"></div>
+
+<!-- XML BACKUP -->
+
+<div class="backup-actions">
+
+    <button class="export-btn" onclick="exportXML()">
+        ↓ Export XML
+    </button>
+
+    <button class="import-btn"
+        onclick="document.getElementById('xmlFile').click()">
+        ↑ Import XML
+    </button>
+
+    <input type="file"
+        id="xmlFile"
+        accept=".xml,text/xml,application/xml"
+        style="display:none"
+        onchange="importXML(event)">
+
+</div>
+
+<!-- STATUS LEGEND -->
+
+<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px;">
+
+    <span class="subject-status status-completed">
+        <span class="status-icon">✓</span>
+        Completed
+    </span>
+
+    <span class="subject-status status-progress">
+        <span class="status-icon">!</span>
+        In Progress
+    </span>
+
+    <span class="subject-status status-pending">
+        <span class="status-icon">−</span>
+        Not Started
+    </span>
+
+</div>
+
+<!-- SECTIONS -->
+
+<div class="section-heading">
+
+    <h2>My Sections</h2>
+
+    <button class="btn" onclick="openSectionModal()">
+        + Add Section
+    </button>
+
+</div>
+
+<div class="sections" id="sections"></div>
+
+<div class="footer">
+</div>
+
+</div>
+
+
+<!-- GENERAL MODAL -->
+
+<div class="modal" id="modal">
+
+    <div class="modal-content">
+
+        <h3 id="modalTitle">Add Section</h3>
+
+        <p class="modal-description" id="modalDescription"></p>
+
+        <div id="nameField">
+
+            <label id="nameLabel">Name</label>
+
+            <input id="nameInput"
+                type="text"
+                placeholder="Enter name">
+
+        </div>
+
+        <div id="extraInputs">
+
+            <label>Total Topics</label>
+
+            <input id="totalInput"
+                type="number"
+                placeholder="Enter total topics"
+                min="1">
+
+        </div>
+
+        <div class="modal-buttons">
+
+            <button class="btn btn-light"
+                onclick="closeModal()">
+                Cancel
+            </button>
+
+            <button class="btn" onclick="saveModal()">
+                Save
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- VIDEO MODAL -->
+
+<div class="modal" id="videoModal">
+
+    <div class="modal-content">
+
+        <h3>🎬 Add Video Link</h3>
+
+        <p class="modal-description">
+            Attach a lecture or video to this subject.
+        </p>
+
+        <label>Video Title</label>
+
+        <input type="text"
+            id="videoTitle"
+            placeholder="Example: Percentage Lecture 1">
+
+        <label>Video URL</label>
+
+        <input type="url"
+            id="videoURL"
+            placeholder="https://www.youtube.com/watch?v=...">
+
+        <div class="modal-buttons">
+
+            <button class="btn btn-light"
+                onclick="closeVideoModal()">
+                Cancel
+            </button>
+
+            <button class="btn" onclick="saveVideo()">
+                Add Video
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
-                const KEY='tyk_local_v1';const SUBJECTS=[{id:'english',name:'English',icon:'📘',desc:'Grammar, vocabulary, PQRS, voice and narration.'},{id:'gs',name:'GS',icon:'🌍',desc:'History, polity, geography, science and static GK.'},{id:'maths',name:'Maths',icon:'➗',desc:'Arithmetic, algebra, geometry and advanced maths.'},{id:'reasoning',name:'Reasoning',icon:'🧩',desc:'Verbal, non-verbal, coding and logical reasoning.'}];let data=load(),subject='english',dayId=null,category='All',index=0,answers={};
-                function seed(){return{nextDayId:2,nextQId:4,days:[{id:1,subject:'english',number:1,title:'English — Day 1',date:new Date().toISOString().slice(0,10),published:true,questions:[{id:1,category:'Vocabulary',text:'Choose the synonym of “Abundant”.',A:'Scarce',B:'Plentiful',C:'Tiny',D:'Weak',correct:'B',explanation:'Abundant means existing in large quantities; plentiful is a synonym.'},{id:2,category:'Grammar',text:'Choose the grammatically correct sentence.',A:'She have completed her work.',B:'She has completed her work.',C:'She having completed her work.',D:'She were completed her work.',correct:'B',explanation:'With the third-person singular subject “she”, use “has”.'},{id:3,category:'Idioms',text:'What does “once in a blue moon” mean?',A:'Very frequently',B:'At night',C:'Very rarely',D:'Unexpectedly',correct:'C',explanation:'The idiom means something that happens very rarely.'}]}],attempts:[]}}
-                function addProvidedQuestionsOnce(d){
-         // One-time additive migration: keep existing days, questions, attempts and mastery.
-         if(d.migrations&&d.migrations.providedPolitySet20261025)return d;
-         const incoming=[
-          {subject:'english',number:1,title:'English — Day 1',category:'Grammar'},
-          {subject:'gs',number:1,title:'GS — Day 1',category:'Polity'},
-          {subject:'maths',number:1,title:'Maths — Day 1',category:'ABC'},
-          {subject:'reasoning',number:1,title:'Reas — Day 1',category:'XYZ'}
-         ];
-         const question={text:'Which article of the Indian Constitution deals with the Union Executive? [SSC CPO 29/06/2024]',A:'Article 112 to 118',B:'Article 80 to 86',C:'Article 38 to 50',D:'Article 52 to 78',correct:'D',explanation:'Articles 52 to 78 in Part V deal with the Union Executive.'};
-         d.migrations=d.migrations||{};
-         let maxDay=Math.max(0,...d.days.map(x=>Number(x.id)||0));
-         let maxQ=Math.max(0,...d.days.flatMap(x=>x.questions||[]).map(q=>Number(q.id)||0));
-         for(const item of incoming){
-           // Avoid adding the same question twice to the same subject if it is already present.
-           const already=d.days.some(day=>day.subject===item.subject&&(day.questions||[]).some(q=>q.text===question.text));
-           if(already)continue;
-           let day=d.days.find(x=>x.subject===item.subject&&Number(x.number)===item.number);
-           if(!day){maxDay++;day={id:maxDay,subject:item.subject,number:item.number,title:item.title,date:'2026-10-24',published:true,questions:[]};d.days.push(day);}
-           maxQ++;
-           day.questions=day.questions||[];
-           day.questions.push({id:maxQ,category:item.category,...question});
-         }
-         d.nextDayId=Math.max(Number(d.nextDayId)||1,maxDay+1);
-         d.nextQId=Math.max(Number(d.nextQId)||1,maxQ+1);
-         d.migrations.providedPolitySet20261025=true;
-         return d;
+
+// ==========================================
+// 1. LOCAL STORAGE
+// ==========================================
+
+const STORAGE_KEY = "studyTrackerDataV1";
+
+const DEFAULT_DATA = {
+    sections: [
+        { id: 1, name: "Section 1", subjects: [] },
+        { id: 2, name: "Section 2", subjects: [] }
+    ]
+};
+
+function loadData() {
+
+    try {
+
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (!saved) return structuredClone(DEFAULT_DATA);
+
+        const parsed = JSON.parse(saved);
+
+        if (!parsed || !Array.isArray(parsed.sections)) {
+            throw new Error("Invalid saved data");
         }
-        function load(){try{let d=JSON.parse(localStorage.getItem(KEY));if(d&&Array.isArray(d.days)&&Array.isArray(d.attempts)){d.days.forEach(x=>{if(!Array.isArray(x.questions))x.questions=[]});if(!Array.isArray(d.mastered))d.mastered=[];if(!Array.isArray(d.attempts))d.attempts=[];return addProvidedQuestionsOnce(d)}}catch(e){}return addProvidedQuestionsOnce(seed())}function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){alert('Could not save data in this browser. Export a backup and check available storage space.');}renderAll()}function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function sub(id){return SUBJECTS.find(x=>x.id===id)||SUBJECTS[0]}function activeDay(){return data.days.find(d=>d.id===dayId)}function daysForSubject(){return data.days.filter(d=>d.subject===subject&&d.published).sort((a,b)=>a.number-b.number)}function toast(s){let e=document.getElementById('toast');e.textContent=s;e.classList.remove('hidden');setTimeout(()=>e.classList.add('hidden'),2400)}
-                function renderAll(){renderSubjects();renderDays();renderAdmin();renderStats();renderMistakes()}function renderSubjects(){document.getElementById('subjects').innerHTML=SUBJECTS.map(s=>`<button class="subject ${s.id===subject?'active':''}" onclick="chooseSubject('${s.id}')"><span class="ico">${s.icon}</span>${s.name}</button>`).join('');document.getElementById('subjectTitle').textContent=sub(subject).name;document.getElementById('subjectDesc').textContent=sub(subject).desc}function chooseSubject(id){subject=id;dayId=null;category='All';index=0;answers={};renderAll()}
-                function renderDays(){let ds=daysForSubject(),el=document.getElementById('days');el.classList.toggle('hidden',!ds.length);document.getElementById('noDays').classList.toggle('hidden',!!ds.length);if(!ds.some(d=>d.id===dayId))dayId=ds[0]?.id??null;el.innerHTML=ds.map(d=>`<button class="day ${d.id===dayId?'active':''}" onclick="chooseDay(${d.id})"><strong>Day ${d.number}</strong><small>${esc(d.title)}</small><span class="count">${d.questions.length} MCQs</span></button>`).join('');renderQuiz()}function chooseDay(id){dayId=id;category='All';index=0;answers={};renderDays();renderAdmin()}function filtered(){let d=activeDay();return d?d.questions.filter(q=>category==='All'||q.category===category):[]}function renderQuiz(){let d=activeDay(),box=document.getElementById('quizContent'),tabs=document.getElementById('tabs');if(!d){document.getElementById('quizTitle').textContent='Choose a day';document.getElementById('quizInfo').textContent='Select or create a day to see its MCQs.';document.getElementById('score').textContent='Correct 0';tabs.innerHTML='';box.innerHTML='<div class="empty">Create a day and add questions using the admin panel.</div>';return}document.getElementById('quizTitle').textContent=`Day ${d.number} · ${d.title}`;let cats=['All',...new Set(d.questions.map(q=>q.category).filter(Boolean))];if(!cats.includes(category))category='All';tabs.innerHTML=cats.map(c=>`<button class="tab ${category===c?'active':''}" onclick="chooseCategory('${esc(c).replace(/'/g,'&#39;')}')">${esc(c)}${c==='All'?' ('+d.questions.length+')':''}</button>`).join('');let qs=filtered();index=Math.min(index,Math.max(0,qs.length-1));document.getElementById('quizInfo').textContent=`${qs.length} questions in this section · ${d.questions.length} total for this day`;document.getElementById('score').textContent='Correct '+d.questions.filter(q=>answers[q.id]===q.correct).length;if(!qs.length){box.innerHTML='<div class="empty">No questions yet. Add MCQs in the admin panel.</div>';return}let q=qs[index],a=answers[q.id];box.innerHTML=`<div class="progress"><div style="width:${(index+1)/qs.length*100}%"></div></div><div class="question"><div class="qmeta"><span>QUESTION ${index+1} OF ${qs.length}</span><span>${esc(q.category)}</span></div><div class="qtext">${esc(q.text)}</div><div class="options">${['A','B','C','D'].map(k=>`<button class="option ${a?(k===q.correct?'correct':k===a?'wrong':''):''}" ${a?'disabled':''} onclick="chooseAnswer('${k}')"><span class="letter">${k}</span><span>${esc(q[k])}</span></button>`).join('')}</div>${a?`<div class="feedback ${a===q.correct?'good':'bad'}"><b>${a===q.correct?'Correct!':'Incorrect.'}</b> Correct answer: ${q.correct}. ${esc(q[q.correct])}${q.explanation?'<br><br>'+esc(q.explanation):''}</div>`:''}<div class="qnav"><button class="btn soft" onclick="move(-1)" ${index===0?'disabled':''}>← Previous</button><span class="muted">${Object.keys(answers).filter(k=>d.questions.some(q=>q.id===Number(k))).length} answered</span><button class="btn primary" onclick="move(1)">${index===qs.length-1?'Finish day':'Next →'}</button></div><div class="qnums">${qs.map((x,i)=>`<button class="qnum ${i===index?'active':''} ${answers[x.id]?'done':''}" onclick="go(${i})">${i+1}</button>`).join('')}</div></div>`}function chooseCategory(c){category=c;index=0;renderQuiz()}function chooseAnswer(k){let q=filtered()[index];if(!q||answers[q.id])return;answers[q.id]=k;data.attempts.push({questionId:q.id,dayId:activeDay()?.id,subject:subject,chosen:k,correct:k===q.correct,at:new Date().toISOString()});save()}function move(n){let qs=filtered();if(!qs.length)return;if(index+n<qs.length){index+=n;renderQuiz()}else{toast(`Section finished: ${qs.filter(q=>answers[q.id]===q.correct).length}/${qs.length} correct`);index=0;renderQuiz()}}function go(i){index=i;renderQuiz()}
 
-                let reviewFilter='all';
-                function allQuestions(){return data.days.flatMap(d=>d.questions.map(q=>({...q,dayId:d.id,dayNumber:d.number,dayTitle:d.title,subjectId:d.subject})));}
-                function mistakeRecords(){
-                 const qs=allQuestions(), map=new Map(qs.map(q=>[q.id,q]));
-                 const wrongIds=new Set(data.attempts.filter(a=>!a.correct).map(a=>a.questionId));
-                 return [...wrongIds].map(id=>({q:map.get(id),attempts:data.attempts.filter(a=>a.questionId===id),mastered:(data.mastered||[]).includes(id)})).filter(x=>x.q);
-                }
-                function renderMistakes(){
-                 const items=mistakeRecords();
-                 document.getElementById('wrongCount').textContent=items.length;
-                 document.getElementById('reviewCount').textContent=items.filter(x=>!x.mastered).length;
-                 document.getElementById('masteredCount').textContent=items.filter(x=>x.mastered).length;
-                 const shown=items.filter(x=>reviewFilter==='all'||(reviewFilter==='mastered'?x.mastered:!x.mastered)).sort((a,b)=>new Date(b.attempts[b.attempts.length-1].at)-new Date(a.attempts[a.attempts.length-1].at));
-                 const el=document.getElementById('mistakeList');
-                 if(!shown.length){el.innerHTML='<div class="empty">'+(items.length?'No questions in this filter.':'No incorrect answers yet. Answer a question incorrectly and it will be tracked here.')+'</div>';return;}
-                 el.innerHTML=shown.map(({q,attempts,mastered})=>`<div class="adminitem" style="align-items:flex-start"><div style="flex:1;min-width:0"><b>${esc(sub(q.subjectId).name)} · Day ${q.dayNumber} · ${esc(q.category)}</b><div style="margin:5px 0;font-weight:750;white-space:pre-wrap">${esc(q.text)}</div><small>Correct: ${q.correct}. ${esc(q[q.correct])} · Wrong attempts: ${attempts.filter(a=>!a.correct).length}${attempts.length?' · Last tried: '+new Date(attempts[attempts.length-1].at).toLocaleDateString():''}</small>${q.explanation?`<small style="margin-top:5px">Explanation: ${esc(q.explanation)}</small>`:''}</div><div class="actions"><button class="btn soft small" onclick="retryMistake(${q.id},${q.dayId})">Retry</button><button class="btn ${mastered?'soft':'primary'} small" onclick="toggleMastered(${q.id})">${mastered?'Unmark':'Mastered ✓'}</button></div></div>`).join('');
-                }
-                function setReviewFilter(v){reviewFilter=v;renderMistakes();}
-                function toggleMastered(id){if(!Array.isArray(data.mastered))data.mastered=[];data.mastered.includes(id)?data.mastered=data.mastered.filter(x=>x!==id):data.mastered.push(id);save();}
-                function retryMistake(qid,did){const d=data.days.find(x=>x.id===did);if(!d)return;subject=d.subject;dayId=d.id;category='All';const idx=d.questions.findIndex(q=>q.id===qid);answers={};renderAll();const visible=filtered();index=Math.max(0,visible.findIndex(q=>q.id===qid));document.getElementById('quizContent').scrollIntoView({behavior:'smooth',block:'center'});renderQuiz();}
-                async function requestPersistentStorage(){
-                 const el=document.getElementById('storageStatus');
-                 try{
-                  if(!navigator.storage||!navigator.storage.persist){el.textContent='This browser does not offer the persistent-storage permission here. Use Download backup regularly; browser/site-data clearing can still remove local data.';return;}
-                  const already=await navigator.storage.persisted();
-                  const granted=already||await navigator.storage.persist();
-                  el.textContent=granted?'Persistent storage is enabled/requested successfully. The browser is less likely to clear this site’s data automatically, but this cannot protect against manually clearing browser data, uninstalling the browser, or device failure.':'The browser did not grant persistent storage. Download a JSON backup regularly; local data can be deleted by browser settings or device cleanup.';
-                 }catch(e){el.textContent='Could not check persistent storage. Download a JSON backup regularly to protect your questions and progress.';}
-                }
-                function showStorageStatus(){const el=document.getElementById('storageStatus');if(!el)return;if(navigator.storage&&navigator.storage.persisted){navigator.storage.persisted().then(v=>{el.textContent=v?'Persistent storage is active. Manual browser-data clearing can still delete your data.':'Storage is saved in this browser, but persistent storage is not yet active. Click “Protect browser storage” and keep a backup.';}).catch(()=>{});} }
+        parsed.sections.forEach(section => {
 
-                function renderStats(){document.getElementById('statDays').textContent=data.days.length;document.getElementById('statQuestions').textContent=data.days.reduce((n,d)=>n+d.questions.length,0);document.getElementById('statAttempts').textContent=data.attempts.length;document.getElementById('statAnswered').textContent=new Set(data.attempts.map(a=>a.questionId)).size;document.getElementById('statCorrect').textContent=data.attempts.filter(a=>a.correct).length}
-                function toggleAdmin(){document.getElementById('admin').classList.toggle('hidden');renderAdmin();if(!document.getElementById('admin').classList.contains('hidden'))document.getElementById('admin').scrollIntoView({behavior:'smooth'})}function renderAdmin(){let ss=document.getElementById('daySubject'),td=document.getElementById('targetDay'),old=ss.value||subject,oldDay=td.value;ss.innerHTML=SUBJECTS.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');ss.value=SUBJECTS.some(s=>s.id===old)?old:subject;let all=[...data.days].sort((a,b)=>a.subject.localeCompare(b.subject)||a.number-b.number);td.innerHTML=all.map(d=>`<option value="${d.id}">${sub(d.subject).name} — Day ${d.number}: ${esc(d.title)}</option>`).join('');if(all.some(d=>String(d.id)===oldDay))td.value=oldDay;document.getElementById('adminDays').innerHTML=all.length?all.map(d=>`<div class="adminitem"><div><b>${sub(d.subject).name} · Day ${d.number}</b><small>${esc(d.title)} · ${d.questions.length} MCQs · ${d.published?'Visible':'Hidden'}</small></div><div class="actions"><button class="btn soft small" onclick="togglePublish(${d.id})">${d.published?'Hide':'Publish'}</button><button class="btn danger small" onclick="deleteDay(${d.id})">Delete</button></div></div>`).join(''):'<div class="empty">No days created.</div>'}
-                function createDay(e){e.preventDefault();let s=document.getElementById('daySubject').value,n=Number(document.getElementById('dayNumber').value);if(data.days.some(d=>d.subject===s&&d.number===n)){toast('This day number already exists for the subject.');return}let id=data.nextDayId||Math.max(0,...data.days.map(d=>d.id))+1;let d={id,subject:s,number:n,title:document.getElementById('dayName').value.trim(),date:document.getElementById('dayDate').value,published:document.getElementById('published').checked,questions:[]};if(!d.title||!d.date)return;data.nextDayId=id+1;data.days.push(d);subject=s;dayId=id;category='All';index=0;answers={};document.getElementById('dayName').value='';save();document.getElementById('targetDay').value=String(id);toast('Day created. Add MCQs now.')}function addQuestion(e){e.preventDefault();let d=data.days.find(x=>x.id===Number(document.getElementById('targetDay').value));if(!d){toast('Create a day first.');return}let id=data.nextQId||Math.max(0,...data.days.flatMap(x=>x.questions).map(q=>q.id))+1;let q={id,category:document.getElementById('qCategory').value.trim(),text:document.getElementById('qText').value.trim(),A:document.getElementById('qA').value.trim(),B:document.getElementById('qB').value.trim(),C:document.getElementById('qC').value.trim(),D:document.getElementById('qD').value.trim(),correct:document.getElementById('qCorrect').value,explanation:document.getElementById('qExplanation').value.trim()};if(!q.text||!q.A||!q.B||!q.C||!q.D){toast('Fill the question and all four options.');return}data.nextQId=id+1;d.questions.push(q);['qText','qA','qB','qC','qD','qExplanation'].forEach(x=>document.getElementById(x).value='');save();toast('MCQ saved to the selected day.')}function togglePublish(id){let d=data.days.find(x=>x.id===id);if(d){d.published=!d.published;save();toast(d.published?'Day published':'Day hidden')}}function deleteDay(id){let d=data.days.find(x=>x.id===id);if(!d||!confirm(`Delete Day ${d.number} and all its questions?`))return;data.days=data.days.filter(x=>x.id!==id);if(dayId===id)dayId=null;save();toast('Day deleted')}function exportBackup(){const backup={format:'TYK_FULL_BACKUP',version:1,exportedAt:new Date().toISOString(),subjects:SUBJECTS.map(s=>({id:s.id,name:s.name})),nextDayId:data.nextDayId||1,nextQId:data.nextQId||1,days:data.days,attempts:data.attempts||[],mastered:data.mastered||[]};const b=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='TYK-full-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);toast('Full backup downloaded: all subjects, days, questions and progress are included.')}function inferSubject(q){const raw=String(q.section??q.subject??q.category??'').toLowerCase();if(/reason|logical|coding|analogy|series|puzzle/.test(raw))return'reasoning';if(/math|quant|arithmetic|percentage|profit|ratio|algebra|geometry/.test(raw))return'maths';if(/english|idiom|phrase|grammar|vocab|synonym|antonym|narration|voice|pqrs|spelling|one word/.test(raw))return'english';if(/gs|general studies|general knowledge|gk|polity|history|geography|econom|science|biology|physics|chemistry|static/.test(raw))return'gs';return'gs'}
-        function importBackup(e){let f=e.target.files?.[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let parsed=JSON.parse(r.result);
-         if(parsed&&Array.isArray(parsed.days)&&parsed.days.every(x=>x&&Array.isArray(x.questions))){
-         parsed.attempts=Array.isArray(parsed.attempts)?parsed.attempts:[];parsed.mastered=Array.isArray(parsed.mastered)?parsed.mastered:[];
-         if(!confirm('Merge this backup into current data? Existing data will be kept. Duplicate questions with the same subject and text will be skipped.'))return;
-         const normSubject=(v,title,category)=>{const raw=String(v||'').toLowerCase()+' '+String(title||'').toLowerCase()+' '+String(category||'').toLowerCase();if(/reason|\breas\b|logical|coding|analogy|series|puzzle|xyz/.test(raw))return'reasoning';if(/math|quant|arithmetic|percentage|profit|ratio|algebra|geometry|\babc\b/.test(raw))return'maths';if(/english|grammar|idiom|phrase|vocab|synonym|antonym|narration|voice|pqrs|spelling/.test(raw))return'english';if(/gs|general studies|general knowledge|gk|polity|history|geography|econom|science|biology|physics|chemistry|static/.test(raw))return'gs';return'gs'};
-         let maxDay=Math.max(0,...data.days.map(x=>Number(x.id)||0)),maxQ=Math.max(0,...data.days.flatMap(x=>x.questions||[]).map(q=>Number(q.id)||0)),added=0;
-         for(const sourceDay of parsed.days){const sid=normSubject(sourceDay.subject,sourceDay.title,(sourceDay.questions[0]||{}).category);let target=data.days.find(d=>d.subject===sid&&Number(d.number)===Number(sourceDay.number));if(!target){maxDay++;target={...sourceDay,id:maxDay,subject:sid,questions:[]};data.days.push(target)}
-         for(const raw of sourceDay.questions){if(!raw||!raw.text||!raw.A||!raw.B||!raw.C||!raw.D||!['A','B','C','D'].includes(String(raw.correct||'').toUpperCase()))continue;if(data.days.some(d=>d.subject===sid&&(d.questions||[]).some(q=>q.text===raw.text)))continue;maxQ++;target.questions.push({...raw,id:maxQ,correct:String(raw.correct).toUpperCase()});added++;}}
-         if(!Array.isArray(data.mastered))data.mastered=[];data.nextDayId=maxDay+1;data.nextQId=maxQ+1;subject='english';dayId=null;answers={};save();toast(`${added} new questions merged; existing data kept`);return;}
-         const incoming=Array.isArray(parsed)?parsed:(Array.isArray(parsed.questions)?parsed.questions:null);if(!incoming||!incoming.length)throw new Error('format');
-         const valid=incoming.filter(q=>q&&q.text&&q.A&&q.B&&q.C&&q.D&&['A','B','C','D'].includes(String(q.correct||'').toUpperCase()));if(!valid.length)throw new Error('questions');
-         if(!confirm(`Import ${valid.length} questions into their matching subject sections? Existing data will be kept.`))return;
-         const date=new Date().toISOString().slice(0,10);let added=0;const nextNum={};
-         for(const raw of valid){const sid=inferSubject(raw);let day=data.days.find(d=>d.subject===sid&&d.title==='Imported Questions'&&d.published);if(!day){const used=data.days.filter(d=>d.subject===sid).map(d=>Number(d.number)||0);const number=Math.max(0,...used)+1;const id=data.nextDayId||Math.max(0,...data.days.map(d=>Number(d.id)||0))+1;day={id,subject:sid,number,title:'Imported Questions',date,published:true,questions:[]};data.days.push(day);data.nextDayId=id+1;}
-         const qid=data.nextQId||Math.max(0,...data.days.flatMap(d=>d.questions||[]).map(q=>Number(q.id)||0))+1;day.questions.push({id:qid,category:String(raw.category??raw.topic??raw.section??'General').trim()||'General',text:String(raw.text).trim(),A:String(raw.A).trim(),B:String(raw.B).trim(),C:String(raw.C).trim(),D:String(raw.D).trim(),correct:String(raw.correct).toUpperCase(),explanation:String(raw.explanation??'')});data.nextQId=qid+1;added++;}
-         save();toast(`${added} questions imported into matching sections`);
-         }catch(err){alert('Import failed: '+(err&&err.message?err.message:'invalid JSON or unsupported structure')+'. Please select a complete JSON file, not a partial copy.')}finally{e.target.value=''}};r.readAsText(f)}function resetAll(){if(!confirm('Delete all quiz days, questions and attempts saved in this browser?'))return;data={nextDayId:1,nextQId:1,days:[],attempts:[],mastered:[]};dayId=null;answers={};save();toast('All local data cleared')}
-                document.getElementById('dayDate').value=new Date().toISOString().slice(0,10);renderAll();showStorageStatus();
-    window.addEventListener('pagehide',()=>{try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}});</script>
+            section.subjects.forEach(subject => {
+
+                if (!Array.isArray(subject.videos)) {
+                    subject.videos = [];
+                }
+
+            });
+
+        });
+
+        return parsed;
+
+    } catch (error) {
+
+        alert("Saved data could not be read. Original storage has not been overwritten.");
+
+        return structuredClone(DEFAULT_DATA);
+
+    }
+}
+
+let data = loadData();
+
+let modalMode = "";
+let activeSection = null;
+let editingSection = null;
+
+let activeVideoSection = null;
+let activeVideoSubject = null;
+
+
+function saveData() {
+
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(data)
+        );
+
+        render();
+
+    } catch (error) {
+
+        alert("Unable to save data. Please export a backup or free browser storage.");
+
+    }
+
+}
+
+
+// ==========================================
+// 2. UNIQUE ID
+// ==========================================
+
+function makeId() {
+
+    let id = Date.now();
+
+    const allIds = [];
+
+    data.sections.forEach(section => {
+
+        allIds.push(Number(section.id));
+
+        section.subjects.forEach(subject => {
+
+            allIds.push(Number(subject.id));
+
+            (subject.videos || []).forEach(video => {
+                allIds.push(Number(video.id));
+            });
+
+        });
+
+    });
+
+    while (allIds.includes(id)) {
+        id++;
+    }
+
+    return id;
+}
+
+
+// ==========================================
+// 3. SUBJECT STATUS
+// ==========================================
+
+function getSubjectStatus(subject) {
+
+    if (subject.done >= subject.total) {
+
+        return {
+            className: "status-completed",
+            icon: "✓",
+            label: "Completed"
+        };
+
+    }
+
+    if (subject.done > 0) {
+
+        return {
+            className: "status-progress",
+            icon: "!",
+            label: "In Progress"
+        };
+
+    }
+
+    return {
+        className: "status-pending",
+        icon: "−",
+        label: "Not Started"
+    };
+
+}
+
+
+// ==========================================
+// 4. DASHBOARD
+// ==========================================
+
+function updateDashboard() {
+
+    let subjects = data.sections.flatMap(
+        section => section.subjects
+    );
+
+    let completed = subjects.reduce(
+        (sum, subject) => sum + subject.done,
+        0
+    );
+
+    let total = subjects.reduce(
+        (sum, subject) => sum + subject.total,
+        0
+    );
+
+    document.getElementById("totalSubjects").innerText =
+        subjects.length;
+
+    document.getElementById("completedTopics").innerText =
+        completed;
+
+    document.getElementById("overallProgress").innerText =
+        (total ? Math.round(completed / total * 100) : 0) + "%";
+
+}
+
+
+// ==========================================
+// 5. RENDER SECTIONS
+// ==========================================
+
+function render() {
+
+    const container = document.getElementById("sections");
+
+    container.innerHTML = "";
+
+    data.sections.forEach(section => {
+
+        let completed = section.subjects.reduce(
+            (sum, subject) => sum + subject.done,
+            0
+        );
+
+        let total = section.subjects.reduce(
+            (sum, subject) => sum + subject.total,
+            0
+        );
+
+        let percent = total
+            ? Math.round(completed / total * 100)
+            : 0;
+
+        let html = `
+
+        <div class="section-card">
+
+            <div class="section-top">
+
+                <h3>${escapeHTML(section.name)}</h3>
+
+                <div class="section-actions">
+
+                    <button class="icon-btn"
+                        onclick="editSection(${section.id})">
+                        ✏️
+                    </button>
+
+                    <button class="icon-btn"
+                        onclick="deleteSection(${section.id})">
+                        🗑️
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="progress-info">
+
+                <span>Section Progress</span>
+
+                <strong>${percent}%</strong>
+
+            </div>
+
+            <div class="progress">
+
+                <div class="progress-fill"
+                    style="width:${percent}%">
+                </div>
+
+            </div>
+
+            <div>
+
+                ${section.subjects.length
+                    ? section.subjects.map(subject =>
+                        subjectHTML(section.id, subject)
+                    ).join("")
+                    : `<div class="empty">No subjects added yet.</div>`
+                }
+
+            </div>
+
+            <button class="add-subject"
+                onclick="openSubjectModal(${section.id})">
+
+                + Add Subject
+
+            </button>
+
+        </div>`;
+
+        container.insertAdjacentHTML("beforeend", html);
+
+    });
+
+    updateDashboard();
+
+}
+
+
+// ==========================================
+// 6. SUBJECT HTML
+// ==========================================
+
+function subjectHTML(sectionId, subject) {
+
+    let percent = subject.total
+        ? Math.round(subject.done / subject.total * 100)
+        : 0;
+
+    const videos = subject.videos || [];
+
+    const status = getSubjectStatus(subject);
+
+    return `
+
+    <div class="subject">
+
+        <div class="subject-top">
+
+            <span class="subject-name">
+                ${escapeHTML(subject.name)}
+            </span>
+
+            <span class="subject-percent">
+                ${percent}%
+            </span>
+
+        </div>
+
+        <!-- AUTOMATIC STATUS BADGE -->
+
+        <div style="margin-top:9px;">
+
+            <span class="subject-status ${status.className}">
+
+                <span class="status-icon">
+                    ${status.icon}
+                </span>
+
+                ${status.label}
+
+            </span>
+
+        </div>
+
+        <div class="progress">
+
+            <div class="progress-fill"
+                style="width:${percent}%">
+            </div>
+
+        </div>
+
+        <div class="topic-controls">
+
+            <span>Topics completed</span>
+
+            <div class="counter">
+
+                <button onclick="changeProgress(${sectionId},${subject.id},-1)">
+                    −
+                </button>
+
+                <strong>${subject.done}/${subject.total}</strong>
+
+                <button onclick="changeProgress(${sectionId},${subject.id},1)">
+                    +
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- VIDEO LIBRARY -->
+
+        <div class="video-area">
+
+            <div class="video-heading">
+
+                <strong>🎬 Video Library</strong>
+
+                <span class="video-count">
+                    ${videos.length} VIDEOS
+                </span>
+
+            </div>
+
+            ${videos.length
+                ? videos.map(video =>
+                    videoHTML(sectionId, subject.id, video)
+                ).join("")
+                : `<div class="empty-video">No video links added yet.</div>`
+            }
+
+            <button class="add-video-btn"
+                onclick="openVideoModal(${sectionId},${subject.id})">
+
+                + Add Video Link
+
+            </button>
+
+        </div>
+
+        <div class="subject-footer">
+
+            <span style="font-size:11px;color:#778198">
+                ${videos.length} attached video(s)
+            </span>
+
+            <div class="subject-tools">
+
+                <button class="icon-btn"
+                    onclick="deleteSubject(${sectionId},${subject.id})">
+                    🗑️ Delete Subject
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>`;
+
+}
+
+
+// ==========================================
+// 7. VIDEO HTML
+// ==========================================
+
+function videoHTML(sectionId, subjectId, video) {
+
+    const safeURL = escapeHTML(video.url);
+
+    return `
+
+    <div class="video-item">
+
+        <a class="video-link"
+            href="${safeURL}"
+            target="_blank"
+            rel="noopener noreferrer">
+
+            <span>▶️</span>
+
+            <span>${escapeHTML(video.title)}</span>
+
+        </a>
+
+        <button class="video-delete"
+            title="Delete video"
+            onclick="deleteVideo(${sectionId},${subjectId},${video.id})">
+
+            ✕
+
+        </button>
+
+    </div>`;
+
+}
+
+
+// ==========================================
+// 8. HTML ESCAPING
+// ==========================================
+
+function escapeHTML(value) {
+
+    return String(value).replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[c]);
+
+}
+
+
+// ==========================================
+// 9. GENERAL MODAL
+// ==========================================
+
+function openSectionModal() {
+
+    modalMode = "section";
+    editingSection = null;
+
+    document.getElementById("modalTitle").innerText =
+        "Add Section";
+
+    document.getElementById("modalDescription").innerText =
+        "Create a new study section.";
+
+    document.getElementById("nameLabel").innerText =
+        "Section Name";
+
+    document.getElementById("nameInput").value = "";
+
+    document.getElementById("extraInputs").style.display =
+        "none";
+
+    showModal();
+
+}
+
+
+function editSection(id) {
+
+    const section = data.sections.find(s => s.id === id);
+
+    if (!section) return;
+
+    modalMode = "editSection";
+    editingSection = id;
+
+    document.getElementById("modalTitle").innerText =
+        "Rename Section";
+
+    document.getElementById("modalDescription").innerText =
+        "Change your section name.";
+
+    document.getElementById("nameLabel").innerText =
+        "Section Name";
+
+    document.getElementById("nameInput").value =
+        section.name;
+
+    document.getElementById("extraInputs").style.display =
+        "none";
+
+    showModal();
+
+}
+
+
+function openSubjectModal(id) {
+
+    modalMode = "subject";
+    activeSection = id;
+
+    document.getElementById("modalTitle").innerText =
+        "Add Subject";
+
+    document.getElementById("modalDescription").innerText =
+        "Add a subject and its total topics.";
+
+    document.getElementById("nameLabel").innerText =
+        "Subject Name";
+
+    document.getElementById("nameInput").value = "";
+
+    document.getElementById("totalInput").value = "";
+
+    document.getElementById("extraInputs").style.display =
+        "block";
+
+    showModal();
+
+}
+
+
+function showModal() {
+
+    document.getElementById("modal").style.display = "flex";
+
+    document.getElementById("nameInput").focus();
+
+}
+
+
+function closeModal() {
+
+    document.getElementById("modal").style.display = "none";
+
+}
+
+
+// ==========================================
+// 10. SAVE GENERAL MODAL
+// ==========================================
+
+function saveModal() {
+
+    const name = document.getElementById("nameInput")
+        .value.trim();
+
+    if (!name || name.length > 100) {
+
+        alert("Enter a name between 1 and 100 characters.");
+
+        return;
+
+    }
+
+    if (modalMode === "section") {
+
+        data.sections.push({
+
+            id: makeId(),
+
+            name: name,
+
+            subjects: []
+
+        });
+
+    }
+
+    else if (modalMode === "editSection") {
+
+        const section = data.sections.find(
+            s => s.id === editingSection
+        );
+
+        if (section) section.name = name;
+
+    }
+
+    else if (modalMode === "subject") {
+
+        const total = Number(
+            document.getElementById("totalInput").value
+        );
+
+        if (!Number.isSafeInteger(total) || total < 1) {
+
+            alert("Enter a valid total topic count.");
+
+            return;
+
+        }
+
+        const section = data.sections.find(
+            s => s.id === activeSection
+        );
+
+        if (section) {
+
+            section.subjects.push({
+
+                id: makeId(),
+
+                name: name,
+
+                total: total,
+
+                done: 0,
+
+                videos: []
+
+            });
+
+        }
+
+    }
+
+    closeModal();
+
+    saveData();
+
+}
+
+
+// ==========================================
+// 11. PROGRESS TRACKING
+// ==========================================
+
+function changeProgress(sectionId, subjectId, amount) {
+
+    const section = data.sections.find(
+        s => s.id === sectionId
+    );
+
+    const subject = section?.subjects.find(
+        s => s.id === subjectId
+    );
+
+    if (!subject) return;
+
+    subject.done = Math.max(
+
+        0,
+
+        Math.min(
+            subject.total,
+            subject.done + amount
+        )
+
+    );
+
+    // Render recalculates the status automatically.
+    saveData();
+
+}
+
+
+// ==========================================
+// 12. DELETE SECTION
+// ==========================================
+
+function deleteSection(id) {
+
+    if (!confirm(
+        "Delete this section and all its subjects and videos?"
+    )) return;
+
+    data.sections = data.sections.filter(
+        s => s.id !== id
+    );
+
+    saveData();
+
+}
+
+
+// ==========================================
+// 13. DELETE SUBJECT
+// ==========================================
+
+function deleteSubject(sectionId, subjectId) {
+
+    if (!confirm(
+        "Delete this subject and its video links?"
+    )) return;
+
+    const section = data.sections.find(
+        s => s.id === sectionId
+    );
+
+    if (!section) return;
+
+    section.subjects = section.subjects.filter(
+        s => s.id !== subjectId
+    );
+
+    saveData();
+
+}
+
+
+// ==========================================
+// 14. VIDEO MODAL
+// ==========================================
+
+function openVideoModal(sectionId, subjectId) {
+
+    activeVideoSection = sectionId;
+
+    activeVideoSubject = subjectId;
+
+    document.getElementById("videoTitle").value = "";
+
+    document.getElementById("videoURL").value = "";
+
+    document.getElementById("videoModal").style.display =
+        "flex";
+
+    document.getElementById("videoTitle").focus();
+
+}
+
+
+function closeVideoModal() {
+
+    document.getElementById("videoModal").style.display =
+        "none";
+
+}
+
+
+// ==========================================
+// 15. SAVE VIDEO
+// ==========================================
+
+function saveVideo() {
+
+    const title = document.getElementById("videoTitle")
+        .value.trim();
+
+    const url = document.getElementById("videoURL")
+        .value.trim();
+
+    if (!title || title.length > 150) {
+
+        alert("Enter a video title (maximum 150 characters).");
+
+        return;
+
+    }
+
+    if (!url || url.length > 2048) {
+
+        alert("Enter a valid video URL.");
+
+        return;
+
+    }
+
+    let parsedURL;
+
+    try {
+
+        parsedURL = new URL(url);
+
+    } catch {
+
+        alert("Invalid video URL.");
+
+        return;
+
+    }
+
+    if (!["http:", "https:"].includes(parsedURL.protocol)) {
+
+        alert("Only HTTP and HTTPS links are allowed.");
+
+        return;
+
+    }
+
+    const section = data.sections.find(
+        s => s.id === activeVideoSection
+    );
+
+    const subject = section?.subjects.find(
+        s => s.id === activeVideoSubject
+    );
+
+    if (!subject) {
+
+        alert("Subject not found.");
+
+        return;
+
+    }
+
+    if (!Array.isArray(subject.videos)) {
+        subject.videos = [];
+    }
+
+    subject.videos.push({
+
+        id: makeId(),
+
+        title: title,
+
+        url: parsedURL.href
+
+    });
+
+    closeVideoModal();
+
+    saveData();
+
+}
+
+
+// ==========================================
+// 16. DELETE VIDEO
+// ==========================================
+
+function deleteVideo(sectionId, subjectId, videoId) {
+
+    if (!confirm("Delete this video link?")) return;
+
+    const section = data.sections.find(
+        s => s.id === sectionId
+    );
+
+    const subject = section?.subjects.find(
+        s => s.id === subjectId
+    );
+
+    if (!subject) return;
+
+    subject.videos = subject.videos.filter(
+        v => v.id !== videoId
+    );
+
+    saveData();
+
+}
+
+
+// ==========================================
+// 17. XML EXPORT
+// ==========================================
+
+function exportXML() {
+
+    const xmlDoc = document.implementation.createDocument(
+        "",
+        "StudyTracker",
+        null
+    );
+
+    const root = xmlDoc.documentElement;
+
+    root.setAttribute("version", "2.0");
+
+    data.sections.forEach(section => {
+
+        const sectionNode =
+            xmlDoc.createElement("Section");
+
+        sectionNode.setAttribute("id", section.id);
+
+        const name = xmlDoc.createElement("Name");
+
+        name.textContent = section.name;
+
+        sectionNode.appendChild(name);
+
+        const subjectsNode =
+            xmlDoc.createElement("Subjects");
+
+        section.subjects.forEach(subject => {
+
+            const subjectNode =
+                xmlDoc.createElement("Subject");
+
+            subjectNode.setAttribute("id", subject.id);
+
+            const subjectName =
+                xmlDoc.createElement("Name");
+
+            subjectName.textContent = subject.name;
+
+            const total =
+                xmlDoc.createElement("Total");
+
+            total.textContent = subject.total;
+
+            const done =
+                xmlDoc.createElement("Completed");
+
+            done.textContent = subject.done;
+
+            subjectNode.appendChild(subjectName);
+            subjectNode.appendChild(total);
+            subjectNode.appendChild(done);
+
+            const videosNode =
+                xmlDoc.createElement("Videos");
+
+            (subject.videos || []).forEach(video => {
+
+                const videoNode =
+                    xmlDoc.createElement("Video");
+
+                videoNode.setAttribute("id", video.id);
+
+                const title =
+                    xmlDoc.createElement("Title");
+
+                title.textContent = video.title;
+
+                const url =
+                    xmlDoc.createElement("URL");
+
+                url.textContent = video.url;
+
+                videoNode.appendChild(title);
+                videoNode.appendChild(url);
+
+                videosNode.appendChild(videoNode);
+
+            });
+
+            subjectNode.appendChild(videosNode);
+
+            subjectsNode.appendChild(subjectNode);
+
+        });
+
+        sectionNode.appendChild(subjectsNode);
+
+        root.appendChild(sectionNode);
+
+    });
+
+    const xmlString = new XMLSerializer()
+        .serializeToString(xmlDoc);
+
+    const finalXML =
+        '<?xml version="1.0" encoding="UTF-8"?>\n' +
+        xmlString;
+
+    const blob = new Blob(
+        [finalXML],
+        { type: "application/xml;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "StudyTracker_Backup_" +
+        new Date().toISOString().slice(0, 10) +
+        ".xml";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+}
+
+
+// ==========================================
+// 18. XML VALIDATION
+// ==========================================
+
+function validateXML(xmlDoc) {
+
+    const root = xmlDoc.documentElement;
+
+    if (!root || root.tagName !== "StudyTracker") {
+        throw new Error("Invalid backup file.");
+    }
+
+    const sections = [];
+
+    const sectionNodes = Array.from(root.children)
+        .filter(node => node.tagName === "Section");
+
+    const sectionIds = new Set();
+    const subjectIds = new Set();
+    const videoIds = new Set();
+
+    function getChild(parent, tag) {
+
+        return Array.from(parent.children)
+            .find(node => node.tagName === tag);
+
+    }
+
+    function readNumber(value, label, min = 0) {
+
+        const text = String(value ?? "").trim();
+
+        if (!/^\d+$/.test(text)) {
+            throw new Error("Invalid " + label + ".");
+        }
+
+        const number = Number(text);
+
+        if (!Number.isSafeInteger(number) || number < min) {
+            throw new Error("Invalid " + label + ".");
+        }
+
+        return number;
+
+    }
+
+    if (sectionNodes.length > 200) {
+        throw new Error("Too many sections.");
+    }
+
+    sectionNodes.forEach(sectionNode => {
+
+        const id = readNumber(
+            sectionNode.getAttribute("id"),
+            "section ID",
+            1
+        );
+
+        if (sectionIds.has(id)) {
+            throw new Error("Duplicate section ID.");
+        }
+
+        sectionIds.add(id);
+
+        const nameNode = getChild(sectionNode, "Name");
+        const subjectsNode = getChild(sectionNode, "Subjects");
+
+        if (!nameNode || !subjectsNode) {
+            throw new Error("Incomplete section data.");
+        }
+
+        const name = nameNode.textContent.trim();
+
+        if (!name || name.length > 100) {
+            throw new Error("Invalid section name.");
+        }
+
+        const subjects = [];
+
+        const subjectNodes = Array.from(subjectsNode.children)
+            .filter(node => node.tagName === "Subject");
+
+        if (subjectNodes.length > 500) {
+            throw new Error("Too many subjects in a section.");
+        }
+
+        subjectNodes.forEach(subjectNode => {
+
+            const subjectId = readNumber(
+                subjectNode.getAttribute("id"),
+                "subject ID",
+                1
+            );
+
+            if (subjectIds.has(subjectId)) {
+                throw new Error("Duplicate subject ID.");
+            }
+
+            subjectIds.add(subjectId);
+
+            const subjectNameNode =
+                getChild(subjectNode, "Name");
+
+            const totalNode =
+                getChild(subjectNode, "Total");
+
+            const doneNode =
+                getChild(subjectNode, "Completed");
+
+            if (!subjectNameNode || !totalNode || !doneNode) {
+                throw new Error("Incomplete subject data.");
+            }
+
+            const subjectName =
+                subjectNameNode.textContent.trim();
+
+            const total = readNumber(
+                totalNode.textContent,
+                "total topics",
+                1
+            );
+
+            const done = readNumber(
+                doneNode.textContent,
+                "completed topics"
+            );
+
+            if (!subjectName || subjectName.length > 100) {
+                throw new Error("Invalid subject name.");
+            }
+
+            if (done > total) {
+                throw new Error("Completed topics cannot exceed total topics.");
+            }
+
+            const videos = [];
+
+            const videosNode = getChild(subjectNode, "Videos");
+
+            if (videosNode) {
+
+                const videoNodes = Array.from(videosNode.children)
+                    .filter(node => node.tagName === "Video");
+
+                if (videoNodes.length > 200) {
+                    throw new Error("Too many videos for a subject.");
+                }
+
+                videoNodes.forEach(videoNode => {
+
+                    const videoId = readNumber(
+                        videoNode.getAttribute("id"),
+                        "video ID",
+                        1
+                    );
+
+                    if (videoIds.has(videoId)) {
+                        throw new Error("Duplicate video ID.");
+                    }
+
+                    videoIds.add(videoId);
+
+                    const titleNode =
+                        getChild(videoNode, "Title");
+
+                    const urlNode =
+                        getChild(videoNode, "URL");
+
+                    if (!titleNode || !urlNode) {
+                        throw new Error("Incomplete video data.");
+                    }
+
+                    const title = titleNode.textContent.trim();
+                    const url = urlNode.textContent.trim();
+
+                    if (!title || title.length > 150) {
+                        throw new Error("Invalid video title.");
+                    }
+
+                    if (!url || url.length > 2048) {
+                        throw new Error("Invalid video URL.");
+                    }
+
+                    let parsedURL;
+
+                    try {
+                        parsedURL = new URL(url);
+                    } catch {
+                        throw new Error("Invalid video URL.");
+                    }
+
+                    if (!["http:", "https:"].includes(parsedURL.protocol)) {
+                        throw new Error("Only HTTP and HTTPS video links are allowed.");
+                    }
+
+                    videos.push({
+                        id: videoId,
+                        title: title,
+                        url: parsedURL.href
+                    });
+
+                });
+
+            }
+
+            subjects.push({
+                id: subjectId,
+                name: subjectName,
+                total: total,
+                done: done,
+                videos: videos
+            });
+
+        });
+
+        sections.push({
+            id: id,
+            name: name,
+            subjects: subjects
+        });
+
+    });
+
+    return { sections: sections };
+
+}
+
+
+// ==========================================
+// 19. XML IMPORT
+// ==========================================
+
+function importXML(event) {
+
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    event.target.value = "";
+
+    if (!file.name.toLowerCase().endsWith(".xml")) {
+        alert("Please select a valid XML file.");
+        return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+        alert("XML file is too large. Maximum size is 5 MB.");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        try {
+
+            const xmlText = e.target.result;
+
+            if (/<!DOCTYPE/i.test(xmlText)) {
+                throw new Error("DOCTYPE declarations are not allowed.");
+            }
+
+            const parser = new DOMParser();
+
+            const xmlDoc = parser.parseFromString(
+                xmlText,
+                "application/xml"
+            );
+
+            if (xmlDoc.querySelector("parsererror")) {
+                throw new Error("XML file is corrupted.");
+            }
+
+            const importedData = validateXML(xmlDoc);
+
+            const totalSubjects =
+                importedData.sections.reduce(
+                    (sum, s) => sum + s.subjects.length,
+                    0
+                );
+
+            const totalVideos =
+                importedData.sections.reduce(
+                    (sum, s) =>
+                        sum + s.subjects.reduce(
+                            (count, subject) =>
+                                count + subject.videos.length,
+                            0
+                        ),
+                    0
+                );
+
+            const confirmed = confirm(
+
+                "Restore this backup?\n\n" +
+
+                "Sections: " +
+                importedData.sections.length +
+
+                "\nSubjects: " +
+                totalSubjects +
+
+                "\nVideo Links: " +
+                totalVideos +
+
+                "\n\nCurrent tracker data will be replaced."
+
+            );
+
+            if (!confirmed) return;
+
+            const oldData = localStorage.getItem(STORAGE_KEY);
+
+            try {
+
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify(importedData)
+                );
+
+                data = importedData;
+
+                render();
+
+                alert(
+                    "Backup restored successfully!\n\n" +
+                    "Sections: " + importedData.sections.length +
+                    "\nSubjects: " + totalSubjects +
+                    "\nVideos: " + totalVideos
+                );
+
+            } catch (saveError) {
+
+                try {
+
+                    if (oldData === null) {
+                        localStorage.removeItem(STORAGE_KEY);
+                    } else {
+                        localStorage.setItem(STORAGE_KEY, oldData);
+                    }
+
+                } catch (_) {}
+
+                throw new Error(
+                    "Unable to restore backup. Browser storage may be full."
+                );
+
+            }
+
+        } catch (error) {
+
+            alert("Import failed: " + error.message);
+
+        }
+
+    };
+
+    reader.onerror = function() {
+        alert("Unable to read the selected file.");
+    };
+
+    reader.readAsText(file);
+
+}
+
+
+// ==========================================
+// 20. INITIALIZE
+// ==========================================
+
+document.getElementById("today").innerText =
+    new Date().toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    });
+
+render();
+
+</script>
+
 </body>
 </html>
